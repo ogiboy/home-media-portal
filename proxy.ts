@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { DEPLOY_TARGET, HOME_URL } from "@/lib/env";
 
+// Resolve the expected host from HOME_URL.
 const getHomeHost = () => {
   try {
     return new URL(HOME_URL).host;
@@ -11,6 +12,7 @@ const getHomeHost = () => {
   }
 };
 
+// Redirect plain HTTP to an internal HTTPS prompt page (home-only).
 export function proxy(request: NextRequest) {
   if (DEPLOY_TARGET !== "home") {
     return NextResponse.next();
@@ -34,6 +36,7 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
+// Apply to all routes except static assets and ping.
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|ping.png).*)"],
 };

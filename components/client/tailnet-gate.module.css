@@ -1,0 +1,36 @@
+/* Tailnet gate overlay layout helpers. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.nonBlocking {
+  pointer-events: none;
+}
+
+.panel {
+  width: min(42rem, 100%);
+  margin: 0 1rem;
+  padding: 2rem;
+  border-radius: var(--radius);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.brand {
+  margin: 0 auto;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

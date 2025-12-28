@@ -7,13 +7,17 @@ import { ArrowUpRight, Loader2, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import type { PortalStrings } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 import { renderServiceIcon } from '@/lib/service-icons';
 import { getServiceById, getServiceHref } from '@/lib/services';
+import styles from './focus-overlay.module.css';
 
+// Motion timing for the focus overlay shell.
 const overlayTransition = {
   duration: 0.28,
   ease: [0.22, 0.61, 0.36, 1],
 };
+// Motion timing for header + iframe content.
 const contentTransition = {
   duration: 0.32,
   ease: [0.22, 0.61, 0.36, 1],
@@ -24,6 +28,7 @@ type FocusOverlayProps = {
   strings: PortalStrings;
 };
 
+// Fullscreen focus-mode overlay for embedded services.
 export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -69,7 +74,7 @@ export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
     <AnimatePresence>
       {isActive && service && (
         <motion.section
-          className="portal-surface absolute inset-0 z-30 flex flex-col gap-4 rounded-(--radius) p-5"
+          className={cn('portal-surface', styles.overlay)}
           initial={{ opacity: 0, scale: 0.97, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.98, y: 10 }}
@@ -123,7 +128,7 @@ export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
           </motion.header>
 
           <motion.div
-            className="relative flex-1 overflow-hidden rounded-3xl border border-border/70 bg-background/70"
+            className={cn('border border-border/70 bg-background/70', styles.frame)}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...contentTransition, delay: 0.1 }}

@@ -1,6 +1,12 @@
 "use client";
 
+// Client hook for tailnet reachability checks via image ping.
 import { useEffect, useMemo, useState } from "react";
+
+import {
+  TAILNET_PING_INTERVAL_MS,
+  TAILNET_PING_TIMEOUT_MS,
+} from "@/lib/constants/polling";
 
 export type TailnetStatus = "connecting" | "online" | "offline";
 
@@ -22,25 +28,29 @@ type Config = {
 
 const listeners = new Set<(state: TailnetState) => void>();
 let state: TailnetState = { status: "connecting", lastChecked: null };
-let config: Config = { homeUrl: "", timeoutMs: 2500, intervalMs: 15000 };
+let config: Config = {
+  homeUrl: "",
+  timeoutMs: TAILNET_PING_TIMEOUT_MS,
+  intervalMs: TAILNET_PING_INTERVAL_MS,
+};
 let intervalId: number | null = null;
 let inFlight = false;
 
+// Notify all subscribers about the latest state.
 const notify = () => {
   listeners.forEach((listener) => listener(state));
 };
 
+// Update shared state and trigger listeners.
 const setState = (next: TailnetState) => {
-  if (
-    next.status === state.status &&
-    next.lastChecked === state.lastChecked
-  ) {
+  if (next.status === state.status && next.lastChecked === state.lastChecked) {
     return;
   }
   state = next;
   notify();
 };
 
+// Start polling if needed.
 const startPolling = () => {
   if (intervalId !== null) {
     return;
@@ -49,6 +59,7 @@ const startPolling = () => {
   intervalId = window.setInterval(probe, config.intervalMs);
 };
 
+// Stop polling when no listeners are active.
 const stopPolling = () => {
   if (intervalId !== null && listeners.size === 0) {
     window.clearInterval(intervalId);
@@ -56,6 +67,7 @@ const stopPolling = () => {
   }
 };
 
+// Refresh polling configuration.
 const updateConfig = (next: Config) => {
   const changed =
     next.homeUrl !== config.homeUrl ||
@@ -74,6 +86,7 @@ const updateConfig = (next: Config) => {
   }
 };
 
+// Perform a single reachability probe.
 const probe = () => {
   if (inFlight) {
     return;
@@ -124,12 +137,13 @@ const probe = () => {
   img.src = `${homeUrl.replace(/\/$/, "")}/ping.png?ts=${Date.now()}`;
 };
 
+// Hook for subscribing to tailnet reachability changes.
 export function useTailnetStatus(homeUrl: string, options: Options = {}) {
   const stableConfig = useMemo(
     () => ({
       homeUrl,
-      timeoutMs: options.timeoutMs ?? 2500,
-      intervalMs: options.intervalMs ?? 15000,
+      timeoutMs: options.timeoutMs ?? TAILNET_PING_TIMEOUT_MS,
+      intervalMs: options.intervalMs ?? TAILNET_PING_INTERVAL_MS,
     }),
     [homeUrl, options.intervalMs, options.timeoutMs]
   );
@@ -151,5 +165,9 @@ export function useTailnetStatus(homeUrl: string, options: Options = {}) {
     };
   }, [stableConfig]);
 
-  return { status: snapshot.status, lastChecked: snapshot.lastChecked, retry: probe };
+  return {
+    status: snapshot.status,
+    lastChecked: snapshot.lastChecked,
+    retry: probe,
+  };
 }

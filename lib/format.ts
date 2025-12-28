@@ -1,5 +1,6 @@
 import type { PortalStrings } from "@/lib/i18n";
 
+// Human-friendly byte formatting for stats.
 export const formatBytes = (bytes: number | null) => {
   if (bytes === null || bytes === undefined) {
     return null;
@@ -14,6 +15,7 @@ export const formatBytes = (bytes: number | null) => {
   return `${value.toFixed(value >= 10 ? 0 : 1)} ${units[unitIndex]}`;
 };
 
+// Format uptime using localized short labels.
 export const formatUptime = (seconds: number, strings: PortalStrings["time"]) => {
   const days = Math.floor(seconds / 86400);
   const hours = Math.floor((seconds % 86400) / 3600);
@@ -27,6 +29,7 @@ export const formatUptime = (seconds: number, strings: PortalStrings["time"]) =>
   return `${minutes}${strings.minuteShort}`;
 };
 
+// Relative time helper for messages and system updates.
 export const formatRelativeTime = (
   iso: string,
   strings: PortalStrings["time"]

@@ -1,3 +1,4 @@
+// In-memory rate limiting for tailnet-only endpoints.
 type Bucket = {
   count: number;
   resetAt: number;
@@ -11,6 +12,7 @@ export type RateLimitResult = {
   remaining: number;
 };
 
+// Check and update rate-limit state for the given key.
 export function checkRateLimit(
   key: string,
   options: { limit?: number; windowMs?: number } = {}

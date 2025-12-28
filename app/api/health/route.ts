@@ -2,12 +2,22 @@ import { NextResponse } from "next/server";
 import { performance } from "perf_hooks";
 
 import { HOME_URL, isHomeDeployment } from "@/lib/env";
+import {
+  HEALTH_GET_TIMEOUT_MS,
+  HEALTH_HEAD_TIMEOUT_MS,
+} from "@/lib/constants/health";
 import { services } from "@/lib/services";
 
+// Node runtime required for perf_hooks timing.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const fetchWithTimeout = async (url: string, init: RequestInit, timeoutMs: number) => {
+// Fetch wrapper with timeout for health probes.
+const fetchWithTimeout = async (
+  url: string,
+  init: RequestInit,
+  timeoutMs: number
+) => {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -17,6 +27,7 @@ const fetchWithTimeout = async (url: string, init: RequestInit, timeoutMs: numbe
   }
 };
 
+// Probe a service endpoint and measure latency.
 const checkService = async (service: (typeof services)[number]) => {
   const url = new URL(service.healthPath ?? service.path, HOME_URL).toString();
   const start = performance.now();
@@ -25,14 +36,14 @@ const checkService = async (service: (typeof services)[number]) => {
     let response = await fetchWithTimeout(
       url,
       { method: "HEAD", redirect: "manual" },
-      2500
+      HEALTH_HEAD_TIMEOUT_MS
     );
 
     if (response.status === 405) {
       response = await fetchWithTimeout(
         url,
         { method: "GET", redirect: "manual" },
-        3000
+        HEALTH_GET_TIMEOUT_MS
       );
     }
 
@@ -53,6 +64,7 @@ const checkService = async (service: (typeof services)[number]) => {
   }
 };
 
+// Health summary for all services (home-only).
 export async function GET() {
   if (!isHomeDeployment()) {
     return NextResponse.json(
@@ -61,7 +73,9 @@ export async function GET() {
     );
   }
 
-  const results = await Promise.all(services.map((service) => checkService(service)));
+  const results = await Promise.all(
+    services.map((service) => checkService(service))
+  );
 
   return NextResponse.json({
     services: results,

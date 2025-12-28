@@ -1,13 +1,17 @@
 "use client";
 
-import { useCallback } from "react";
+// Client-only service actions (open, copy, restart stub).
+import { useCallback, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowUpRight, Copy } from "lucide-react";
+import { ArrowUpRight, Copy, RotateCw } from "lucide-react";
 
+import { requestServiceAction } from "@/app/actions/portal-actions";
 import { Button } from "@/components/ui/button";
 import type { PortalStrings } from "@/lib/i18n";
 import { getServiceHref, type ServiceDefinition } from "@/lib/services";
+import { pushToast } from "@/lib/toast-store";
 
+// Warm up an iframe endpoint with a HEAD request.
 const prefetchService = (path: string) => {
   fetch(path, { method: "HEAD", cache: "no-store" }).catch(() => undefined);
 };
@@ -18,6 +22,9 @@ type ServiceActionsProps = {
   strings: PortalStrings;
 };
 
+type RestartState = "idle" | "pending" | "queued" | "unavailable";
+
+// Action buttons for each service card.
 export default function ServiceActions({
   service,
   isPublic,
@@ -25,6 +32,8 @@ export default function ServiceActions({
 }: ServiceActionsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [restartState, setRestartState] = useState<RestartState>("idle");
+  const [isPending, startTransition] = useTransition();
 
   const setActiveApp = useCallback(
     (id?: string) => {
@@ -61,6 +70,46 @@ export default function ServiceActions({
     }
   }, [service, strings]);
 
+  const handleRestart = useCallback(() => {
+    if (isPublic) {
+      return;
+    }
+
+    setRestartState("pending");
+    startTransition(async () => {
+      const result = await requestServiceAction({
+        serviceId: service.id,
+        action: "restart",
+      });
+      setRestartState(result.ok ? "queued" : "unavailable");
+
+      if (result.ok) {
+        pushToast({
+          title: strings.toasts.restartQueued.title,
+          description: strings.toasts.restartQueued.description,
+          tone: "success",
+        });
+      } else {
+        pushToast({
+          title: strings.toasts.restartUnavailable.title,
+          description: strings.toasts.restartUnavailable.description,
+          tone: "warning",
+        });
+      }
+
+      window.setTimeout(() => setRestartState("idle"), 2200);
+    });
+  }, [isPublic, service.id, startTransition, strings]);
+
+  const restartLabel =
+    restartState === "pending" || isPending
+      ? strings.services.restartPending
+      : restartState === "queued"
+      ? strings.services.restartQueued
+      : restartState === "unavailable"
+      ? strings.services.restartUnavailable
+      : strings.services.restart;
+
   return (
     <div
       className="flex flex-wrap gap-2"
@@ -94,6 +143,15 @@ export default function ServiceActions({
       <Button size="sm" variant="ghost" onClick={handleCopy} disabled={isPublic}>
         <Copy className="h-4 w-4" />
         {strings.services.copyLink}
+      </Button>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={handleRestart}
+        disabled={isPublic || isPending || restartState === "pending"}
+      >
+        <RotateCw className="h-4 w-4" />
+        {restartLabel}
       </Button>
     </div>
   );

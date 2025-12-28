@@ -11,6 +11,7 @@ type ThemeToggleProps = {
   label: string;
 };
 
+// Read the current theme from the document root.
 const getCurrentTheme = (): Theme => {
   if (typeof document === "undefined") {
     return "light";
@@ -19,6 +20,7 @@ const getCurrentTheme = (): Theme => {
   return current === "dark" ? "dark" : "light";
 };
 
+// Theme toggle button that updates the document dataset.
 export default function ThemeToggle({ label }: ThemeToggleProps) {
   const toggleTheme = useCallback(() => {
     if (typeof document === "undefined") {

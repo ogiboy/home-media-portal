@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { locales, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
+// Display labels for locale tabs.
 const labels: Record<Locale, string> = {
   tr: "TR",
   en: "EN",
   it: "IT",
 };
 
+// Persist locale preference to cookies and the html lang attribute.
 const applyLocale = (value: Locale) => {
   if (typeof document === "undefined") {
     return;
@@ -25,6 +27,7 @@ type LanguageSwitchProps = {
   label: string;
 };
 
+// Locale switcher for UI strings.
 export default function LanguageSwitch({ locale, label }: LanguageSwitchProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();

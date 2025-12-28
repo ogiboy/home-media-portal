@@ -2,7 +2,9 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 import type { BoardMessageInput } from "@/lib/board-schema";
+import { BOARD_LIST_LIMIT } from "@/lib/constants/board";
 
+// Row shape for board messages.
 type MessageRow = {
   id: number;
   author: string;
@@ -10,6 +12,7 @@ type MessageRow = {
   created_at: number;
 };
 
+// Prepared statements for message queries.
 type Statements = {
   list: Database.Statement<{ limit: number }>;
   insert: Database.Statement<{ author: string; body: string; created_at: number }>;
@@ -18,10 +21,11 @@ type Statements = {
 let db: Database.Database | null = null;
 let statements: Statements | null = null;
 
+// Resolve the SQLite database path.
 const getDbPath = () =>
-  process.env.BOARD_DB_PATH ??
-  path.join(process.cwd(), "data", "board.db");
+  process.env.BOARD_DB_PATH ?? path.join(process.cwd(), "data", "board.db");
 
+// Initialize the database and schema if needed.
 const ensureDb = () => {
   if (db) {
     return db;
@@ -40,6 +44,7 @@ const ensureDb = () => {
   return db;
 };
 
+// Lazily prepare statements for reuse.
 const getStatements = () => {
   const database = ensureDb();
   if (!statements) {
@@ -55,12 +60,14 @@ const getStatements = () => {
   return statements;
 };
 
-export const listMessages = (limit = 50): MessageRow[] => {
-  const safeLimit = Math.max(1, Math.min(50, Math.floor(limit)));
+// List recent messages with a safe limit cap.
+export const listMessages = (limit = BOARD_LIST_LIMIT): MessageRow[] => {
+  const safeLimit = Math.max(1, Math.min(BOARD_LIST_LIMIT, Math.floor(limit)));
   const stmt = getStatements().list;
   return stmt.all({ limit: safeLimit }) as MessageRow[];
 };
 
+// Insert a new message and return the stored row.
 export const insertMessage = (input: BoardMessageInput): MessageRow => {
   const createdAt = Date.now();
   const stmt = getStatements().insert;

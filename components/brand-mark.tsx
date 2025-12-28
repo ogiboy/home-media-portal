@@ -5,6 +5,7 @@ type BrandMarkProps = {
   title?: string;
 };
 
+// SVG brand mark used across the portal UI.
 export default function BrandMark({ className, title }: BrandMarkProps) {
   const labelled = Boolean(title);
 

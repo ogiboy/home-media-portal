@@ -1,13 +1,20 @@
 import { NextResponse } from "next/server";
 
 import { boardMessageSchema } from "@/lib/board-schema";
+import {
+  BOARD_LIST_LIMIT,
+  BOARD_RATE_LIMIT,
+  BOARD_RATE_WINDOW_MS,
+} from "@/lib/constants/board";
 import { insertMessage, listMessages } from "@/lib/board-db";
 import { isHomeDeployment } from "@/lib/env";
 import { checkRateLimit } from "@/lib/rate-limit";
 
+// Force Node runtime for SQLite access.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+// Determine client IP from proxy headers.
 const getClientIp = (request: Request) => {
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) {
@@ -16,12 +23,13 @@ const getClientIp = (request: Request) => {
   return request.headers.get("x-real-ip") ?? "unknown";
 };
 
+// List recent board messages (home-only).
 export async function GET() {
   if (!isHomeDeployment()) {
     return NextResponse.json({ error: "not_available" }, { status: 403 });
   }
 
-  const rows = listMessages(50);
+  const rows = listMessages(BOARD_LIST_LIMIT);
   const messages = rows.map((row) => ({
     id: row.id,
     author: row.author,
@@ -32,13 +40,17 @@ export async function GET() {
   return NextResponse.json({ messages });
 }
 
+// Post a new message to the board (home-only).
 export async function POST(request: Request) {
   if (!isHomeDeployment()) {
     return NextResponse.json({ error: "not_available" }, { status: 403 });
   }
 
   const clientIp = getClientIp(request);
-  const rate = checkRateLimit(clientIp, { limit: 6, windowMs: 30_000 });
+  const rate = checkRateLimit(clientIp, {
+    limit: BOARD_RATE_LIMIT,
+    windowMs: BOARD_RATE_WINDOW_MS,
+  });
   if (!rate.allowed) {
     return NextResponse.json(
       { error: "rate_limited" },

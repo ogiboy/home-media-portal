@@ -4,12 +4,14 @@ import { promisify } from "util";
 import fs from "fs/promises";
 
 import type { SystemStats } from "@/types/system";
+import { SYSTEM_CACHE_TTL_MS } from "@/lib/constants/system";
 
 const exec = promisify(execCallback);
 
+// Simple in-memory cache to avoid hammering system calls.
 let cache: { data: SystemStats; ts: number } | null = null;
-const CACHE_TTL_MS = 2500;
 
+// Read disk usage via df for the root partition.
 const getDiskUsage = async () => {
   try {
     const { stdout } = await exec("df -k /", { timeout: 1200 });
@@ -37,6 +39,7 @@ const getDiskUsage = async () => {
   }
 };
 
+// Read CPU temperature from thermal zone when available.
 const getCpuTemp = async () => {
   try {
     const raw = await fs.readFile(
@@ -53,9 +56,10 @@ const getCpuTemp = async () => {
   }
 };
 
+// Compute a system stats snapshot with a short cache window.
 export const getSystemStats = async (): Promise<SystemStats> => {
   const now = Date.now();
-  if (cache && now - cache.ts < CACHE_TTL_MS) {
+  if (cache && now - cache.ts < SYSTEM_CACHE_TTL_MS) {
     return cache.data;
   }
 

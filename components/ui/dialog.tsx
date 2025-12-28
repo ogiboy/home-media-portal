@@ -4,11 +4,13 @@ import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
+// Root dialog primitives.
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
 const DialogPortal = DialogPrimitive.Portal;
 const DialogClose = DialogPrimitive.Close;
 
+// Dialog overlay backdrop.
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
@@ -30,6 +32,7 @@ type DialogContentProps = React.ComponentPropsWithoutRef<
   closeLabel?: string;
 };
 
+// Dialog content container with a close button.
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps

@@ -1,3 +1,4 @@
+// Shared types for health polling and helpers.
 export type HealthStatus = {
   id: string;
   ok: boolean;
@@ -10,6 +11,7 @@ export type HealthResponse = {
   checkedAt: string;
 };
 
+// Look up a service health entry by ID.
 export const getServiceHealth = (
   data: HealthResponse | undefined,
   id: string

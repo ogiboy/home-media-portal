@@ -3,6 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+// Tailwind variant map for badge styles.
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border border-border/60 px-2.5 py-0.5 text-xs font-medium",
   {
@@ -23,6 +24,7 @@ export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}
 
+// Badge component for small status labels.
 function Badge({ className, variant, ...props }: BadgeProps) {
   return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
 }

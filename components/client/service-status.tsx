@@ -1,12 +1,15 @@
 "use client";
 
+// Client health indicators for service cards.
 import useSWR from "swr";
 
 import { jsonFetcher } from "@/lib/fetcher";
 import { getServiceHealth, type HealthResponse } from "@/lib/health";
+import { HEALTH_POLL_INTERVAL_MS } from "@/lib/constants/polling";
 import type { PortalStrings } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
+// Visual tone map for service states.
 const statusTone = {
   online: "bg-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.45)]",
   offline: "bg-rose-400 shadow-[0_0_16px_rgba(248,113,113,0.4)]",
@@ -20,11 +23,12 @@ type ServiceStatusProps = {
   strings: PortalStrings;
 };
 
+// Render the status dot + label for a service.
 export function ServiceStatusBadge({ serviceId, isHome, strings }: ServiceStatusProps) {
   const { data } = useSWR<HealthResponse>(
     isHome ? "/api/health" : null,
     jsonFetcher,
-    { refreshInterval: 12000 }
+    { refreshInterval: HEALTH_POLL_INTERVAL_MS }
   );
 
   if (!isHome) {
@@ -56,11 +60,12 @@ export function ServiceStatusBadge({ serviceId, isHome, strings }: ServiceStatus
   );
 }
 
+// Render the latest latency value for a service.
 export function ServiceLatency({ serviceId, isHome, strings }: ServiceStatusProps) {
   const { data } = useSWR<HealthResponse>(
     isHome ? "/api/health" : null,
     jsonFetcher,
-    { refreshInterval: 12000 }
+    { refreshInterval: HEALTH_POLL_INTERVAL_MS }
   );
 
   if (!isHome) {

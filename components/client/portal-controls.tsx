@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+// Client-only header controls (command palette + tailnet gate).
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowUpRight, Loader2, Search } from 'lucide-react';
+import { ArrowUpRight, Search } from 'lucide-react';
 
-import BrandMark from '@/components/brand-mark';
+import TailnetGate from '@/components/client/tailnet-gate';
 import { Button } from '@/components/ui/button';
 import {
   CommandDialog,
@@ -19,7 +20,9 @@ import { HOME_URL } from '@/lib/env';
 import type { PortalStrings } from '@/lib/i18n';
 import { getServiceHref, services } from '@/lib/services';
 import { cn } from '@/lib/utils';
+import { pushToast } from '@/lib/toast-store';
 
+// Status dot palette for the tailnet pill.
 const statusTone = {
   online: 'bg-emerald-500',
   offline: 'bg-rose-500',
@@ -31,6 +34,7 @@ type PortalControlsProps = {
   isPublic: boolean;
 };
 
+// Header controls for search and tailnet actions.
 export default function PortalControls({
   strings,
   isPublic,
@@ -39,6 +43,40 @@ export default function PortalControls({
   const searchParams = useSearchParams();
   const { status, retry } = useTailnetStatus(HOME_URL);
   const [open, setOpen] = useState(false);
+  const lastStatus = useRef<typeof status | null>(null);
+
+  useEffect(() => {
+    if (lastStatus.current === status) {
+      return;
+    }
+
+    const shouldAnnounceInitial =
+      lastStatus.current === null && status !== 'connecting';
+
+    if (lastStatus.current !== null || shouldAnnounceInitial) {
+      if (status === 'online') {
+        pushToast({
+          title: strings.toasts.tailnetOnline.title,
+          description: strings.toasts.tailnetOnline.description,
+          tone: 'success',
+        });
+      } else if (status === 'offline') {
+        pushToast({
+          title: strings.toasts.tailnetOffline.title,
+          description: strings.toasts.tailnetOffline.description,
+          tone: 'warning',
+        });
+      } else if (status === 'connecting') {
+        pushToast({
+          title: strings.toasts.tailnetConnecting.title,
+          description: strings.toasts.tailnetConnecting.description,
+          tone: 'info',
+        });
+      }
+    }
+
+    lastStatus.current = status;
+  }, [status, strings]);
 
   const statusLabel =
     status === 'online'
@@ -76,7 +114,8 @@ export default function PortalControls({
     [isPublic, setActiveApp]
   );
 
-  const showGate = isPublic || status !== 'online';
+  // Public shell always shows the gate; home only blocks when offline.
+  const showGate = isPublic || status === 'offline';
   const showRetry = isPublic && status !== 'online';
 
   const enterHome = useCallback(() => {
@@ -157,76 +196,5 @@ export default function PortalControls({
         onEnter={enterHome}
       />
     </>
-  );
-}
-
-type GateProps = {
-  visible: boolean;
-  status: 'connecting' | 'online' | 'offline';
-  isPublic: boolean;
-  strings: PortalStrings;
-  onEnter: () => void;
-};
-
-function TailnetGate({
-  visible,
-  status,
-  isPublic,
-  strings,
-  onEnter,
-}: GateProps) {
-  if (!visible) {
-    return null;
-  }
-
-  const statusLabel =
-    status === 'offline'
-      ? strings.gate.waitingLabel
-      : status === 'connecting'
-      ? strings.gate.connectingLabel
-      : strings.gate.connected;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-md">
-      <div className="portal-surface portal-entrance mx-4 flex w-full max-w-2xl flex-col gap-5 rounded-(--radius) p-8 text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 shadow-[0_0_40px_var(--portal-glow-strong)]">
-          <BrandMark className="h-9 w-9" />
-        </div>
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            {strings.gate.title}
-          </p>
-          <h2 className="text-2xl font-semibold">
-            {status === 'online'
-              ? strings.gate.connected
-              : status === 'offline'
-              ? strings.gate.waiting
-              : strings.gate.connecting}
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {isPublic
-              ? strings.gate.publicDescription
-              : strings.gate.homeDescription}
-          </p>
-        </div>
-        {status !== 'online' && (
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span>{statusLabel}</span>
-          </div>
-        )}
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          {isPublic && status === 'online' && (
-            <Button
-              onClick={onEnter}
-              className="shadow-[0_12px_30px_var(--portal-glow)]"
-            >
-              {strings.gate.enter}
-              <ArrowUpRight className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
   );
 }

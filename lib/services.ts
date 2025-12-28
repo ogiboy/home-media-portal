@@ -1,5 +1,6 @@
 import { HOME_URL } from "@/lib/env";
 
+// Ordered list of service identifiers used across the portal.
 export const serviceIds = [
   "jellyfin",
   "radarr",
@@ -11,6 +12,7 @@ export const serviceIds = [
 
 export type ServiceId = (typeof serviceIds)[number];
 
+// How a service is opened from the UI.
 export type ServiceOpenMode = "overlay" | "newtab";
 
 export type ServiceDefinition = {
@@ -23,6 +25,7 @@ export type ServiceDefinition = {
   accent: string;
 };
 
+// Registry of known services and their routes.
 export const services: ServiceDefinition[] = [
   {
     id: "jellyfin",
@@ -80,9 +83,11 @@ export const services: ServiceDefinition[] = [
   },
 ];
 
+// Locate a service by ID when resolving the focus overlay.
 export const getServiceById = (id: string | null) =>
   services.find((service) => service.id === id);
 
+// Build an absolute URL for the service based on HOME_URL.
 export const getServiceHref = (service: ServiceDefinition) => {
   const base = HOME_URL.replace(/\/$/, "");
   return `${base}${service.path}`;

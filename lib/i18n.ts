@@ -1,8 +1,11 @@
+// Localization dictionaries and lookup helpers.
 import type { ServiceId } from "@/lib/services";
 
+// Supported locale codes.
 export const locales = ["tr", "en", "it"] as const;
 export type Locale = (typeof locales)[number];
 
+// Default locale used when none is resolved.
 export const defaultLocale: Locale = "tr";
 
 type TimeStrings = {
@@ -60,6 +63,10 @@ export type PortalStrings = {
     open: string;
     newTab: string;
     copyLink: string;
+    restart: string;
+    restartPending: string;
+    restartQueued: string;
+    restartUnavailable: string;
     statusOnline: string;
     statusOffline: string;
     statusChecking: string;
@@ -122,6 +129,44 @@ export type PortalStrings = {
     placeholder: string;
     empty: string;
     groupServices: string;
+  };
+  toasts: {
+    tailnetOnline: {
+      title: string;
+      description: string;
+    };
+    tailnetOffline: {
+      title: string;
+      description: string;
+    };
+    tailnetConnecting: {
+      title: string;
+      description: string;
+    };
+    boardSuccess: {
+      title: string;
+      description: string;
+    };
+    boardError: {
+      title: string;
+      description: string;
+    };
+    boardRate: {
+      title: string;
+      description: string;
+    };
+    boardUnavailable: {
+      title: string;
+      description: string;
+    };
+    restartQueued: {
+      title: string;
+      description: string;
+    };
+    restartUnavailable: {
+      title: string;
+      description: string;
+    };
   };
   misc: {
     updated: string;
@@ -190,6 +235,10 @@ const dictionaries: Record<Locale, PortalStrings> = {
       open: "Ac",
       newTab: "Yeni sekme",
       copyLink: "Baglantiyi kopyala",
+      restart: "Yeniden baslat",
+      restartPending: "Yeniden baslatiliyor",
+      restartQueued: "Kuyruga alindi",
+      restartUnavailable: "Hazir degil",
       statusOnline: "Cevrimici",
       statusOffline: "Cevrimdisi",
       statusChecking: "Kontrol ediliyor",
@@ -259,6 +308,44 @@ const dictionaries: Record<Locale, PortalStrings> = {
       placeholder: "Servis ara...",
       empty: "Eslesme yok.",
       groupServices: "Servisler",
+    },
+    toasts: {
+      tailnetOnline: {
+        title: "Tailnet baglandi",
+        description: "Ev portali hazir.",
+      },
+      tailnetOffline: {
+        title: "Tailnet kapali",
+        description: "Tailscale'i acip tekrar dene.",
+      },
+      tailnetConnecting: {
+        title: "Tailnet baglaniyor",
+        description: "Baglanti kontrol ediliyor.",
+      },
+      boardSuccess: {
+        title: "Mesaj gonderildi",
+        description: "Not panosuna eklendi.",
+      },
+      boardError: {
+        title: "Mesaj gonderilemedi",
+        description: "Tekrar dene veya baglantiyi kontrol et.",
+      },
+      boardRate: {
+        title: "Cok hizli gonderim",
+        description: "Lutfen biraz bekle.",
+      },
+      boardUnavailable: {
+        title: "Tailnet gerekli",
+        description: "Pano sadece ev portalinda.",
+      },
+      restartQueued: {
+        title: "Yeniden baslatma gonderildi",
+        description: "Istegin kuyruga alindi.",
+      },
+      restartUnavailable: {
+        title: "Aksiyon hazir degil",
+        description: "Bu islem henuz desteklenmiyor.",
+      },
     },
     misc: {
       updated: "Guncellendi",
@@ -333,6 +420,10 @@ const dictionaries: Record<Locale, PortalStrings> = {
       open: "Open",
       newTab: "New tab",
       copyLink: "Copy link",
+      restart: "Restart",
+      restartPending: "Restarting",
+      restartQueued: "Queued",
+      restartUnavailable: "Unavailable",
       statusOnline: "Online",
       statusOffline: "Offline",
       statusChecking: "Checking",
@@ -402,6 +493,44 @@ const dictionaries: Record<Locale, PortalStrings> = {
       placeholder: "Search services...",
       empty: "No matches found.",
       groupServices: "Services",
+    },
+    toasts: {
+      tailnetOnline: {
+        title: "Tailnet connected",
+        description: "Home portal is reachable.",
+      },
+      tailnetOffline: {
+        title: "Tailnet offline",
+        description: "Enable Tailscale and retry.",
+      },
+      tailnetConnecting: {
+        title: "Checking tailnet",
+        description: "Connection check in progress.",
+      },
+      boardSuccess: {
+        title: "Message posted",
+        description: "Your note is on the board.",
+      },
+      boardError: {
+        title: "Message failed",
+        description: "Please try again.",
+      },
+      boardRate: {
+        title: "Too many requests",
+        description: "Slow down for a moment.",
+      },
+      boardUnavailable: {
+        title: "Tailnet required",
+        description: "Board is available on the home portal.",
+      },
+      restartQueued: {
+        title: "Restart queued",
+        description: "Service restart has been queued.",
+      },
+      restartUnavailable: {
+        title: "Action unavailable",
+        description: "This action is not available yet.",
+      },
     },
     misc: {
       updated: "Updated",
@@ -476,6 +605,10 @@ const dictionaries: Record<Locale, PortalStrings> = {
       open: "Apri",
       newTab: "Nuova scheda",
       copyLink: "Copia link",
+      restart: "Riavvia",
+      restartPending: "Riavvio",
+      restartQueued: "In coda",
+      restartUnavailable: "Non disponibile",
       statusOnline: "Online",
       statusOffline: "Offline",
       statusChecking: "Controllo",
@@ -546,6 +679,44 @@ const dictionaries: Record<Locale, PortalStrings> = {
       empty: "Nessun risultato.",
       groupServices: "Servizi",
     },
+    toasts: {
+      tailnetOnline: {
+        title: "Tailnet connessa",
+        description: "Il portale di casa e raggiungibile.",
+      },
+      tailnetOffline: {
+        title: "Tailnet offline",
+        description: "Attiva Tailscale e riprova.",
+      },
+      tailnetConnecting: {
+        title: "Controllo tailnet",
+        description: "Verifica connessione in corso.",
+      },
+      boardSuccess: {
+        title: "Messaggio inviato",
+        description: "Il tuo messaggio e sulla bacheca.",
+      },
+      boardError: {
+        title: "Invio fallito",
+        description: "Riprova tra poco.",
+      },
+      boardRate: {
+        title: "Troppi invii",
+        description: "Attendi un momento.",
+      },
+      boardUnavailable: {
+        title: "Tailnet richiesta",
+        description: "La bacheca e solo nel portale di casa.",
+      },
+      restartQueued: {
+        title: "Riavvio in coda",
+        description: "Il riavvio e stato accodato.",
+      },
+      restartUnavailable: {
+        title: "Azione non disponibile",
+        description: "Questa azione non e ancora attiva.",
+      },
+    },
     misc: {
       updated: "Aggiornato",
       na: "n/d",
@@ -578,17 +749,37 @@ const dictionaries: Record<Locale, PortalStrings> = {
   },
 };
 
-export const resolveLocale = (value?: string): Locale => {
-  if (!value) {
-    return defaultLocale;
+// Pull potential locales from an Accept-Language header.
+const parseAcceptLanguage = (header?: string) =>
+  header
+    ? header
+        .split(",")
+        .map((part) => part.trim().split(";")[0])
+        .filter(Boolean)
+        .map((part) => part.toLowerCase())
+    : [];
+
+// Normalize a locale string to a supported locale.
+export const resolveLocale = (value?: string, acceptLanguage?: string): Locale => {
+  if (value) {
+    const normalized = value.toLowerCase();
+    if (locales.includes(normalized as Locale)) {
+      return normalized as Locale;
+    }
   }
-  const normalized = value.toLowerCase();
-  return locales.includes(normalized as Locale)
-    ? (normalized as Locale)
-    : defaultLocale;
+
+  for (const candidate of parseAcceptLanguage(acceptLanguage)) {
+    const base = candidate.split("-")[0];
+    if (locales.includes(base as Locale)) {
+      return base as Locale;
+    }
+  }
+
+  return defaultLocale;
 };
 
-export const getTranslations = (value?: string) => {
-  const locale = resolveLocale(value);
+// Resolve translations and the final locale tuple.
+export const getTranslations = (value?: string, acceptLanguage?: string) => {
+  const locale = resolveLocale(value, acceptLanguage);
   return { locale, strings: dictionaries[locale] };
 };

@@ -1,13 +1,16 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 import HttpRedirect from "@/components/client/http-redirect";
-import { HOME_URL } from "@/lib/env";
 import { getTranslations } from "@/lib/i18n";
+import { HOME_URL } from "@/lib/env";
 
+// HTTP-only landing that nudges users to HTTPS.
 export default async function HttpRedirectPage() {
   const cookieStore = await cookies();
+  const headerList = await headers();
   const locale = cookieStore.get("portal_locale")?.value;
-  const { strings } = getTranslations(locale);
+  const acceptLanguage = headerList.get("accept-language") ?? undefined;
+  const { strings } = getTranslations(locale, acceptLanguage);
 
   return <HttpRedirect target={HOME_URL} strings={strings.http} />;
 }

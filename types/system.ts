@@ -1,3 +1,4 @@
+// System stats payload returned by the home server API.
 export type SystemStats = {
   cpu: {
     load1: number;

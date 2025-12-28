@@ -1,5 +1,6 @@
 'use client';
 
+// Client widget for live system stats and quick service health.
 import useSWR from 'swr';
 
 import {
@@ -13,6 +14,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { jsonFetcher } from '@/lib/fetcher';
 import { formatBytes, formatUptime } from '@/lib/format';
 import { getServiceHealth, type HealthResponse } from '@/lib/health';
+import {
+  HEALTH_POLL_INTERVAL_MS,
+  SYSTEM_POLL_INTERVAL_MS,
+} from '@/lib/constants/polling';
 import { services } from '@/lib/services';
 import type { PortalStrings } from '@/lib/i18n';
 import type { SystemStats } from '@/types/system';
@@ -22,16 +27,17 @@ type SystemPanelProps = {
   strings: PortalStrings;
 };
 
+// Render the system stats and quick health widgets.
 export default function SystemPanel({ isHome, strings }: SystemPanelProps) {
   const { data: system } = useSWR<SystemStats>(
     isHome ? '/api/system' : null,
     jsonFetcher,
-    { refreshInterval: 5000 }
+    { refreshInterval: SYSTEM_POLL_INTERVAL_MS }
   );
   const { data: health } = useSWR<HealthResponse>(
     isHome ? '/api/health' : null,
     jsonFetcher,
-    { refreshInterval: 12000 }
+    { refreshInterval: HEALTH_POLL_INTERVAL_MS }
   );
 
   return (
@@ -132,6 +138,7 @@ export default function SystemPanel({ isHome, strings }: SystemPanelProps) {
   );
 }
 
+// Build the quick-status list for services.
 function servicesSummary(
   isHome: boolean,
   health: HealthResponse | undefined,

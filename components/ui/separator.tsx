@@ -1,18 +1,31 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-const Separator = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="separator"
-    className={cn("h-px w-full bg-border/70", className)}
-    {...props}
-  />
-));
-Separator.displayName = "Separator";
+type SeparatorProps = React.HTMLAttributes<HTMLDivElement> & {
+  orientation?: 'horizontal' | 'vertical';
+  decorative?: boolean;
+};
+
+// Horizontal or vertical divider component.
+const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
+  (
+    { className, orientation = 'horizontal', decorative = true, ...props },
+    ref
+  ) => (
+    <div
+      ref={ref}
+      role={decorative ? 'presentation' : 'separator'}
+      aria-orientation={orientation}
+      className={cn(
+        'shrink-0 bg-border',
+        orientation === 'horizontal' ? 'h-px w-full' : 'h-full w-px',
+        className
+      )}
+      {...props}
+    />
+  )
+);
+Separator.displayName = 'Separator';
 
 export { Separator };

@@ -33,14 +33,23 @@ A sleek, animated home media portal that lives in two modes:
 Note: A separate installer repo will later automate Tailscale/Caddy/systemd for a one-command setup. Until then, this README keeps minimal notes and examples.
 
 ### Environment variables
-```
-NEXT_PUBLIC_DEPLOY_TARGET=public|home
+Create a `.env.local` file: 
+```dotenv
+# public | home
+NEXT_PUBLIC_DEPLOY_TARGET=home
+
+# Tailnet home portal URL (used for reachability and links)
 NEXT_PUBLIC_HOME_URL=https://home.tailnet.ts.net
+
+# Optional override for the local SQLite database path
 BOARD_DB_PATH=/var/lib/home-media-portal/board.db
+
+# Optional dev-only origins for LAN access (comma-separated)
+NEXT_PUBLIC_DEV_ORIGINS=http://192.168.1.4:3000
 ```
 
 ### Local development
-1. `cp .env.example .env.local`
+1. Create `.env.local` (see above)
 2. Set `NEXT_PUBLIC_DEPLOY_TARGET=home`
 3. `npm install`
 4. `npm run dev`
@@ -124,14 +133,23 @@ Evdeki medya servisleri icin tek bir portal. Iki modda calisir:
 Not: Tek komutluk kurulum icin Tailscale/Caddy/systemd otomasyonu ayri bir repo olacak. O repo hazir olana kadar burada kisa notlar ve ornekler var.
 
 ### Ortam degiskenleri
-```
-NEXT_PUBLIC_DEPLOY_TARGET=public|home
+`.env.local` dosyasi olusturun: 
+```dotenv
+# public | home
+NEXT_PUBLIC_DEPLOY_TARGET=home
+
+# Tailnet home portal URL (used for reachability and links)
 NEXT_PUBLIC_HOME_URL=https://home.tailnet.ts.net
+
+# Optional override for the local SQLite database path
 BOARD_DB_PATH=/var/lib/home-media-portal/board.db
+
+# Optional dev-only origins for LAN access (comma-separated)
+NEXT_PUBLIC_DEV_ORIGINS=http://192.168.1.4:3000
 ```
 
 ### Lokal gelistirme
-1. `cp .env.example .env.local`
+1. `.env.local` dosyasini olustur (ustteki ornek)
 2. `NEXT_PUBLIC_DEPLOY_TARGET=home`
 3. `npm install`
 4. `npm run dev`

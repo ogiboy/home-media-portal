@@ -1,19 +1,34 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+// Client message board widget with polling and server-action posting.
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
 import useSWR from "swr";
 import { Loader2 } from "lucide-react";
 
+import { postBoardMessage, type BoardActionState } from "@/app/actions/board-actions";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { jsonFetcher } from "@/lib/fetcher";
 import { formatRelativeTime } from "@/lib/format";
+import { BOARD_AUTHOR_MAX, BOARD_BODY_MAX } from "@/lib/constants/board";
+import { BOARD_POLL_INTERVAL_MS } from "@/lib/constants/polling";
 import type { PortalStrings } from "@/lib/i18n";
+import { pushToast } from "@/lib/toast-store";
 
+const initialState: BoardActionState = { status: "idle", resetKey: 0 };
+
+// Message DTO received from the board API.
 type BoardMessage = {
   id: number;
   author: string;
@@ -21,6 +36,7 @@ type BoardMessage = {
   createdAt: string;
 };
 
+// API payload structure for the message list.
 type BoardResponse = {
   messages: BoardMessage[];
 };
@@ -30,68 +46,80 @@ type MessageBoardPanelProps = {
   strings: PortalStrings;
 };
 
-export default function MessageBoardPanel({ isHome, strings }: MessageBoardPanelProps) {
+// Message board panel with server-action form.
+export default function MessageBoardPanel({
+  isHome,
+  strings,
+}: MessageBoardPanelProps) {
   const { data, mutate } = useSWR<BoardResponse>(
     isHome ? "/api/board" : null,
     jsonFetcher,
-    { refreshInterval: 15000 }
+    { refreshInterval: BOARD_POLL_INTERVAL_MS }
   );
 
-  const [author, setAuthor] = useState("");
-  const [body, setBody] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [cooldown, setCooldown] = useState(false);
+  const [state, formAction] = useActionState(postBoardMessage, initialState);
+  const lastToastKey = useRef<string | null>(null);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError(null);
-
-    if (!isHome) {
-      return;
+  const errorMessage = useMemo(() => {
+    if (state.status !== "error") {
+      return null;
     }
-
-    const trimmedAuthor = author.trim();
-    const trimmedBody = body.trim();
-
-    if (trimmedAuthor.length < 1 || trimmedAuthor.length > 30) {
-      setError(strings.board.errorInvalid);
-      return;
+    switch (state.error) {
+      case "invalid":
+        return strings.board.errorInvalid;
+      case "rate":
+        return strings.board.errorRate;
+      case "not_available":
+        return strings.misc.tailnetOnly;
+      default:
+        return strings.board.errorGeneric;
     }
-    if (trimmedBody.length < 1 || trimmedBody.length > 280) {
-      setError(strings.board.errorInvalid);
-      return;
-    }
+  }, [state, strings]);
 
-    try {
-      setSubmitting(true);
-      const response = await fetch("/api/board", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ author: trimmedAuthor, body: trimmedBody }),
-      });
-
-      if (!response.ok) {
-        const result = await response.json().catch(() => ({}));
-        if (result?.error === "rate_limited") {
-          setError(strings.board.errorRate);
-        } else {
-          setError(strings.board.errorGeneric);
-        }
-        return;
-      }
-
-      setAuthor("");
-      setBody("");
+  useEffect(() => {
+    if (state.status === "success") {
       mutate();
-      setCooldown(true);
-      window.setTimeout(() => setCooldown(false), 1500);
-    } catch {
-      setError(strings.board.errorGeneric);
-    } finally {
-      setSubmitting(false);
     }
-  };
+  }, [state.status, mutate]);
+
+  useEffect(() => {
+    const toastKey = `${state.status}:${state.error ?? ""}`;
+    if (toastKey === lastToastKey.current) {
+      return;
+    }
+
+    if (state.status === "success") {
+      pushToast({
+        title: strings.toasts.boardSuccess.title,
+        description: strings.toasts.boardSuccess.description,
+        tone: "success",
+      });
+    }
+
+    if (state.status === "error") {
+      if (state.error === "rate") {
+        pushToast({
+          title: strings.toasts.boardRate.title,
+          description: strings.toasts.boardRate.description,
+          tone: "warning",
+        });
+      } else if (state.error === "not_available") {
+        pushToast({
+          title: strings.toasts.boardUnavailable.title,
+          description: strings.toasts.boardUnavailable.description,
+          tone: "warning",
+        });
+      } else {
+        pushToast({
+          title: strings.toasts.boardError.title,
+          description: strings.toasts.boardError.description,
+          tone: "error",
+        });
+      }
+    }
+
+    lastToastKey.current = toastKey;
+  }, [state.status, state.error, strings]);
 
   return (
     <div className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
@@ -108,7 +136,9 @@ export default function MessageBoardPanel({ isHome, strings }: MessageBoardPanel
               <Skeleton className="h-6 w-3/4" />
             </div>
           ) : data.messages.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{strings.board.empty}</p>
+            <p className="text-sm text-muted-foreground">
+              {strings.board.empty}
+            </p>
           ) : (
             <div className="space-y-4">
               {data.messages.map((message) => (
@@ -117,10 +147,16 @@ export default function MessageBoardPanel({ isHome, strings }: MessageBoardPanel
                   className="portal-card rounded-2xl p-4"
                 >
                   <header className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">{message.author}</span>
-                    <span>{formatRelativeTime(message.createdAt, strings.time)}</span>
+                    <span className="font-semibold text-foreground">
+                      {message.author}
+                    </span>
+                    <span>
+                      {formatRelativeTime(message.createdAt, strings.time)}
+                    </span>
                   </header>
-                  <p className="mt-2 text-sm text-foreground/90">{message.body}</p>
+                  <p className="mt-2 text-sm text-foreground/90">
+                    {message.body}
+                  </p>
                 </article>
               ))}
             </div>
@@ -134,48 +170,90 @@ export default function MessageBoardPanel({ isHome, strings }: MessageBoardPanel
           <CardDescription>{strings.board.postDesc}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <Label htmlFor="author">{strings.board.nameLabel}</Label>
-              <Input
-                id="author"
-                placeholder={strings.board.namePlaceholder}
-                value={author}
-                onChange={(event) => setAuthor(event.target.value)}
-                maxLength={30}
-                disabled={!isHome}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="body">{strings.board.messageLabel}</Label>
-              <Textarea
-                id="body"
-                placeholder={strings.board.messagePlaceholder}
-                value={body}
-                onChange={(event) => setBody(event.target.value)}
-                maxLength={280}
-                disabled={!isHome}
-              />
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>{strings.board.charCount}: {body.length}/280</span>
-                <span>{strings.board.tailnetOnly}</span>
-              </div>
-            </div>
-            {error && <p className="text-xs text-rose-600">{error}</p>}
-            <Button
-              type="submit"
-              disabled={!isHome || submitting || cooldown}
-              className="shadow-[0_12px_30px_var(--portal-glow)]"
-            >
-              {submitting ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                strings.board.postButton
-              )}
-            </Button>
-          </form>
+          <BoardForm
+            key={state.resetKey ?? 0}
+            isHome={isHome}
+            strings={strings}
+            errorMessage={errorMessage}
+            formAction={formAction}
+          />
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+type BoardFormProps = {
+  isHome: boolean;
+  strings: PortalStrings;
+  errorMessage: string | null;
+  formAction: (formData: FormData) => void;
+};
+
+// Form section rendered as its own component to reset on success.
+function BoardForm({
+  isHome,
+  strings,
+  errorMessage,
+  formAction,
+}: BoardFormProps) {
+  const [bodyLength, setBodyLength] = useState(0);
+
+  return (
+    <form className="space-y-4" action={formAction}>
+      <div className="space-y-2">
+        <Label htmlFor="author">{strings.board.nameLabel}</Label>
+        <Input
+          id="author"
+          name="author"
+          placeholder={strings.board.namePlaceholder}
+          maxLength={BOARD_AUTHOR_MAX}
+          disabled={!isHome}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="body">{strings.board.messageLabel}</Label>
+        <Textarea
+          id="body"
+          name="body"
+          placeholder={strings.board.messagePlaceholder}
+          maxLength={BOARD_BODY_MAX}
+          disabled={!isHome}
+          onInput={(event) =>
+            setBodyLength(event.currentTarget.value.length)
+          }
+        />
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <span>
+            {strings.board.charCount}: {bodyLength}/{BOARD_BODY_MAX}
+          </span>
+          <span>{strings.board.tailnetOnly}</span>
+        </div>
+      </div>
+      {errorMessage && (
+        <p className="text-xs text-rose-600">{errorMessage}</p>
+      )}
+      <SubmitButton label={strings.board.postButton} disabled={!isHome} />
+    </form>
+  );
+}
+
+type SubmitButtonProps = {
+  label: string;
+  disabled: boolean;
+};
+
+// Submit button that reflects the server action pending state.
+function SubmitButton({ label, disabled }: SubmitButtonProps) {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      type="submit"
+      disabled={disabled || pending}
+      className="shadow-[0_12px_30px_var(--portal-glow)]"
+    >
+      {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : label}
+    </Button>
   );
 }
