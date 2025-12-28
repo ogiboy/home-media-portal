@@ -71,7 +71,7 @@ export default function SystemPanel({ isHome, strings }: SystemPanelProps) {
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-muted/60">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
+                  className="h-full rounded-full bg-linear-to-r from-primary to-accent"
                   style={{
                     width: `${Math.min(
                       100,
@@ -94,7 +94,7 @@ export default function SystemPanel({ isHome, strings }: SystemPanelProps) {
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-muted/60">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-accent to-primary"
+                  className="h-full rounded-full bg-linear-to-r from-accent to-primary"
                   style={{ width: `${system.disk.usedPercent ?? 0}%` }}
                 />
               </div>

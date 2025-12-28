@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowUpRight, Loader2, Search } from 'lucide-react';
 
+import BrandMark from '@/components/brand-mark';
 import { Button } from '@/components/ui/button';
 import {
   CommandDialog,
@@ -178,18 +179,18 @@ function TailnetGate({
     return null;
   }
 
-  const blocking = isPublic;
+  const statusLabel =
+    status === 'offline'
+      ? strings.gate.waitingLabel
+      : status === 'connecting'
+      ? strings.gate.connectingLabel
+      : strings.gate.connected;
 
   return (
-    <div
-      className={cn(
-        'fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm',
-        !blocking && 'pointer-events-none'
-      )}
-    >
-      <div className="portal-surface mx-4 flex max-w-xl flex-col gap-4 rounded-[var(--radius)] p-6 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[var(--portal-glow)]">
-          <Loader2 className="h-6 w-6 animate-spin" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-md">
+      <div className="portal-surface portal-entrance mx-4 flex w-full max-w-2xl flex-col gap-5 rounded-(--radius) p-8 text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 shadow-[0_0_40px_var(--portal-glow-strong)]">
+          <BrandMark className="h-9 w-9" />
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
@@ -208,21 +209,20 @@ function TailnetGate({
               : strings.gate.homeDescription}
           </p>
         </div>
+        {status !== 'online' && (
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span>{statusLabel}</span>
+          </div>
+        )}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          {isPublic && status === 'online' ? (
+          {isPublic && status === 'online' && (
             <Button
               onClick={onEnter}
               className="shadow-[0_12px_30px_var(--portal-glow)]"
             >
               {strings.gate.enter}
               <ArrowUpRight className="h-4 w-4" />
-            </Button>
-          ) : (
-            <Button variant="secondary" disabled>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              {status === 'offline'
-                ? strings.gate.waitingLabel
-                : strings.gate.connectingLabel}
             </Button>
           )}
         </div>

@@ -319,4 +319,9 @@ html[data-focus="true"] .portal-mobile-nav {
   .portal-orb {
     animation: none;
   }
+
+  .portal-entrance {
+    opacity: 1;
+    transform: none;
+  }
 }

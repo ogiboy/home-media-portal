@@ -6,9 +6,9 @@ import {
   MessageSquare,
   MonitorPlay,
   Server,
-  Sparkles,
 } from 'lucide-react';
 
+import BrandMark from '@/components/brand-mark';
 import { Badge } from '@/components/ui/badge';
 import {
   CardContent,
@@ -59,8 +59,8 @@ export default async function PortalApp() {
           style={withDelay(40)}
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-(--portal-glow)">
-              <Sparkles className="h-5 w-5" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[0_0_24px_var(--portal-glow)]">
+              <BrandMark className="h-6 w-6 text-primary-foreground" />
             </div>
             <div className="portal-label">
               <p className="text-sm font-semibold tracking-wide">

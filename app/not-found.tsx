@@ -11,7 +11,7 @@ export default async function NotFoundPage() {
 
   return (
     <main className="portal-shell flex min-h-screen items-center justify-center px-6">
-      <section className="portal-surface max-w-md rounded-4xl p-6 text-center">
+      <section className="portal-surface max-w-md rounded-(--radius) p-6 text-center">
         <h1 className="text-xl font-semibold">{strings.notFound.title}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {strings.notFound.description}

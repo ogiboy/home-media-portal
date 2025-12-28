@@ -30,6 +30,8 @@ A sleek, animated home media portal that lives in two modes:
 - Reverse proxy with HTTPS (Caddy or Nginx)
 - Media services running locally (e.g., Jellyfin, Radarr, Sonarr, Prowlarr, Bazarr)
 
+Note: A separate installer repo will later automate Tailscale/Caddy/systemd for a one-command setup. Until then, this README keeps minimal notes and examples.
+
 ### Environment variables
 ```
 NEXT_PUBLIC_DEPLOY_TARGET=public|home
@@ -118,6 +120,8 @@ Evdeki medya servisleri icin tek bir portal. Iki modda calisir:
 - Sunucuda ve istemci cihazlarda Tailscale
 - HTTPS destekli reverse proxy (Caddy veya Nginx)
 - Yerel calisan medya servisleri (Jellyfin, Radarr, Sonarr, Prowlarr, Bazarr)
+
+Not: Tek komutluk kurulum icin Tailscale/Caddy/systemd otomasyonu ayri bir repo olacak. O repo hazir olana kadar burada kisa notlar ve ornekler var.
 
 ### Ortam degiskenleri
 ```

@@ -16,6 +16,9 @@ const themeScript = `(() => {\n  try {\n    const stored = localStorage.getItem(
 export const metadata: Metadata = {
   title: "Home Media Portal",
   description: "A unified, in-universe dashboard for your home media services.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default async function RootLayout({

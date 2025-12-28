@@ -69,14 +69,14 @@ export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
     <AnimatePresence>
       {isActive && service && (
         <motion.section
-          className="portal-surface absolute inset-0 z-30 flex flex-col gap-4 rounded-[var(--radius)] p-5"
+          className="portal-surface absolute inset-0 z-30 flex flex-col gap-4 rounded-(--radius) p-5"
           initial={{ opacity: 0, scale: 0.97, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.98, y: 10 }}
           transition={overlayTransition}
           aria-label={strings.focus.label}
         >
-          <div className="pointer-events-none absolute inset-0 rounded-[var(--radius)] border border-white/10" />
+          <div className="pointer-events-none absolute inset-0 rounded-(--radius) border border-white/10" />
           <motion.header
             className="flex flex-wrap items-center justify-between gap-3"
             initial={{ opacity: 0, y: -8 }}
