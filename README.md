@@ -1,3 +1,5 @@
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=ogiboy_home-media-portal) [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ogiboy_home-media-portal)](https://sonarcloud.io/summary/new_code?id=ogiboy_home-media-portal)
+
 # Home Media Portal / Ev Medya Portali
 
 A dual-deploy Next.js dashboard for a self-hosted media stack. It provides a polished single-universe UX with embedded services (focus mode), system health, and a small family message board.
@@ -9,12 +11,14 @@ Caddy + Tailscale keeps services on the same origin so Jellyfin/Radarr/Sonarr et
 ## English
 
 ### What this is
+
 A sleek, animated home media portal that lives in two modes:
 
 - **Public shell (Vercel):** shows the UI in a locked state, checks tailnet reachability, and offers a CTA to open the home portal.
 - **Home portal (Tailscale + Caddy):** full access, embedded dashboards, system stats, and a local SQLite message board.
 
 ### Features
+
 - Single-universe focus mode (services open in an iframe overlay, not a new page)
 - Service health and latency checks
 - System stats (CPU, RAM, disk, uptime, optional temperature)
@@ -24,6 +28,7 @@ A sleek, animated home media portal that lives in two modes:
 - Responsive layout with animated entrances
 
 ### Requirements
+
 - Node.js 20+ and npm
 - A Linux home server (recommended) with systemd
 - Tailscale installed on the server and client devices
@@ -33,7 +38,9 @@ A sleek, animated home media portal that lives in two modes:
 Note: A separate installer repo will later automate Tailscale/Caddy/systemd for a one-command setup. Until then, this README keeps minimal notes and examples.
 
 ### Environment variables
-Create a `.env.local` file: 
+
+Create a `.env.local` file:
+
 ```dotenv
 # public | home
 NEXT_PUBLIC_DEPLOY_TARGET=home
@@ -49,15 +56,18 @@ NEXT_PUBLIC_DEV_ORIGINS=http://192.168.1.4:3000
 ```
 
 ### Local development
+
 1. Create `.env.local` (see above)
 2. Set `NEXT_PUBLIC_DEPLOY_TARGET=home`
 3. `npm install`
 4. `npm run dev`
 
 ### Public shell (Vercel)
+
 Set `NEXT_PUBLIC_DEPLOY_TARGET=public` and `NEXT_PUBLIC_HOME_URL` to your tailnet domain. The UI stays locked until the tailnet is reachable and then shows an "Enter Home Portal" CTA.
 
 ### Home server deployment
+
 1. `npm install`
 2. `npm run build`
 3. `npm run start`
@@ -65,6 +75,7 @@ Set `NEXT_PUBLIC_DEPLOY_TARGET=public` and `NEXT_PUBLIC_HOME_URL` to your tailne
 SQLite note: ensure `BOARD_DB_PATH` directory exists and is writable by the systemd user.
 
 ### Reverse proxy (Caddy example)
+
 Replace `home.tailnet.ts.net` with your tailnet domain and update ports for your services:
 
 ```
@@ -83,9 +94,11 @@ home.tailnet.ts.net {
 ```
 
 ### HTTP to HTTPS redirect
+
 The portal includes an `/http-redirect` page for plain HTTP. Choose one:
 
 Option A (simple redirect):
+
 ```
 :80 {
   redir https://home.tailnet.ts.net/http-redirect 302
@@ -93,6 +106,7 @@ Option A (simple redirect):
 ```
 
 Option B (proxy HTTP to Next):
+
 ```
 :80 {
   reverse_proxy 127.0.0.1:3000
@@ -100,6 +114,7 @@ Option B (proxy HTTP to Next):
 ```
 
 ### Future ideas
+
 - More system sensors and charts
 - Service admin actions (e.g., reset passwords for Radarr/Sonarr/Jellyfin)
 - Alerts and health history
@@ -109,12 +124,14 @@ Option B (proxy HTTP to Next):
 ## Turkce
 
 ### Proje nedir?
+
 Evdeki medya servisleri icin tek bir portal. Iki modda calisir:
 
 - **Public shell (Vercel):** arayuz gozukur ama kilitlidir; tailnet erisimi varsa ev portalina CTA sunar.
 - **Home portal (Tailscale + Caddy):** tum servisler portal icinde calisir, sistem istatistikleri ve mesaj panosu aktif olur.
 
 ### Ozellikler
+
 - Tek evren odak modu (iframe overlay)
 - Servis saglik ve gecikme kontrolu
 - Sistem istatistikleri (CPU, RAM, disk, uptime, opsiyonel sicaklik)
@@ -124,6 +141,7 @@ Evdeki medya servisleri icin tek bir portal. Iki modda calisir:
 - Mobil uyumlu, animasyonlu arayuz
 
 ### Gereksinimler
+
 - Node.js 20+ ve npm
 - Linux ev sunucusu (onerilir) ve systemd
 - Sunucuda ve istemci cihazlarda Tailscale
@@ -133,7 +151,9 @@ Evdeki medya servisleri icin tek bir portal. Iki modda calisir:
 Not: Tek komutluk kurulum icin Tailscale/Caddy/systemd otomasyonu ayri bir repo olacak. O repo hazir olana kadar burada kisa notlar ve ornekler var.
 
 ### Ortam degiskenleri
-`.env.local` dosyasi olusturun: 
+
+`.env.local` dosyasi olusturun:
+
 ```dotenv
 # public | home
 NEXT_PUBLIC_DEPLOY_TARGET=home
@@ -149,15 +169,18 @@ NEXT_PUBLIC_DEV_ORIGINS=http://192.168.1.4:3000
 ```
 
 ### Lokal gelistirme
+
 1. `.env.local` dosyasini olustur (ustteki ornek)
 2. `NEXT_PUBLIC_DEPLOY_TARGET=home`
 3. `npm install`
 4. `npm run dev`
 
 ### Public shell (Vercel)
+
 `NEXT_PUBLIC_DEPLOY_TARGET=public` ve `NEXT_PUBLIC_HOME_URL` tailnet domainin olacak. Tailnet erisimi yoksa UI kilitli kalir, erisim olunca "Enter Home Portal" butonu gorunur.
 
 ### Sunucuya kurulum
+
 1. `npm install`
 2. `npm run build`
 3. `npm run start`
@@ -165,6 +188,7 @@ NEXT_PUBLIC_DEV_ORIGINS=http://192.168.1.4:3000
 SQLite notu: `BOARD_DB_PATH` klasoru mevcut olmali ve systemd kullanicisi yazabilmeli.
 
 ### Reverse proxy (Caddy ornegi)
+
 `home.tailnet.ts.net` yerine kendi tailnet domainini ve servis portlarini yaz:
 
 ```
@@ -183,9 +207,11 @@ home.tailnet.ts.net {
 ```
 
 ### HTTP -> HTTPS yonlendirme
+
 HTTP ile gelenler icin `/http-redirect` sayfasi vardir. Iki secenek:
 
 Secenek A (basit yonlendirme):
+
 ```
 :80 {
   redir https://home.tailnet.ts.net/http-redirect 302
@@ -193,6 +219,7 @@ Secenek A (basit yonlendirme):
 ```
 
 Secenek B (HTTP proxy):
+
 ```
 :80 {
   reverse_proxy 127.0.0.1:3000
@@ -200,6 +227,7 @@ Secenek B (HTTP proxy):
 ```
 
 ### Gelecek fikirleri
+
 - Daha fazla sistem istatistigi ve grafik
 - Radarr/Sonarr/Jellyfin icin admin aksiyonlari
 - Gecmis saglik verisi ve uyarilar
