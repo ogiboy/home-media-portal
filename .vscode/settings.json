@@ -1,10 +1,10 @@
 {
   "editor.formatOnSave": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  },
   "sonarlint.connectedMode.project": {
     "connectionId": "ogiboy",
     "projectKey": "ogiboy_home-media-portal"
-  },
-  "yaml.schemas": {
-    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
   }
 }
