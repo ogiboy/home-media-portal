@@ -16,7 +16,15 @@ type ServicesSectionProps = Readonly<{
   delay?: number;
 }>;
 
-// Section that renders the service cards grid.
+/**
+ * Render the Services section with a header and a responsive grid of service cards.
+ *
+ * @param strings - Localized text used for the section title, description, and hint
+ * @param isHome - Whether the section is rendered on the home page (affects card rendering)
+ * @param isPublic - Whether the section is rendered in a public context (affects card rendering)
+ * @param delay - Initial entrance animation delay in milliseconds applied to the section
+ * @returns The section element containing the services header and a grid of ServiceCard components
+ */
 export default function ServicesSection({
   strings,
   isHome,

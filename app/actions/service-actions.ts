@@ -19,7 +19,13 @@ import {
 
 export type ServiceActionResponse = ServiceActionResult;
 
-// Trigger a service action after validating identity, RBAC, and rate limits.
+/**
+ * Validate request context, enforce rate limits and RBAC, and invoke the specified service action.
+ *
+ * @param input.serviceId - Identifier of the target service
+ * @param input.action - The action to perform on the service
+ * @returns A ServiceActionResponse describing the outcome. On failure the `error` field may be `'not_available'`, `'rate_limited'`, or `'forbidden'`; on success it contains the action result and timing fields. 
+ */
 export async function triggerServiceAction(input: {
   serviceId: string;
   action: ServiceActionId;

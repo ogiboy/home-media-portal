@@ -124,7 +124,14 @@ const getBoardErrorMessage = (
   return null;
 };
 
-// Message board panel with server-action form.
+/**
+ * Render a message board panel with a list of recent messages, client-side filters, and a posting form.
+ *
+ * @param isHome - Whether the panel operates in the home context (enables fetching and posting behavior).
+ * @param strings - Localization strings used for labels, placeholders, descriptions, and toast messages.
+ * @param variant - Layout variant for the panel; `"split"` renders side-by-side cards, `"stacked"` renders a vertical layout.
+ * @returns The rendered message board panel React element.
+ */
 export default function MessageBoardPanel({
   isHome,
   strings,
@@ -353,7 +360,15 @@ type BoardFormProps = Readonly<{
   formAction: (formData: FormData) => void;
 }>;
 
-// Form section rendered as its own component to reset on success.
+/**
+ * Render the message-posting form used to submit new board messages.
+ *
+ * @param isHome - If `true`, form inputs and submission are enabled; if `false`, inputs are disabled.
+ * @param strings - Localized UI strings for labels, placeholders, button text, and helper copy.
+ * @param errorMessage - Optional error text to display above the submit button when present.
+ * @param formAction - Action handler used as the form's `action` prop for submission.
+ * @returns The JSX element for the board submission form, including author and message fields, character count, and submit control.
+ */
 function BoardForm({
   isHome,
   strings,
@@ -402,7 +417,13 @@ type SubmitButtonProps = Readonly<{
   disabled?: boolean;
 }>;
 
-// Action button that reflects pending submission state.
+/**
+ * Render a submit button that displays a loading spinner while the surrounding form action is pending.
+ *
+ * @param label - Text to display inside the button.
+ * @param disabled - If `true`, disables the button in addition to any pending form state.
+ * @returns The submit button element; when the form is pending a spinner is shown and the button is disabled.
+ */
 function SubmitButton({ label, disabled }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 

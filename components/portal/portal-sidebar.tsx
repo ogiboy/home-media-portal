@@ -27,7 +27,16 @@ const defaultLinks: PortalNavLinks = {
   board: '#board',
 };
 
-// Sidebar navigation for desktop portal layout.
+/**
+ * Render the desktop portal sidebar with brand, primary navigation, and status badge.
+ *
+ * @param strings - Localization strings used for the header, navigation labels, accessibility attributes, badges, and tailnet notes.
+ * @param isHome - Whether the current portal is the user's home portal; toggles badge and tailnet note content.
+ * @param delay - Optional entrance animation delay in milliseconds.
+ * @param links - Optional navigation targets for `dashboard`, `games`, `system`, and `board`; defaults to `defaultLinks`.
+ * @param active - Which navigation item is currently active; when `'dashboard'` or `'games'` sets `aria-current="page"` on that link.
+ * @returns The sidebar JSX element containing brand, navigation, and footer status badge.
+ */
 export default function PortalSidebar({
   strings,
   isHome,

@@ -11,7 +11,13 @@ type ShortcutsSectionProps = {
   delay?: number;
 };
 
-// Render shortcut cards for search and actions.
+/**
+ * Render the Shortcuts section of the portal with a search panel and a secondary actions panel.
+ *
+ * @param strings - Localized texts for titles, descriptions, and action labels
+ * @param delay - Optional entrance animation delay applied to the section's style
+ * @returns A section element containing the shortcuts search panel and a panel of (currently disabled) shortcut action buttons
+ */
 export default function ShortcutsSection({
   strings,
   delay = 0,

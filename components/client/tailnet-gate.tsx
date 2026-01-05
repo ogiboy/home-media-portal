@@ -28,7 +28,21 @@ const useHydrated = () =>
     () => false
   );
 
-// Fullscreen tailnet gate overlay mounted via portal.
+/**
+ * Render a fullscreen Tailnet gate overlay into document.body using a portal.
+ *
+ * The overlay blocks interaction and disables page scrolling when `isPublic` is true and
+ * `allowInteraction` is false. Displays connection status, a contextual description,
+ * and an "Enter" control when the gate is public and the status is `online`.
+ *
+ * @param visible - Whether the gate should be shown.
+ * @param status - Current connection status (`'connecting' | 'online' | 'offline'`).
+ * @param isPublic - Whether the gate represents a public tailnet (affects description and controls).
+ * @param allowInteraction - When true, the overlay is rendered non-blocking and does not disable page scroll.
+ * @param strings - Localized UI strings for the gate.
+ * @param onEnter - Callback invoked when the user activates the Enter control.
+ * @returns The portal-rendered gate element, or `null` when not visible or when rendering is not possible.
+ */
 export default function TailnetGate({
   visible,
   status,

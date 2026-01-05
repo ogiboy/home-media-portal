@@ -41,7 +41,12 @@ type ToastViewportProps = {
   strings: PortalStrings;
 };
 
-// Animated toast stack for transient notifications.
+/**
+ * Renders an animated toast notification viewport in the bottom-right corner.
+ *
+ * @param strings - Localization strings used for accessible labels (for example, the dismiss button label)
+ * @returns The toast viewport element when there are active toasts, `null` when there are none
+ */
 export default function ToastViewport({
   strings,
 }: Readonly<ToastViewportProps>) {

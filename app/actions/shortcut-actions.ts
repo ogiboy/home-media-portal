@@ -261,7 +261,13 @@ const logShortcutAdd = (params: {
   });
 };
 
-// Lookup Radarr/Sonarr titles using the service API.
+/**
+ * Perform a lookup against Radarr or Sonarr and return an updated search state.
+ *
+ * @param prevState - Previous search state to base error responses on
+ * @param formData - FormData containing `query` (required) and optional `service` ('radarr' | 'sonarr')
+ * @returns `ShortcutSearchState` reflecting the search outcome; on success contains `status: 'success'` with `results`, `query`, and `service`; on failure contains `status: 'error'` and an `error` code describing the failure reason
+ */
 export async function searchShortcuts(
   prevState: ShortcutSearchState,
   formData: FormData
@@ -392,7 +398,21 @@ export async function searchShortcuts(
   }
 }
 
-// Add a selected item to Radarr/Sonarr using API lookup then POST.
+/**
+ * Add a selected item to the specified Radarr or Sonarr instance.
+ *
+ * @param input - Operation input
+ * @param input.service - Target service, either `'radarr'` or `'sonarr'`
+ * @param input.id - Service-specific numeric identifier for the item (e.g., TMDB id for Radarr, TVDB id for Sonarr)
+ * @returns `{ ok: true }` when the add succeeded; `{ ok: false, error }` on failure. Possible `error` values include:
+ * - `not_available`
+ * - `forbidden`
+ * - `missing_api_key`
+ * - `missing_config`
+ * - `lookup_failed`
+ * - `request_failed`
+ * - `unknown`
+ */
 export async function addShortcutItem(input: {
   service: ShortcutService;
   id: number;

@@ -10,7 +10,14 @@ type SystemSectionProps = Readonly<{
   delay?: number;
 }>;
 
-// Section that wraps system stats widgets.
+/**
+ * Renders the "System" section of the portal, including title, description, update badge, and system widgets.
+ *
+ * @param strings - Localized strings for the section content
+ * @param isHome - Whether the portal is rendering in the "home" context (affects badge and panel behavior)
+ * @param delay - Optional delay applied to the entrance animation
+ * @returns The section element containing the system header, update badge, and system panel
+ */
 export default function SystemSection({
   strings,
   isHome,

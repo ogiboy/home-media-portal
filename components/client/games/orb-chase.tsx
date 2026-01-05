@@ -29,7 +29,13 @@ type OrbChaseProps = {
   compact?: boolean;
 };
 
-// Arcade-style orb clicking mini game.
+/**
+ * Render an arcade-style clicking mini-game UI where the player hits a moving orb to score points within a fixed time.
+ *
+ * @param strings - Localized UI strings used for title, hints, button labels, timer, and score.
+ * @param compact - If true, use a reduced-height layout for a more compact presentation.
+ * @returns A React element that displays the OrbChase game interface including the title, remaining time, score, hint, a play/replay control, and the clickable target while the game is running.
+ */
 export default function OrbChase({
   strings,
   compact = false,

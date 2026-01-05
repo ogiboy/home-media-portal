@@ -35,7 +35,18 @@ type PortalControlsProps = Readonly<{
   allowGateInteraction?: boolean;
 }>;
 
-// Header controls for search and tailnet actions.
+/**
+ * Renders header controls for portal search, tailnet status, and quick actions.
+ *
+ * Displays a status chip, a searchable command palette for services, optional retry and gate buttons,
+ * and the TailnetGate component. Interaction and visibility adapt to `isPublic`, current tailnet `status`,
+ * and `allowGateInteraction`.
+ *
+ * @param strings - Localization strings used for labels, placeholders, and toasts
+ * @param isPublic - When true, the component renders the public portal shell behaviour (affects available actions)
+ * @param allowGateInteraction - When true, enables interaction controls on the TailnetGate
+ * @returns The header controls UI (status chip, command dialog, action buttons, and TailnetGate)
+ */
 export default function PortalControls({
   strings,
   isPublic,

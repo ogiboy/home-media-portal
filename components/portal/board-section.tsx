@@ -12,7 +12,15 @@ type BoardSectionProps = Readonly<{
   variant?: 'full' | 'compact';
 }>;
 
-// Section that wraps the family message board.
+/**
+ * Render the portal's message board section.
+ *
+ * @param strings - Localized strings for the board title, description, and badge text
+ * @param isHome - Whether the current page is the home view; passed to the MessageBoardPanel
+ * @param delay - Milliseconds to offset the entrance animation for the section
+ * @param variant - Layout variant: `'compact'` applies condensed styling and uses the stacked panel layout; `'full'` uses the regular layout
+ * @returns The section element containing the board header, tailnet badge, and MessageBoardPanel
+ */
 export default function BoardSection({
   strings,
   isHome,
