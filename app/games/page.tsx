@@ -1,6 +1,10 @@
 import PortalApp from '@/components/portal-app';
 
-// Public games route rendered inside the portal shell.
+/**
+ * Render the public games route inside the portal shell.
+ *
+ * @returns A React element that renders the portal application configured for the "games" view.
+ */
 export default function GamesPage() {
   return <PortalApp view="games" />;
 }

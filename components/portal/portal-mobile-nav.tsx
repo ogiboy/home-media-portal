@@ -23,7 +23,17 @@ const defaultLinks: PortalNavLinks = {
   board: '#board',
 };
 
-// Bottom navigation for mobile layouts.
+/**
+ * Render a bottom-fixed mobile navigation bar with links for dashboard, games, system, and board.
+ *
+ * The component uses `strings.accessibility.mobileNav` for the `aria-label` and sets `aria-current="page"`
+ * on the dashboard or games item when `active` matches that section.
+ *
+ * @param strings - Localized strings used for link labels and the navigation accessibility label
+ * @param links - Optional URLs for each navigation item; defaults to `defaultLinks`
+ * @param active - Optional active section selector; when `'dashboard'` or `'games'` it marks that item as current
+ * @returns A React element containing the mobile navigation bar
+ */
 export default function PortalMobileNav({
   strings,
   links = defaultLinks,

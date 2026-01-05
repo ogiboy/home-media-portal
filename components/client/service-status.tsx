@@ -23,7 +23,17 @@ type ServiceStatusProps = Readonly<{
   strings: PortalStrings;
 }>;
 
-// Render the status dot + label for a service.
+/**
+ * Render a status indicator (colored dot and text label) for a service.
+ *
+ * Displays a locked label when not on the home view. When on the home view,
+ * resolves the service's health and displays one of: checking, online, or offline.
+ *
+ * @param serviceId - Identifier of the service to display status for
+ * @param isHome - Whether the component is rendered on the home view (enables health lookup)
+ * @param strings - Localized strings used for status labels
+ * @returns A JSX element containing a colored status dot and a status label reflecting the service health
+ */
 export function ServiceStatusBadge({
   serviceId,
   isHome,
@@ -66,7 +76,14 @@ export function ServiceStatusBadge({
   );
 }
 
-// Render the latest latency value for a service.
+/**
+ * Render the latest latency text for a service, falling back to appropriate status labels when latency is unavailable.
+ *
+ * @param serviceId - Identifier of the service whose latency is displayed
+ * @param isHome - If `false`, renders the locked label and skips health fetching
+ * @param strings - Localized strings used for status and fallback labels
+ * @returns A JSX element showing "`<latencyMs> ms`" when present, `strings.services.statusChecking` while loading, `strings.services.statusLocked` when not on the home view, or `strings.misc.na` when latency is unavailable
+ */
 export function ServiceLatency({
   serviceId,
   isHome,

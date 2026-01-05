@@ -27,7 +27,16 @@ type LanguageSwitchProps = Readonly<{
   label: string;
 }>;
 
-// Locale switcher for UI strings.
+/**
+ * Render a locale selection control that persists the chosen locale and triggers a router refresh.
+ *
+ * The control presents one button per supported locale, marks the active option with `aria-pressed`,
+ * and includes a visually hidden legend for accessibility.
+ *
+ * @param locale - Current locale code used to highlight the active option
+ * @param label - Accessible label rendered as a visually hidden legend for the fieldset
+ * @returns The language switch React element
+ */
 export default function LanguageSwitch({ locale, label }: LanguageSwitchProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();

@@ -25,7 +25,13 @@ const getClientIp = (requestHeaders: Headers) => {
   return requestHeaders.get('x-real-ip') ?? 'unknown';
 };
 
-// Post a new message via server action to enable form state feedback.
+/**
+ * Post a message to the board, validating input, enforcing availability and rate limits, and returning an updated action state.
+ *
+ * @param prevState - The previous board action state; `resetKey` from this state is preserved on error responses
+ * @param formData - Form data expected to contain `author` and `body` fields
+ * @returns On success, an object with `status: 'success'` and `resetKey` set to the current timestamp. On error, an object with `status: 'error'`, `error` set to one of `'invalid' | 'rate' | 'not_available' | 'unknown'`, and `resetKey` preserved from `prevState`.
+ */
 export async function postBoardMessage(
   prevState: BoardActionState,
   formData: FormData

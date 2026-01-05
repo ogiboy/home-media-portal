@@ -27,7 +27,15 @@ const initialState: ShortcutSearchState = {
   service: 'radarr',
 };
 
-// Search panel for lookup + add actions.
+/**
+ * Render a search panel for finding and adding Radarr or Sonarr shortcuts.
+ *
+ * The component provides service selection, a query input, result listing, and per-item add actions
+ * with visual loading and toast feedback based on API outcomes.
+ *
+ * @param strings - Localized UI strings used for labels, descriptions, errors, and toasts.
+ * @returns The rendered search-and-add shortcuts panel as a JSX element.
+ */
 export default function ShortcutsSearchPanel({
   strings,
 }: Readonly<ShortcutsSearchPanelProps>) {

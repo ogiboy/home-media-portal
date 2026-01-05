@@ -23,6 +23,17 @@ type GlobalErrorProps = Readonly<{
   reset: () => void;
 }>;
 
+/**
+ * Render a full-screen, localized global error UI with a retry action.
+ *
+ * Displays a branded error screen using translations derived from the user's
+ * locale (cookie) or browser language. Shows the error digest when present
+ * and exposes a retry button that invokes the provided reset callback.
+ *
+ * @param error - The error to display; may include an optional `digest` string shown to the user.
+ * @param reset - Callback invoked when the user clicks the retry button.
+ * @returns The React element for the global error screen.
+ */
 export default function GlobalError({
   error,
   reset,

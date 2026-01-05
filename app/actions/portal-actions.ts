@@ -20,7 +20,14 @@ export type ActionResult =
   | { ok: true }
   | { ok: false; error: 'not_available' | 'not_implemented' | 'invalid' };
 
-// Validate and queue a future admin action.
+/**
+ * Validate, authorize, and audit a requested administrative action against a service, enforcing rate limits and returning the action's availability or implementation status.
+ *
+ * @param input - Object describing the requested action
+ * @param input.serviceId - Identifier of the target service
+ * @param input.action - Administrative action to perform (`ServiceAction`)
+ * @returns `{ ok: true }` on success; otherwise `{ ok: false, error: 'not_available' | 'not_implemented' | 'invalid' }`
+ */
 export async function requestServiceAction(input: {
   serviceId: string;
   action: ServiceAction;

@@ -37,7 +37,15 @@ const getStatusLabel = (
   return status.ok ? strings.services.statusOnline : strings.services.statusOffline;
 };
 
-// Render the system stats and quick health widgets.
+/**
+ * Render the system vitals and quick health widgets as two responsive cards.
+ *
+ * Renders a "System vitals" card showing load averages, memory, disk, uptime and optional temperature, and a "Quick health" card listing service statuses; when `isHome` is false the data fetches are disabled and services are shown as locked.
+ *
+ * @param isHome - If true, enable polling for system and health data and show live values; if false, disable data fetching and show locked/placeholder content.
+ * @param strings - Localized UI strings used for labels, titles, and descriptions.
+ * @returns A JSX element containing the two cards with their respective content.
+ */
 export default function SystemPanel({ isHome, strings }: SystemPanelProps) {
   const { data: system } = useSWR<SystemStats>(
     isHome ? '/api/system' : null,
@@ -138,7 +146,17 @@ export default function SystemPanel({ isHome, strings }: SystemPanelProps) {
   );
 }
 
-// Build the quick-status list for services.
+/**
+ * Build a list of service status items for the quick-status panel.
+ *
+ * When `isHome` is false each service is shown with a locked status label; when true each
+ * service is shown with a label derived from the provided `health` data and localized `strings`.
+ *
+ * @param isHome - If false, show locked status for all services; if true, compute live statuses.
+ * @param health - Optional health response used to determine each service's current status.
+ * @param strings - Localization strings used for status labels and fallbacks.
+ * @returns An array of `<li>` elements, each containing a service name and its status label.
+ */
 function servicesSummary(
   isHome: boolean,
   health: HealthResponse | undefined,

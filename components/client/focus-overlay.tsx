@@ -28,7 +28,13 @@ type FocusOverlayProps = Readonly<{
   strings: PortalStrings;
 }>;
 
-// Fullscreen focus-mode overlay for embedded services.
+/**
+ * Renders a fullscreen focus-mode overlay for an embedded service when the current route selects a service configured to open in overlay and the page is the home view.
+ *
+ * @param isHome - Whether the current page is the home view; the overlay appears only when `true`.
+ * @param strings - Localization strings used for accessible labels and button text inside the overlay.
+ * @returns The overlay React element when active, `null` otherwise.
+ */
 export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
   const router = useRouter();
   const searchParams = useSearchParams();

@@ -5,7 +5,16 @@ type BrandMarkProps = Readonly<{
   title?: string;
 }>;
 
-// SVG brand mark used across the portal UI.
+/**
+ * Renders the application's branded SVG mark.
+ *
+ * The SVG includes decorative circles and a path; when `title` is provided it is embedded as a <title>
+ * element and exposed via `aria-label`, otherwise the SVG is marked `aria-hidden`.
+ *
+ * @param className - Optional additional CSS class names applied to the SVG root
+ * @param title - Optional accessible label for the SVG; when provided it is rendered as a `<title>` and set on `aria-label`
+ * @returns An SVG element containing the brand mark
+ */
 export default function BrandMark({ className, title }: BrandMarkProps) {
   const labelled = Boolean(title);
 

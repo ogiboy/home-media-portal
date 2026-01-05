@@ -16,7 +16,15 @@ type HttpRedirectProps = Readonly<{
   strings: HttpRedirectStrings;
 }>;
 
-// Client redirect panel for HTTP -> HTTPS.
+/**
+ * Render a redirect panel and navigate the browser to `target` after a short delay.
+ *
+ * The component displays branding, a title, description, and an action link; it sets the browser location to `target` after 1.2 seconds and clears the timer if unmounted or if `target` changes.
+ *
+ * @param target - Destination URL to navigate to
+ * @param strings - UI text values: `title`, `description`, and `action`
+ * @returns The rendered redirect panel element
+ */
 export default function HttpRedirect({
   target,
   strings,

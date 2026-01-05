@@ -64,7 +64,14 @@ const checkService = async (service: (typeof services)[number]) => {
   }
 };
 
-// Health summary for all services (home-only).
+/**
+ * Produce a health summary for all configured services when running on the home deployment.
+ *
+ * @returns A JSON HTTP response containing:
+ * - `services`: an array of health check results (`{ id, ok, status, latencyMs }`)
+ * - `checkedAt`: an ISO 8601 timestamp when checks completed
+ * If not running on the home deployment, responds with status 403 and body `{ error: 'not_available', services: [] }`.
+ */
 export async function GET() {
   if (!isHomeDeployment()) {
     return NextResponse.json(

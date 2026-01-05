@@ -3,7 +3,13 @@
 // Passive scroll listener for simple parallax on background layers.
 import { useEffect } from 'react';
 
-// Update a CSS variable based on scroll position.
+/**
+ * Keeps the CSS variable `--portal-scroll-y` on the document root in sync with the page vertical scroll position.
+ *
+ * Attaches `scroll` (passive) and `resize` listeners to update the variable when the page scrolls or the viewport resizes, and cleans up listeners on unmount.
+ *
+ * @returns A React element that renders nothing (`null`).
+ */
 export default function ScrollParallax() {
   useEffect(() => {
     const root = document.documentElement;

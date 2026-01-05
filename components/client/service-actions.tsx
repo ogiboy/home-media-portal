@@ -41,7 +41,14 @@ const getRestartLabel = (
   return strings.services.restart;
 };
 
-// Action buttons for each service card.
+/**
+ * Render action buttons for a service card and handle open, copy-link, and restart interactions.
+ *
+ * @param service - Service definition used to derive URLs, labels, and behavior for the actions
+ * @param isPublic - When true, interactive actions are disabled for public view
+ * @param strings - Localized UI text used by the buttons and toasts
+ * @returns A JSX element containing the action buttons for the service
+ */
 export default function ServiceActions({
   service,
   isPublic,

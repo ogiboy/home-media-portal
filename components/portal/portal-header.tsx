@@ -19,7 +19,19 @@ type PortalHeaderProps = Readonly<{
   delay?: number;
 }>;
 
-// Hero header for the portal dashboard.
+/**
+ * Render the portal's hero header with title, subtitle, controls, and live/preview status.
+ *
+ * @param strings - Localized UI strings used for labels, title, subtitle, badges, and accessibility text
+ * @param isHome - Whether the current view is the home portal (controls badge style and live note)
+ * @param isPublic - Whether the portal is in a public preview state (affects control behavior)
+ * @param locale - Current locale for the language switch component
+ * @param title - Optional override for the header title (falls back to `strings.header.title`)
+ * @param subtitle - Optional override for the header subtitle (falls back to `strings.header.subtitle`)
+ * @param allowGateInteraction - When provided, enables gate interaction within PortalControls
+ * @param delay - Optional entrance animation delay in milliseconds
+ * @returns The header JSX element for the portal hero area
+ */
 export default function PortalHeader({
   strings,
   isHome,

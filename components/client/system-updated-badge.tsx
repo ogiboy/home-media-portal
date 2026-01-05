@@ -15,7 +15,13 @@ type SystemUpdatedBadgeProps = Readonly<{
   strings: PortalStrings;
 }>;
 
-// Timestamp badge for the latest system poll.
+/**
+ * Render a badge that shows when the system was last polled.
+ *
+ * @param isHome - If true, the component fetches system stats and updates the badge; if false, it displays only the label.
+ * @param strings - Localization strings used for the label and relative time formatting.
+ * @returns A Badge element containing the updated label (and relative timestamp when available).
+ */
 export default function SystemUpdatedBadge({
   isHome,
   strings,

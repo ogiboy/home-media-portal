@@ -13,7 +13,14 @@ type GamesSectionProps = {
   delay?: number;
 };
 
-// Section that renders the games preview and carousel.
+/**
+ * Render the games section containing a title, description, an action (CTA or now-playing badge), and the GamesPanel.
+ *
+ * @param strings - Localized strings for the section (title, description, CTA text, and now-playing label).
+ * @param variant - 'preview' to show a CTA linking to the games page, 'full' to show a now-playing badge.
+ * @param delay - Milliseconds delay applied to the section's entrance style.
+ * @returns The section element that wraps the games header, action control, and GamesPanel.
+ */
 export default function GamesSection({
   strings,
   variant = 'preview',

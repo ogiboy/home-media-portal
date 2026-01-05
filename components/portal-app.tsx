@@ -22,7 +22,18 @@ type PortalAppProps = {
   view?: PortalView;
 };
 
-// Compose the full portal layout with server-rendered sections.
+/**
+ * Render the server-side portal shell composed of sidebar, header, and view-specific sections.
+ *
+ * Calculates locale and translation strings from cookies and request headers, then composes
+ * the complete portal layout including navigation, sidebar, header, main sections, mobile nav,
+ * toast viewport, and focus overlay.
+ *
+ * @param view - Which top-level view to render: `'dashboard'` renders the multi-section home
+ *   layout (default), `'games'` renders the games-focused layout.
+ * @returns The JSX element for the fully composed portal layout configured for the selected view
+ *   with server-resolved locale and strings.
+ */
 export default async function PortalApp({
   view = 'dashboard',
 }: Readonly<PortalAppProps>) {

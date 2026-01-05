@@ -15,7 +15,13 @@ type GamesPanelProps = {
   variant?: 'preview' | 'full';
 };
 
-// Games panel with preview and selection list.
+/**
+ * Renders a two-pane games panel showing details for the active game and a selectable collection.
+ *
+ * @param strings - Localized UI text used throughout the panel.
+ * @param variant - Layout variant; `'preview'` renders a more compact view, `'full'` renders an expanded layout. Defaults to `'preview'`.
+ * @returns The React element containing the active game detail pane (title, status, description, tags, and play area or placeholder) and the horizontally scrollable game collection.
+ */
 export default function GamesPanel({
   strings,
   variant = 'preview',
