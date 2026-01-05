@@ -9,12 +9,12 @@ import ServiceCard from '@/components/portal/service-card';
 const CARD_BASE_DELAY = 180;
 const CARD_STAGGER = 70;
 
-type ServicesSectionProps = {
+type ServicesSectionProps = Readonly<{
   strings: PortalStrings;
   isHome: boolean;
   isPublic: boolean;
   delay?: number;
-};
+}>;
 
 // Section that renders the service cards grid.
 export default function ServicesSection({
@@ -45,7 +45,9 @@ export default function ServicesSection({
         </div>
       </div>
 
-      <ul className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3" role="list">
+      <ul
+        className="mt-6 grid auto-rows-fr items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3"
+      >
         {services.map((service, index) => (
           <ServiceCard
             key={service.id}

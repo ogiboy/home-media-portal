@@ -33,7 +33,7 @@ let config: Config = {
   timeoutMs: TAILNET_PING_TIMEOUT_MS,
   intervalMs: TAILNET_PING_INTERVAL_MS,
 };
-let intervalId: number | null = null;
+let intervalId: ReturnType<typeof globalThis.setInterval> | null = null;
 let inFlight = false;
 
 // Notify all subscribers about the latest state.
@@ -56,13 +56,13 @@ const startPolling = () => {
     return;
   }
   probe();
-  intervalId = window.setInterval(probe, config.intervalMs);
+  intervalId = globalThis.setInterval(probe, config.intervalMs);
 };
 
 // Stop polling when no listeners are active.
 const stopPolling = () => {
   if (intervalId !== null && listeners.size === 0) {
-    window.clearInterval(intervalId);
+    globalThis.clearInterval(intervalId);
     intervalId = null;
   }
 };
@@ -77,7 +77,7 @@ const updateConfig = (next: Config) => {
   config = next;
 
   if (changed && intervalId !== null) {
-    window.clearInterval(intervalId);
+    globalThis.clearInterval(intervalId);
     intervalId = null;
   }
 
@@ -105,7 +105,7 @@ const probe = () => {
 
   let done = false;
   const img = new Image();
-  const timer = window.setTimeout(() => {
+  const timer = globalThis.setTimeout(() => {
     if (done) {
       return;
     }
@@ -120,7 +120,7 @@ const probe = () => {
     }
     done = true;
     inFlight = false;
-    window.clearTimeout(timer);
+    globalThis.clearTimeout(timer);
     setState({ status: "online", lastChecked: Date.now() });
   };
 
@@ -130,7 +130,7 @@ const probe = () => {
     }
     done = true;
     inFlight = false;
-    window.clearTimeout(timer);
+    globalThis.clearTimeout(timer);
     setState({ status: "offline", lastChecked: Date.now() });
   };
 

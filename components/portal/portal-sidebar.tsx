@@ -1,14 +1,30 @@
 // Sidebar shell for the portal layout.
-import { Gauge, LayoutGrid, MessageSquare, Server } from 'lucide-react';
+import { Gamepad2, Gauge, LayoutGrid, MessageSquare, Server } from 'lucide-react';
 
 import BrandMark from '@/components/brand-mark';
 import type { PortalStrings } from '@/lib/i18n';
 import { withDelay } from '@/components/portal/portal-motion';
 
-type PortalSidebarProps = {
+type PortalNavLinks = {
+  dashboard: string;
+  games: string;
+  system: string;
+  board: string;
+};
+
+type PortalSidebarProps = Readonly<{
   strings: PortalStrings;
   isHome: boolean;
   delay?: number;
+  links?: PortalNavLinks;
+  active?: 'dashboard' | 'games';
+}>;
+
+const defaultLinks: PortalNavLinks = {
+  dashboard: '#services',
+  games: '/games',
+  system: '#system',
+  board: '#board',
 };
 
 // Sidebar navigation for desktop portal layout.
@@ -16,6 +32,8 @@ export default function PortalSidebar({
   strings,
   isHome,
   delay = 0,
+  links = defaultLinks,
+  active = 'dashboard',
 }: PortalSidebarProps) {
   return (
     <aside
@@ -36,11 +54,15 @@ export default function PortalSidebar({
         </div>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-3" aria-label={strings.accessibility.primaryNav}>
-        <ul className="flex flex-1 flex-col gap-3" role="list">
+      <nav
+        className="flex flex-1 flex-col gap-3"
+        aria-label={strings.accessibility.primaryNav}
+      >
+        <ul className="flex flex-1 flex-col gap-3">
           <li>
             <a
-              href="#services"
+              href={links.dashboard}
+              aria-current={active === 'dashboard' ? 'page' : undefined}
               className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <LayoutGrid className="h-5 w-5" />
@@ -49,7 +71,17 @@ export default function PortalSidebar({
           </li>
           <li>
             <a
-              href="#system"
+              href={links.games}
+              aria-current={active === 'games' ? 'page' : undefined}
+              className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              <Gamepad2 className="h-5 w-5" />
+              <span className="portal-label">{strings.nav.games}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href={links.system}
               className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <Gauge className="h-5 w-5" />
@@ -58,7 +90,7 @@ export default function PortalSidebar({
           </li>
           <li>
             <a
-              href="#board"
+              href={links.board}
               className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <MessageSquare className="h-5 w-5" />

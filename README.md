@@ -48,12 +48,48 @@ NEXT_PUBLIC_DEPLOY_TARGET=home
 # Tailnet home portal URL (used for reachability and links)
 NEXT_PUBLIC_HOME_URL=https://home.tailnet.ts.net
 
+# Trust boundary for canonical tailnet headers (home only)
+PORTAL_INTERNAL_SECRET=replace-with-random-secret
+PORTAL_TRUSTED_PROXIES=127.0.0.1,::1
+
 # Optional override for the local SQLite database path
 BOARD_DB_PATH=/var/lib/home-media-portal/board.db
+
+# Optional service API keys (required for service actions)
+RADARR_API_KEY=
+SONARR_API_KEY=
+PROWLARR_API_KEY=
+BAZARR_API_KEY=
+JELLYFIN_API_KEY=
+
+# Optional shortcut config (required for Radarr/Sonarr add)
+RADARR_ROOT_FOLDER=
+RADARR_QUALITY_PROFILE_ID=
+SONARR_ROOT_FOLDER=
+SONARR_QUALITY_PROFILE_ID=
+SONARR_SEASON_FOLDER=true
 
 # Optional dev-only origins for LAN access (comma-separated)
 NEXT_PUBLIC_DEV_ORIGINS=http://192.168.1.4:3000
 ```
+
+### Service API keys (Radarr/Sonarr/Prowlarr/Bazarr/Jellyfin)
+
+These keys are required for service actions and the Radarr/Sonarr shortcuts:
+
+- **Radarr**: Settings → General → Security → API Key  
+  Docs: https://radarr.video/docs/api/
+- **Sonarr**: Settings → General → Security → API Key  
+  Docs: https://sonarr.tv/docs/api/
+- **Prowlarr**: Settings → General → Security → API Key  
+  Docs: https://wiki.servarr.com/prowlarr/api
+- **Bazarr**: Settings → General → Security → API Key  
+  Docs: https://wiki.bazarr.media/faq/api/
+- **Jellyfin**: Dashboard → API Keys → Create new  
+  Docs: https://jellyfin.org/docs/general/administration/api/
+
+All keys stay in `.env.local` and never ship to the client.
+
 
 ### Local development
 
@@ -161,12 +197,48 @@ NEXT_PUBLIC_DEPLOY_TARGET=home
 # Tailnet home portal URL (used for reachability and links)
 NEXT_PUBLIC_HOME_URL=https://home.tailnet.ts.net
 
+# Trust boundary for canonical tailnet headers (home only)
+PORTAL_INTERNAL_SECRET=replace-with-random-secret
+PORTAL_TRUSTED_PROXIES=127.0.0.1,::1
+
 # Optional override for the local SQLite database path
 BOARD_DB_PATH=/var/lib/home-media-portal/board.db
+
+# Optional service API keys (required for service actions)
+RADARR_API_KEY=
+SONARR_API_KEY=
+PROWLARR_API_KEY=
+BAZARR_API_KEY=
+JELLYFIN_API_KEY=
+
+# Optional shortcut config (required for Radarr/Sonarr add)
+RADARR_ROOT_FOLDER=
+RADARR_QUALITY_PROFILE_ID=
+SONARR_ROOT_FOLDER=
+SONARR_QUALITY_PROFILE_ID=
+SONARR_SEASON_FOLDER=true
 
 # Optional dev-only origins for LAN access (comma-separated)
 NEXT_PUBLIC_DEV_ORIGINS=http://192.168.1.4:3000
 ```
+
+### Servis API anahtarlari (Radarr/Sonarr/Prowlarr/Bazarr/Jellyfin)
+
+Bu anahtarlar servis aksiyonlari ve Radarr/Sonarr kisa yollar icin gereklidir:
+
+- **Radarr**: Settings → General → Security → API Key  
+  Dokuman: https://radarr.video/docs/api/
+- **Sonarr**: Settings → General → Security → API Key  
+  Dokuman: https://sonarr.tv/docs/api/
+- **Prowlarr**: Settings → General → Security → API Key  
+  Dokuman: https://wiki.servarr.com/prowlarr/api
+- **Bazarr**: Settings → General → Security → API Key  
+  Dokuman: https://wiki.bazarr.media/faq/api/
+- **Jellyfin**: Dashboard → API Keys → Yeni olustur  
+  Dokuman: https://jellyfin.org/docs/general/administration/api/
+
+Anahtarlar yalnizca `.env.local` icinde tutulur ve client tarafa gonderilmez.
+
 
 ### Lokal gelistirme
 

@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils';
 
-type BrandMarkProps = {
+type BrandMarkProps = Readonly<{
   className?: string;
   title?: string;
-};
+}>;
 
 // SVG brand mark used across the portal UI.
 export default function BrandMark({ className, title }: BrandMarkProps) {
@@ -12,8 +12,8 @@ export default function BrandMark({ className, title }: BrandMarkProps) {
   return (
     <svg
       viewBox="0 0 64 64"
-      role={labelled ? 'img' : 'presentation'}
       aria-hidden={labelled ? undefined : true}
+      aria-label={labelled ? title : undefined}
       className={cn('h-8 w-8 text-primary', className)}
       xmlns="http://www.w3.org/2000/svg"
     >

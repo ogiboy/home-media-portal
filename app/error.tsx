@@ -9,7 +9,7 @@ const getLocaleFromCookie = () => {
   if (typeof document === 'undefined') {
     return undefined;
   }
-  const match = document.cookie.match(/(?:^|; )portal_locale=([^;]+)/);
+  const match = /(?:^|; )portal_locale=([^;]+)/.exec(document.cookie);
   return match ? decodeURIComponent(match[1]) : undefined;
 };
 
@@ -18,13 +18,15 @@ const getBrowserLanguage = () =>
   typeof navigator === 'undefined' ? undefined : navigator.language;
 
 // Global error boundary themed to match the portal shell.
+type GlobalErrorProps = Readonly<{
+  error: Error & { digest?: string };
+  reset: () => void;
+}>;
+
 export default function GlobalError({
   error,
   reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+}: GlobalErrorProps) {
   const locale = getLocaleFromCookie();
   const acceptLanguage = getBrowserLanguage();
   const { strings } = getTranslations(locale, acceptLanguage);

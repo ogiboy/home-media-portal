@@ -1,28 +1,31 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import BrandMark from "@/components/brand-mark";
-import { Button } from "@/components/ui/button";
+import BrandMark from '@/components/brand-mark';
+import { Button } from '@/components/ui/button';
 
-export type HttpRedirectStrings = {
+export type HttpRedirectStrings = Readonly<{
   title: string;
   description: string;
   action: string;
-};
+}>;
 
-type HttpRedirectProps = {
+type HttpRedirectProps = Readonly<{
   target: string;
   strings: HttpRedirectStrings;
-};
+}>;
 
 // Client redirect panel for HTTP -> HTTPS.
-export default function HttpRedirect({ target, strings }: HttpRedirectProps) {
+export default function HttpRedirect({
+  target,
+  strings,
+}: HttpRedirectProps) {
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      window.location.href = target;
+    const timer = globalThis.setTimeout(() => {
+      globalThis.location.href = target;
     }, 1200);
-    return () => window.clearTimeout(timer);
+    return () => globalThis.clearTimeout(timer);
   }, [target]);
 
   return (

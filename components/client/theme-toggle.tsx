@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 
 type Theme = "light" | "dark";
 
-type ThemeToggleProps = {
+type ThemeToggleProps = Readonly<{
   label: string;
-};
+}>;
 
 // Read the current theme from the document root.
 const getCurrentTheme = (): Theme => {

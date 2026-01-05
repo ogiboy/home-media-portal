@@ -1,6 +1,6 @@
 'use server';
 
-// Server actions placeholder for future admin workflows.
+// Server actions for service API triggers with RBAC and rate limiting.
 import { headers } from 'next/headers';
 
 import {
@@ -11,26 +11,21 @@ import { checkRateLimit } from '@/lib/rate-limit';
 import { getClientIp, getPortalIdentity } from '@/lib/portal-auth';
 import { hasPermission, writeAuditLog } from '@/lib/access-db';
 import { isHomeDeployment } from '@/lib/env';
+import {
+  runServiceAction,
+  type ServiceActionId,
+  type ServiceActionResult,
+} from '@/lib/service-actions';
 
-// Supported admin intents (stubbed for now).
-type ServiceAction = 'restart' | 'reset-password';
+export type ServiceActionResponse = ServiceActionResult;
 
-// Normalized result for UI feedback.
-export type ActionResult =
-  | { ok: true }
-  | { ok: false; error: 'not_available' | 'not_implemented' | 'invalid' };
-
-// Validate and queue a future admin action.
-export async function requestServiceAction(input: {
+// Trigger a service action after validating identity, RBAC, and rate limits.
+export async function triggerServiceAction(input: {
   serviceId: string;
-  action: ServiceAction;
-}): Promise<ActionResult> {
+  action: ServiceActionId;
+}): Promise<ServiceActionResponse> {
   if (!isHomeDeployment()) {
-    return { ok: false, error: 'not_available' };
-  }
-
-  if (!input.serviceId || !input.action) {
-    return { ok: false, error: 'invalid' };
+    return { ok: false, status: null, durationMs: 0, error: 'not_available' };
   }
 
   const requestHeaders = await headers();
@@ -38,7 +33,7 @@ export async function requestServiceAction(input: {
   const ip = getClientIp(requestHeaders);
 
   if (!identity) {
-    return { ok: false, error: 'not_available' };
+    return { ok: false, status: null, durationMs: 0, error: 'not_available' };
   }
 
   const rateKey = identity.login ?? ip ?? 'unknown';
@@ -56,7 +51,7 @@ export async function requestServiceAction(input: {
       durationMs: 0,
       ip,
     });
-    return { ok: false, error: 'not_available' };
+    return { ok: false, status: null, durationMs: 0, error: 'rate_limited' };
   }
 
   if (!hasPermission(identity.login, 'actions:run')) {
@@ -69,18 +64,14 @@ export async function requestServiceAction(input: {
       durationMs: 0,
       ip,
     });
-    return { ok: false, error: 'not_available' };
+    return { ok: false, status: null, durationMs: 0, error: 'forbidden' };
   }
 
-  writeAuditLog({
+  return runServiceAction({
+    serviceId: input.serviceId,
+    action: input.action,
     actorLogin: identity.login,
     actorName: identity.name,
-    action: input.action,
-    serviceId: input.serviceId,
-    result: 'not_implemented',
-    durationMs: 0,
     ip,
   });
-
-  return { ok: false, error: 'not_implemented' };
 }

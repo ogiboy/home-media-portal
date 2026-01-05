@@ -1,16 +1,16 @@
-import { NextResponse } from "next/server";
-import { performance } from "perf_hooks";
+import { NextResponse } from 'next/server';
+import { performance } from 'node:perf_hooks';
 
-import { HOME_URL, isHomeDeployment } from "@/lib/env";
+import { HOME_URL, isHomeDeployment } from '@/lib/env';
 import {
   HEALTH_GET_TIMEOUT_MS,
   HEALTH_HEAD_TIMEOUT_MS,
-} from "@/lib/constants/health";
-import { services } from "@/lib/services";
+} from '@/lib/constants/health';
+import { services } from '@/lib/services';
 
 // Node runtime required for perf_hooks timing.
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 // Fetch wrapper with timeout for health probes.
 const fetchWithTimeout = async (
@@ -35,14 +35,14 @@ const checkService = async (service: (typeof services)[number]) => {
   try {
     let response = await fetchWithTimeout(
       url,
-      { method: "HEAD", redirect: "manual" },
+      { method: 'HEAD', redirect: 'manual' },
       HEALTH_HEAD_TIMEOUT_MS
     );
 
     if (response.status === 405) {
       response = await fetchWithTimeout(
         url,
-        { method: "GET", redirect: "manual" },
+        { method: 'GET', redirect: 'manual' },
         HEALTH_GET_TIMEOUT_MS
       );
     }
@@ -68,7 +68,7 @@ const checkService = async (service: (typeof services)[number]) => {
 export async function GET() {
   if (!isHomeDeployment()) {
     return NextResponse.json(
-      { error: "not_available", services: [] },
+      { error: 'not_available', services: [] },
       { status: 403 }
     );
   }

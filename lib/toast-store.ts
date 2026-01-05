@@ -26,7 +26,19 @@ const notify = () => {
   listeners.forEach((listener) => listener(toasts));
 };
 
-const createId = () => Math.random().toString(36).slice(2, 10);
+const createId = () => {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID();
+  }
+
+  if (globalThis.crypto?.getRandomValues) {
+    const bytes = new Uint8Array(8);
+    globalThis.crypto.getRandomValues(bytes);
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+  }
+
+  return `${Date.now()}-${globalThis.performance?.now() ?? 0}`;
+};
 
 // Subscribe to toast updates for the viewport.
 export const toastStore = {
@@ -48,7 +60,7 @@ export const dismissToast = (id: string) => {
 
 // Push a new toast to the queue and auto-dismiss after a delay.
 export const pushToast = (input: ToastInput) => {
-  if (typeof window === "undefined") {
+  if (!("window" in globalThis)) {
     return undefined;
   }
 
@@ -64,6 +76,6 @@ export const pushToast = (input: ToastInput) => {
   toasts = [toast, ...toasts].slice(0, TOAST_MAX);
   notify();
 
-  window.setTimeout(() => dismissToast(toast.id), toast.durationMs);
+  globalThis.setTimeout(() => dismissToast(toast.id), toast.durationMs);
   return toast.id;
 };

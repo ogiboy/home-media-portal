@@ -1,6 +1,9 @@
 import Database from "better-sqlite3";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+
+import path from "node:path";
+
+import { getPortalDbPath } from "@/lib/db-path";
 import type { BoardMessageInput } from "@/lib/board-schema";
 import { BOARD_LIST_LIMIT } from "@/lib/constants/board";
 
@@ -22,8 +25,7 @@ let db: Database.Database | null = null;
 let statements: Statements | null = null;
 
 // Resolve the SQLite database path.
-const getDbPath = () =>
-  process.env.BOARD_DB_PATH ?? path.join(process.cwd(), "data", "board.db");
+const getDbPath = () => getPortalDbPath();
 
 // Initialize the database and schema if needed.
 const ensureDb = () => {
@@ -47,16 +49,14 @@ const ensureDb = () => {
 // Lazily prepare statements for reuse.
 const getStatements = () => {
   const database = ensureDb();
-  if (!statements) {
-    statements = {
-      list: database.prepare(
-        "SELECT id, author, body, created_at FROM messages ORDER BY created_at DESC LIMIT @limit"
-      ),
-      insert: database.prepare(
-        "INSERT INTO messages (author, body, created_at) VALUES (@author, @body, @created_at)"
-      ),
-    };
-  }
+  statements ??= {
+    list: database.prepare(
+      "SELECT id, author, body, created_at FROM messages ORDER BY created_at DESC LIMIT @limit"
+    ),
+    insert: database.prepare(
+      "INSERT INTO messages (author, body, created_at) VALUES (@author, @body, @created_at)"
+    ),
+  };
   return statements;
 };
 

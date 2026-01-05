@@ -23,10 +23,10 @@ const contentTransition = {
   ease: [0.22, 0.61, 0.36, 1],
 };
 
-type FocusOverlayProps = {
+type FocusOverlayProps = Readonly<{
   isHome: boolean;
   strings: PortalStrings;
-};
+}>;
 
 // Fullscreen focus-mode overlay for embedded services.
 export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
@@ -39,8 +39,8 @@ export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
     return getServiceById(activeAppId);
   }, [searchParams]);
 
-  const isActive = Boolean(service && service.openMode === 'overlay' && isHome);
-  const isLoaded = service ? loadedId === service.id : false;
+  const isActive = Boolean(service?.openMode === 'overlay' && isHome);
+  const isLoaded = service?.id === loadedId;
   const close = useCallback(() => {
     setLoadedId(null);
     const params = new URLSearchParams(searchParams.toString());
@@ -50,11 +50,7 @@ export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
   }, [router, searchParams]);
 
   useEffect(() => {
-    if (isActive) {
-      document.documentElement.dataset.focus = 'true';
-    } else {
-      document.documentElement.dataset.focus = 'false';
-    }
+    document.documentElement.dataset.focus = isActive ? 'true' : 'false';
     return () => {
       document.documentElement.dataset.focus = 'false';
     };
@@ -66,8 +62,8 @@ export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
         close();
       }
     };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    globalThis.addEventListener('keydown', onKeyDown);
+    return () => globalThis.removeEventListener('keydown', onKeyDown);
   }, [isActive, close]);
 
   return (
@@ -110,7 +106,7 @@ export default function FocusOverlay({ isHome, strings }: FocusOverlayProps) {
                 size="sm"
                 variant="secondary"
                 onClick={() =>
-                  window.open(
+                  globalThis.open(
                     getServiceHref(service),
                     '_blank',
                     'noopener,noreferrer'

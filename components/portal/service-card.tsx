@@ -17,13 +17,13 @@ import { renderServiceIcon } from '@/lib/service-icons';
 import type { ServiceDefinition } from '@/lib/services';
 import { withDelay } from '@/components/portal/portal-motion';
 
-type ServiceCardProps = {
+type ServiceCardProps = Readonly<{
   service: ServiceDefinition;
   strings: PortalStrings;
   isHome: boolean;
   isPublic: boolean;
   delay?: number;
-};
+}>;
 
 // Card layout for a single service entry.
 export default function ServiceCard({
@@ -34,8 +34,8 @@ export default function ServiceCard({
   delay = 0,
 }: ServiceCardProps) {
   return (
-    <li className="portal-entrance" style={withDelay(delay)}>
-      <article className="portal-card group rounded-(--radius)">
+    <li className="portal-entrance h-full" style={withDelay(delay)}>
+      <article className="portal-card group flex h-full flex-col rounded-(--radius)">
         <div
           className="absolute right-0 top-0 h-24 w-24 -translate-y-8 translate-x-8 rounded-full opacity-35"
           style={{ background: service.accent }}
@@ -66,7 +66,7 @@ export default function ServiceCard({
             />
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="flex-1 space-y-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>{strings.services.latency}</span>
             <ServiceLatency
@@ -78,7 +78,7 @@ export default function ServiceCard({
           <Separator />
           <ServiceActions service={service} isPublic={isPublic} strings={strings} />
         </CardContent>
-        <CardFooter className="text-xs text-muted-foreground">
+        <CardFooter className="mt-auto text-xs text-muted-foreground">
           {service.openMode === 'overlay'
             ? strings.services.overlayHint
             : strings.services.newTabHint}

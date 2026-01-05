@@ -1,7 +1,7 @@
-import os from "os";
-import { exec as execCallback } from "child_process";
-import { promisify } from "util";
-import fs from "fs/promises";
+import os from "node:os";
+import { exec as execCallback } from "node:child_process";
+import { promisify } from "node:util";
+import fs from "node:fs/promises";
 
 import type { SystemStats } from "@/types/system";
 import { SYSTEM_CACHE_TTL_MS } from "@/lib/constants/system";
@@ -19,7 +19,11 @@ const getDiskUsage = async () => {
     if (lines.length < 2) {
       return null;
     }
-    const parts = lines[lines.length - 1].trim().split(/\s+/);
+    const lastLine = lines.at(-1);
+    if (!lastLine) {
+      return null;
+    }
+    const parts = lastLine.trim().split(/\s+/);
     if (parts.length < 5) {
       return null;
     }

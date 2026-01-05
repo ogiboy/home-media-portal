@@ -4,11 +4,11 @@ import SystemUpdatedBadge from '@/components/client/system-updated-badge';
 import type { PortalStrings } from '@/lib/i18n';
 import { withDelay } from '@/components/portal/portal-motion';
 
-type SystemSectionProps = {
+type SystemSectionProps = Readonly<{
   strings: PortalStrings;
   isHome: boolean;
   delay?: number;
-};
+}>;
 
 // Section that wraps system stats widgets.
 export default function SystemSection({

@@ -23,6 +23,7 @@ type ServiceDescriptions = Record<ServiceId, string>;
 export type PortalStrings = {
   nav: {
     dashboard: string;
+    games: string;
     system: string;
     board: string;
   };
@@ -75,6 +76,47 @@ export type PortalStrings = {
     newTabHint: string;
     items: ServiceDescriptions;
   };
+  shortcuts: {
+    title: string;
+    description: string;
+    searchTitle: string;
+    searchDesc: string;
+    searchPlaceholder: string;
+    searchMovies: string;
+    searchSeries: string;
+    searchButton: string;
+    resultsTitle: string;
+    resultsEmpty: string;
+    addButton: string;
+    actionsTitle: string;
+    actionsDesc: string;
+    actionSync: string;
+    actionRescan: string;
+    actionTest: string;
+    comingSoon: string;
+    errorInvalid: string;
+    errorUnavailable: string;
+    errorForbidden: string;
+    errorMissingKey: string;
+    errorMissingConfig: string;
+    errorUnknown: string;
+  };
+  games: {
+    title: string;
+    description: string;
+    cta: string;
+    nowPlaying: string;
+    collectionTitle: string;
+    collectionDesc: string;
+    play: string;
+    playAgain: string;
+    comingSoon: string;
+    liveLabel: string;
+    score: string;
+    timeLeft: string;
+    orbChaseTitle: string;
+    orbChaseHint: string;
+  };
   system: {
     title: string;
     description: string;
@@ -95,6 +137,14 @@ export type PortalStrings = {
     tailnetOnly: string;
     recentTitle: string;
     recentDesc: string;
+    filterLabel: string;
+    filterPlaceholder: string;
+    sortNewest: string;
+    sortOldest: string;
+    dateFromLabel: string;
+    dateToLabel: string;
+    clearFilters: string;
+    emptyFiltered: string;
     empty: string;
     postTitle: string;
     postDesc: string;
@@ -131,6 +181,7 @@ export type PortalStrings = {
     groupServices: string;
   };
   toasts: {
+    dismiss: string;
     tailnetOnline: {
       title: string;
       description: string;
@@ -167,6 +218,26 @@ export type PortalStrings = {
       title: string;
       description: string;
     };
+    shortcutAdded: {
+      title: string;
+      description: string;
+    };
+    shortcutFailed: {
+      title: string;
+      description: string;
+    };
+    shortcutMissingConfig: {
+      title: string;
+      description: string;
+    };
+    shortcutMissingKey: {
+      title: string;
+      description: string;
+    };
+    shortcutUnavailable: {
+      title: string;
+      description: string;
+    };
   };
   misc: {
     updated: string;
@@ -195,6 +266,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
   tr: {
     nav: {
       dashboard: "Gosterge",
+      games: "Oyunlar",
       system: "Sistem",
       board: "Pano",
     },
@@ -254,6 +326,47 @@ const dictionaries: Record<Locale, PortalStrings> = {
         qbittorrent: "Indirme kuyrugu ve torrent istemcisi.",
       },
     },
+    shortcuts: {
+      title: "Hizli Kisayollar",
+      description: "Sik kullanilan islemler tek panelde.",
+      searchTitle: "Arama",
+      searchDesc: "Radarr/Sonarr aramasi yakinda.",
+      searchPlaceholder: "Film veya dizi ara...",
+      searchMovies: "Film ara",
+      searchSeries: "Dizi ara",
+      searchButton: "Ara",
+      resultsTitle: "Sonuclar",
+      resultsEmpty: "Sonuc bulunamadi.",
+      addButton: "Ekle",
+      actionsTitle: "Hizli Aksiyonlar",
+      actionsDesc: "Servis gorevleri yakinda aktif.",
+      actionSync: "Senkronize et",
+      actionRescan: "Yeniden tara",
+      actionTest: "Test et",
+      comingSoon: "Yakinda",
+      errorInvalid: "Arama bos olamaz.",
+      errorUnavailable: "Tailnet disinda kullanilamaz.",
+      errorForbidden: "Bu islem icin yetkin yok.",
+      errorMissingKey: "API anahtari eksik.",
+      errorMissingConfig: "Profil veya klasor ayarlanmamis.",
+      errorUnknown: "Arama basarisiz oldu.",
+    },
+    games: {
+      title: "Oyun Kosesi",
+      description: "Beklerken kisa bir oyun oyna.",
+      cta: "Tum oyunlar",
+      nowPlaying: "Secili oyun",
+      collectionTitle: "Oyunlar",
+      collectionDesc: "Koleksiyondan sec.",
+      play: "Oyna",
+      playAgain: "Tekrar oyna",
+      comingSoon: "Yakinda",
+      liveLabel: "Canli",
+      score: "Skor",
+      timeLeft: "Sure",
+      orbChaseTitle: "Orb Avcisi",
+      orbChaseHint: "Parlayan orbu tikla ve sure bitmeden puan topla.",
+    },
     system: {
       title: "Sistem durumu",
       description: "Ev sunucusundan canli saglik verisi.",
@@ -274,6 +387,14 @@ const dictionaries: Record<Locale, PortalStrings> = {
       tailnetOnly: "Sadece tailnet",
       recentTitle: "Son notlar",
       recentDesc: "Son 50 mesaj.",
+      filterLabel: "Filtre",
+      filterPlaceholder: "Mesaj veya isim ara...",
+      sortNewest: "Yeniden eskiye",
+      sortOldest: "Eskiden yeniye",
+      dateFromLabel: "Baslangic tarihi",
+      dateToLabel: "Bitis tarihi",
+      clearFilters: "Filtreleri temizle",
+      emptyFiltered: "Filtreyle eslesen mesaj yok.",
       empty: "Henuz not yok. Ilk mesaji birakin.",
       postTitle: "Not birak",
       postDesc: "Kisa ve net yaz.",
@@ -310,6 +431,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       groupServices: "Servisler",
     },
     toasts: {
+      dismiss: "Kapat",
       tailnetOnline: {
         title: "Tailnet baglandi",
         description: "Ev portali hazir.",
@@ -319,32 +441,52 @@ const dictionaries: Record<Locale, PortalStrings> = {
         description: "Tailscale'i acip tekrar dene.",
       },
       tailnetConnecting: {
-        title: "Tailnet baglaniyor",
-        description: "Baglanti kontrol ediliyor.",
+        title: "Baglaniyor",
+        description: "Tailnet kontrol ediliyor.",
       },
       boardSuccess: {
         title: "Mesaj gonderildi",
-        description: "Not panosuna eklendi.",
+        description: "Pano guncellendi.",
       },
       boardError: {
         title: "Mesaj gonderilemedi",
-        description: "Tekrar dene veya baglantiyi kontrol et.",
+        description: "Tekrar dene.",
       },
       boardRate: {
-        title: "Cok hizli gonderim",
-        description: "Lutfen biraz bekle.",
+        title: "Cok hizli",
+        description: "Biraz bekleyip tekrar deneyin.",
       },
       boardUnavailable: {
-        title: "Tailnet gerekli",
-        description: "Pano sadece ev portalinda.",
+        title: "Tailnet disinda",
+        description: "Pano yalnizca ev icinde acik.",
       },
       restartQueued: {
-        title: "Yeniden baslatma gonderildi",
-        description: "Istegin kuyruga alindi.",
+        title: "Yeniden baslatma kuyruga alindi",
+        description: "Servis kisa surede yeniden baslayacak.",
       },
       restartUnavailable: {
-        title: "Aksiyon hazir degil",
-        description: "Bu islem henuz desteklenmiyor.",
+        title: "Yeniden baslatma kapali",
+        description: "Bu servis icin desteklenmiyor.",
+      },
+      shortcutAdded: {
+        title: "Istek eklendi",
+        description: "Servis ekleme istegini aldi.",
+      },
+      shortcutFailed: {
+        title: "Islem basarisiz",
+        description: "Tekrar dene veya servis kontrol et.",
+      },
+      shortcutMissingConfig: {
+        title: "Ayar eksik",
+        description: "Profil veya klasor ayari gerekir.",
+      },
+      shortcutMissingKey: {
+        title: "API anahtari eksik",
+        description: "Radarr/Sonarr API anahtarini ekleyin.",
+      },
+      shortcutUnavailable: {
+        title: "Bu islem kilitli",
+        description: "Yalnizca yetkili kullanicilar icindir.",
       },
     },
     misc: {
@@ -380,6 +522,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
   en: {
     nav: {
       dashboard: "Dashboard",
+      games: "Games",
       system: "System",
       board: "Board",
     },
@@ -439,6 +582,47 @@ const dictionaries: Record<Locale, PortalStrings> = {
         qbittorrent: "Download queue and torrent client.",
       },
     },
+    shortcuts: {
+      title: "Quick Shortcuts",
+      description: "Common tasks in one panel.",
+      searchTitle: "Search",
+      searchDesc: "Radarr/Sonarr search coming soon.",
+      searchPlaceholder: "Search for a movie or series...",
+      searchMovies: "Search movies",
+      searchSeries: "Search series",
+      searchButton: "Search",
+      resultsTitle: "Results",
+      resultsEmpty: "No results found.",
+      addButton: "Add",
+      actionsTitle: "Quick Actions",
+      actionsDesc: "Service tasks will be enabled soon.",
+      actionSync: "Sync",
+      actionRescan: "Rescan",
+      actionTest: "Test",
+      comingSoon: "Coming soon",
+      errorInvalid: "Search cannot be empty.",
+      errorUnavailable: "Not available outside the tailnet.",
+      errorForbidden: "You do not have permission.",
+      errorMissingKey: "Missing API key.",
+      errorMissingConfig: "Missing profile or folder config.",
+      errorUnknown: "Search failed.",
+    },
+    games: {
+      title: "Games Lounge",
+      description: "Play a quick game while you wait.",
+      cta: "All games",
+      nowPlaying: "Now playing",
+      collectionTitle: "Library",
+      collectionDesc: "Pick a game to spotlight.",
+      play: "Play",
+      playAgain: "Play again",
+      comingSoon: "Coming soon",
+      liveLabel: "Live",
+      score: "Score",
+      timeLeft: "Time left",
+      orbChaseTitle: "Orb Chase",
+      orbChaseHint: "Tap the glowing orb and score before the timer ends.",
+    },
     system: {
       title: "System status",
       description: "Live health overview from the home server.",
@@ -459,6 +643,14 @@ const dictionaries: Record<Locale, PortalStrings> = {
       tailnetOnly: "Tailnet only",
       recentTitle: "Recent notes",
       recentDesc: "Latest 50 messages.",
+      filterLabel: "Filter",
+      filterPlaceholder: "Search name or message...",
+      sortNewest: "Newest first",
+      sortOldest: "Oldest first",
+      dateFromLabel: "From date",
+      dateToLabel: "To date",
+      clearFilters: "Clear filters",
+      emptyFiltered: "No messages match the filters.",
       empty: "No notes yet. Be the first to post.",
       postTitle: "Post a note",
       postDesc: "Keep it short and sweet.",
@@ -495,41 +687,62 @@ const dictionaries: Record<Locale, PortalStrings> = {
       groupServices: "Services",
     },
     toasts: {
+      dismiss: "Dismiss",
       tailnetOnline: {
         title: "Tailnet connected",
-        description: "Home portal is reachable.",
+        description: "Home portal is ready.",
       },
       tailnetOffline: {
         title: "Tailnet offline",
-        description: "Enable Tailscale and retry.",
+        description: "Enable Tailscale and try again.",
       },
       tailnetConnecting: {
-        title: "Checking tailnet",
-        description: "Connection check in progress.",
+        title: "Connecting",
+        description: "Checking tailnet status.",
       },
       boardSuccess: {
         title: "Message posted",
-        description: "Your note is on the board.",
+        description: "Board updated.",
       },
       boardError: {
         title: "Message failed",
         description: "Please try again.",
       },
       boardRate: {
-        title: "Too many requests",
-        description: "Slow down for a moment.",
+        title: "Too fast",
+        description: "Slow down and try again.",
       },
       boardUnavailable: {
-        title: "Tailnet required",
-        description: "Board is available on the home portal.",
+        title: "Tailnet only",
+        description: "Board is available on the home network.",
       },
       restartQueued: {
         title: "Restart queued",
-        description: "Service restart has been queued.",
+        description: "Service will restart soon.",
       },
       restartUnavailable: {
-        title: "Action unavailable",
-        description: "This action is not available yet.",
+        title: "Restart unavailable",
+        description: "Not supported for this service.",
+      },
+      shortcutAdded: {
+        title: "Request queued",
+        description: "The service received the add request.",
+      },
+      shortcutFailed: {
+        title: "Action failed",
+        description: "Try again or check the service.",
+      },
+      shortcutMissingConfig: {
+        title: "Missing config",
+        description: "Set a profile and root folder first.",
+      },
+      shortcutMissingKey: {
+        title: "Missing API key",
+        description: "Add the Radarr/Sonarr API key.",
+      },
+      shortcutUnavailable: {
+        title: "Action locked",
+        description: "Only authorized users can run this.",
       },
     },
     misc: {
@@ -565,6 +778,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
   it: {
     nav: {
       dashboard: "Dashboard",
+      games: "Giochi",
       system: "Sistema",
       board: "Bacheca",
     },
@@ -624,6 +838,47 @@ const dictionaries: Record<Locale, PortalStrings> = {
         qbittorrent: "Coda download e client torrent.",
       },
     },
+    shortcuts: {
+      title: "Scorciatoie",
+      description: "Azioni frequenti in un solo pannello.",
+      searchTitle: "Ricerca",
+      searchDesc: "Ricerca Radarr/Sonarr in arrivo.",
+      searchPlaceholder: "Cerca un film o una serie...",
+      searchMovies: "Cerca film",
+      searchSeries: "Cerca serie",
+      searchButton: "Cerca",
+      resultsTitle: "Risultati",
+      resultsEmpty: "Nessun risultato.",
+      addButton: "Aggiungi",
+      actionsTitle: "Azioni rapide",
+      actionsDesc: "Le azioni dei servizi saranno disponibili a breve.",
+      actionSync: "Sincronizza",
+      actionRescan: "Scansiona",
+      actionTest: "Test",
+      comingSoon: "In arrivo",
+      errorInvalid: "La ricerca non puo essere vuota.",
+      errorUnavailable: "Non disponibile fuori dal tailnet.",
+      errorForbidden: "Non hai i permessi.",
+      errorMissingKey: "API key mancante.",
+      errorMissingConfig: "Profilo o cartella mancanti.",
+      errorUnknown: "Ricerca non riuscita.",
+    },
+    games: {
+      title: "Angolo Giochi",
+      description: "Gioca mentre aspetti.",
+      cta: "Tutti i giochi",
+      nowPlaying: "In primo piano",
+      collectionTitle: "Collezione",
+      collectionDesc: "Scegli un gioco.",
+      play: "Gioca",
+      playAgain: "Gioca di nuovo",
+      comingSoon: "In arrivo",
+      liveLabel: "Live",
+      score: "Punteggio",
+      timeLeft: "Tempo",
+      orbChaseTitle: "Caccia all'Orb",
+      orbChaseHint: "Tocca l'orb brillante prima che scada il tempo.",
+    },
     system: {
       title: "Stato sistema",
       description: "Panoramica live dal server di casa.",
@@ -644,6 +899,14 @@ const dictionaries: Record<Locale, PortalStrings> = {
       tailnetOnly: "Solo tailnet",
       recentTitle: "Note recenti",
       recentDesc: "Ultimi 50 messaggi.",
+      filterLabel: "Filtro",
+      filterPlaceholder: "Cerca nome o messaggio...",
+      sortNewest: "Piu recenti",
+      sortOldest: "Piu vecchi",
+      dateFromLabel: "Data inizio",
+      dateToLabel: "Data fine",
+      clearFilters: "Rimuovi filtri",
+      emptyFiltered: "Nessun messaggio corrisponde ai filtri.",
       empty: "Nessuna nota. Pubblica la prima.",
       postTitle: "Pubblica una nota",
       postDesc: "Breve e chiaro.",
@@ -680,41 +943,62 @@ const dictionaries: Record<Locale, PortalStrings> = {
       groupServices: "Servizi",
     },
     toasts: {
+      dismiss: "Chiudi",
       tailnetOnline: {
-        title: "Tailnet connessa",
-        description: "Il portale di casa e raggiungibile.",
+        title: "Tailnet connesso",
+        description: "Il portale di casa e pronto.",
       },
       tailnetOffline: {
         title: "Tailnet offline",
         description: "Attiva Tailscale e riprova.",
       },
       tailnetConnecting: {
-        title: "Controllo tailnet",
-        description: "Verifica connessione in corso.",
+        title: "Connessione",
+        description: "Controllo stato tailnet.",
       },
       boardSuccess: {
         title: "Messaggio inviato",
-        description: "Il tuo messaggio e sulla bacheca.",
+        description: "Bacheca aggiornata.",
       },
       boardError: {
         title: "Invio fallito",
-        description: "Riprova tra poco.",
+        description: "Riprova.",
       },
       boardRate: {
-        title: "Troppi invii",
-        description: "Attendi un momento.",
+        title: "Troppo veloce",
+        description: "Aspetta e riprova.",
       },
       boardUnavailable: {
-        title: "Tailnet richiesta",
-        description: "La bacheca e solo nel portale di casa.",
+        title: "Solo tailnet",
+        description: "Disponibile solo in rete locale.",
       },
       restartQueued: {
         title: "Riavvio in coda",
-        description: "Il riavvio e stato accodato.",
+        description: "Il servizio si riavviera presto.",
       },
       restartUnavailable: {
-        title: "Azione non disponibile",
-        description: "Questa azione non e ancora attiva.",
+        title: "Riavvio non disponibile",
+        description: "Non supportato per questo servizio.",
+      },
+      shortcutAdded: {
+        title: "Richiesta inviata",
+        description: "Il servizio ha ricevuto la richiesta.",
+      },
+      shortcutFailed: {
+        title: "Azione fallita",
+        description: "Riprova o controlla il servizio.",
+      },
+      shortcutMissingConfig: {
+        title: "Configurazione mancante",
+        description: "Imposta profilo e cartella.",
+      },
+      shortcutMissingKey: {
+        title: "API key mancante",
+        description: "Aggiungi la API key di Radarr/Sonarr.",
+      },
+      shortcutUnavailable: {
+        title: "Azione bloccata",
+        description: "Solo utenti autorizzati.",
       },
     },
     misc: {

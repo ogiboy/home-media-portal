@@ -29,15 +29,17 @@ const statusTone = {
   connecting: 'bg-amber-400',
 };
 
-type PortalControlsProps = {
+type PortalControlsProps = Readonly<{
   strings: PortalStrings;
   isPublic: boolean;
-};
+  allowGateInteraction?: boolean;
+}>;
 
 // Header controls for search and tailnet actions.
 export default function PortalControls({
   strings,
   isPublic,
+  allowGateInteraction,
 }: PortalControlsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -78,12 +80,12 @@ export default function PortalControls({
     lastStatus.current = status;
   }, [status, strings]);
 
-  const statusLabel =
-    status === 'online'
-      ? strings.tailnet.reachable
-      : status === 'offline'
-      ? strings.tailnet.offline
-      : strings.tailnet.connecting;
+  const statusLabels = {
+    online: strings.tailnet.reachable,
+    offline: strings.tailnet.offline,
+    connecting: strings.tailnet.connecting,
+  };
+  const statusLabel = statusLabels[status];
 
   const setActiveApp = useCallback(
     (id?: string) => {
@@ -106,7 +108,7 @@ export default function PortalControls({
         return;
       }
       if (service.openMode === 'newtab') {
-        window.open(getServiceHref(service), '_blank', 'noopener,noreferrer');
+        globalThis.open(getServiceHref(service), '_blank', 'noopener,noreferrer');
         return;
       }
       setActiveApp(service.id);
@@ -119,7 +121,7 @@ export default function PortalControls({
   const showRetry = isPublic && status !== 'online';
 
   const enterHome = useCallback(() => {
-    window.location.href = HOME_URL;
+    globalThis.location.href = HOME_URL;
   }, []);
 
   const commands = useMemo(
@@ -192,6 +194,7 @@ export default function PortalControls({
         visible={showGate}
         status={status}
         isPublic={isPublic}
+        allowInteraction={Boolean(allowGateInteraction)}
         strings={strings}
         onEnter={enterHome}
       />

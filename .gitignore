@@ -42,3 +42,5 @@ next-env.d.ts
 # local data
 /data
 *.db
+
+sonar-issues.json

@@ -38,8 +38,10 @@ export async function postBoardMessage(
     };
   }
 
-  const author = String(formData.get('author') ?? '').trim();
-  const body = String(formData.get('body') ?? '').trim();
+  const authorValue = formData.get('author');
+  const bodyValue = formData.get('body');
+  const author = typeof authorValue === 'string' ? authorValue.trim() : '';
+  const body = typeof bodyValue === 'string' ? bodyValue.trim() : '';
 
   const parsed = boardMessageSchema.safeParse({ author, body });
   if (!parsed.success) {

@@ -1,7 +1,11 @@
 /* Focus overlay layout helpers. */
 .overlay {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  left: 50%;
+  width: min(1120px, calc(100vw - 3rem));
+  transform: translateX(-50%);
   z-index: 30;
   display: flex;
   flex-direction: column;

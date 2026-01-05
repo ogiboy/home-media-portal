@@ -1,28 +1,60 @@
 // Mobile bottom navigation for quick section jumps.
-import { Gauge, LayoutGrid, MessageSquare } from 'lucide-react';
+import { Gamepad2, Gauge, LayoutGrid, MessageSquare } from 'lucide-react';
 
 import type { PortalStrings } from '@/lib/i18n';
 
-type PortalMobileNavProps = {
+type PortalNavLinks = {
+  dashboard: string;
+  games: string;
+  system: string;
+  board: string;
+};
+
+type PortalMobileNavProps = Readonly<{
   strings: PortalStrings;
+  links?: PortalNavLinks;
+  active?: 'dashboard' | 'games';
+}>;
+
+const defaultLinks: PortalNavLinks = {
+  dashboard: '#services',
+  games: '/games',
+  system: '#system',
+  board: '#board',
 };
 
 // Bottom navigation for mobile layouts.
-export default function PortalMobileNav({ strings }: PortalMobileNavProps) {
+export default function PortalMobileNav({
+  strings,
+  links = defaultLinks,
+  active = 'dashboard',
+}: PortalMobileNavProps) {
   return (
     <nav
-      className="portal-surface portal-mobile-nav fixed inset-x-4 bottom-4 z-40 flex items-center justify-between rounded-full px-4 py-3 md:hidden"
+      className="portal-surface portal-mobile-nav fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-2 rounded-full px-4 py-3 md:hidden"
       aria-label={strings.accessibility.mobileNav}
     >
-      <a href="#services" className="flex items-center gap-2 text-xs font-semibold">
+      <a
+        href={links.dashboard}
+        aria-current={active === 'dashboard' ? 'page' : undefined}
+        className="flex items-center gap-2 text-xs font-semibold"
+      >
         <LayoutGrid className="h-4 w-4" />
         {strings.nav.dashboard}
       </a>
-      <a href="#system" className="flex items-center gap-2 text-xs font-semibold">
+      <a
+        href={links.games}
+        aria-current={active === 'games' ? 'page' : undefined}
+        className="flex items-center gap-2 text-xs font-semibold"
+      >
+        <Gamepad2 className="h-4 w-4" />
+        {strings.nav.games}
+      </a>
+      <a href={links.system} className="flex items-center gap-2 text-xs font-semibold">
         <Gauge className="h-4 w-4" />
         {strings.nav.system}
       </a>
-      <a href="#board" className="flex items-center gap-2 text-xs font-semibold">
+      <a href={links.board} className="flex items-center gap-2 text-xs font-semibold">
         <MessageSquare className="h-4 w-4" />
         {strings.nav.board}
       </a>
