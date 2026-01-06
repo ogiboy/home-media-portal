@@ -127,9 +127,9 @@ export default function PortalControls({
     [isPublic, setActiveApp]
   );
 
-  // Public shell always shows the gate; home only blocks when offline.
-  const showGate = isPublic || status === 'offline';
-  const showRetry = isPublic && status !== 'online';
+  // Public shell always shows the gate; home shows it when not online.
+  const showGate = isPublic || status !== 'online';
+  const showRetry = status !== 'online';
 
   const enterHome = useCallback(() => {
     globalThis.location.href = HOME_URL;

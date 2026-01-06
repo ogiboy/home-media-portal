@@ -78,7 +78,7 @@ export default function TailnetGate({
   );
 
   useEffect(() => {
-    if (!visible || !blocking) {
+    if (!visible) {
       return undefined;
     }
     const original = document.body.style.overflow;
@@ -86,7 +86,7 @@ export default function TailnetGate({
     return () => {
       document.body.style.overflow = original;
     };
-  }, [visible, blocking]);
+  }, [visible]);
 
   if (!visible || !hydrated) {
     return null;

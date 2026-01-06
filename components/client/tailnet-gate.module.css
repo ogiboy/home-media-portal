@@ -17,12 +17,12 @@
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 70;
-  width: min(42rem, calc(100% - 2rem));
+  width: min(48rem, calc(100% - 2rem));
 }
 
 .panel {
   width: 100%;
-  padding: 2rem;
+  padding: 2.25rem;
   border-radius: var(--radius);
   text-align: center;
   display: flex;
