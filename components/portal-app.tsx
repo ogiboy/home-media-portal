@@ -4,6 +4,8 @@ import { cookies, headers } from 'next/headers';
 import FocusOverlay from '@/components/client/focus-overlay';
 import ToastViewport from '@/components/client/toast-viewport';
 import ScrollParallax from '@/components/client/scroll-parallax';
+import ScrollRestoration from '@/components/client/scroll-restoration';
+import ToTopButton from '@/components/client/to-top-button';
 import PortalSidebar from '@/components/portal/portal-sidebar';
 import PortalHeader from '@/components/portal/portal-header';
 import ShortcutsSection from '@/components/portal/shortcuts-section';
@@ -57,6 +59,7 @@ export default async function PortalApp({
   return (
     <div className="portal-shell relative min-h-screen overflow-x-hidden">
       <ScrollParallax />
+      <ScrollRestoration />
       <div className="pointer-events-none absolute inset-0 portal-grid opacity-40" />
       <div className="portal-orb portal-orb--a" />
       <div className="portal-orb portal-orb--b" />
@@ -121,6 +124,7 @@ export default async function PortalApp({
         links={navLinks}
         active={isGamesView ? 'games' : 'dashboard'}
       />
+      <ToTopButton label={strings.accessibility.backToTop} />
       <ToastViewport strings={strings} />
       <FocusOverlay isHome={isHome} strings={strings} />
     </div>

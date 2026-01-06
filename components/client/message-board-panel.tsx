@@ -313,7 +313,7 @@ export default function MessageBoardPanel({
     <div
       className={cn(
         'mt-6 grid gap-6',
-        isStacked ? 'mt-4' : 'lg:grid-cols-[1.1fr_1fr]'
+        isStacked ? 'mt-4' : 'lg:grid-cols-2'
       )}
     >
       <Card className="portal-surface">

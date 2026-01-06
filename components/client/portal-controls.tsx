@@ -143,19 +143,19 @@ export default function PortalControls({
   return (
     <>
       <div className="flex flex-wrap items-center gap-2">
-        <div className="portal-chip flex items-center gap-2 px-3 py-1 text-xs text-muted-foreground">
+        <div className="portal-chip flex min-w-40 items-center justify-between gap-2 px-3 py-1 text-xs text-muted-foreground">
           <span className={cn('h-2 w-2 rounded-full', statusTone[status])} />
-          <span>{statusLabel}</span>
+          <span className="whitespace-nowrap">{statusLabel}</span>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setOpen(true)}
-          className="shadow-sm"
+          className="min-w-32 justify-center shadow-sm"
         >
           <Search className="h-4 w-4" />
           {strings.header.search}
-          <span className="ml-1 hidden text-xs text-muted-foreground sm:inline">
+          <span className="ml-1 hidden whitespace-nowrap text-xs text-muted-foreground sm:inline">
             {strings.header.searchHint}
           </span>
         </Button>

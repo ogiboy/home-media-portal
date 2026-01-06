@@ -43,6 +43,7 @@ export type PortalStrings = {
     primaryNav: string;
     mobileNav: string;
     dialogClose: string;
+    backToTop: string;
   };
   badges: {
     homePortal: string;
@@ -286,6 +287,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       primaryNav: "Ana gezinme",
       mobileNav: "Mobil gezinme",
       dialogClose: "Kapat",
+      backToTop: "Yukari cik",
     },
     badges: {
       homePortal: "Ev Portali",
