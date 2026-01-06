@@ -1,10 +1,11 @@
 'use client';
 
 // Simple click-based mini game for the games section.
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { Play, RotateCw } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { recordGamePlay, recordGameScore } from '@/app/actions/game-actions';
 import type { PortalStrings } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
@@ -27,6 +28,7 @@ const randomPosition = () => ({
 type OrbChaseProps = {
   strings: PortalStrings;
   compact?: boolean;
+  gameId?: string;
 };
 
 /**
@@ -39,11 +41,27 @@ type OrbChaseProps = {
 export default function OrbChase({
   strings,
   compact = false,
+  gameId = 'orb-chase',
 }: Readonly<OrbChaseProps>) {
   const [status, setStatus] = useState<'idle' | 'running' | 'ended'>('idle');
+  const [isPending, startTransition] = useTransition();
+  const hasReportedScore = useRef(false);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
   const [target, setTarget] = useState(randomPosition());
+
+  useEffect(() => {
+    if (status === 'ended' && !hasReportedScore.current) {
+      hasReportedScore.current = true;
+      startTransition(() => {
+        recordGameScore(gameId, score);
+      });
+    }
+
+    if (status === 'running') {
+      hasReportedScore.current = false;
+    }
+  }, [gameId, score, startTransition, status]);
 
   useEffect(() => {
     if (status !== 'running') {
@@ -68,6 +86,9 @@ export default function OrbChase({
     setTimeLeft(GAME_DURATION);
     setTarget(randomPosition());
     setStatus('running');
+    startTransition(() => {
+      recordGamePlay(gameId);
+    });
   };
 
   const handleHit = () => {
@@ -121,7 +142,7 @@ export default function OrbChase({
         )}
         {status !== 'running' && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <Button size="sm" onClick={startGame}>
+            <Button size="sm" onClick={startGame} disabled={isPending}>
               {status === 'ended' ? (
                 <RotateCw className="h-4 w-4" />
               ) : (

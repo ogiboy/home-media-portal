@@ -2,6 +2,7 @@
 import { cookies, headers } from 'next/headers';
 
 import FocusOverlay from '@/components/client/focus-overlay';
+import GameFocusOverlay from '@/components/client/game-focus-overlay';
 import ToastViewport from '@/components/client/toast-viewport';
 import ScrollParallax from '@/components/client/scroll-parallax';
 import ScrollRestoration from '@/components/client/scroll-restoration';
@@ -127,6 +128,7 @@ export default async function PortalApp({
       <ToTopButton label={strings.accessibility.backToTop} />
       <ToastViewport strings={strings} />
       <FocusOverlay isHome={isHome} strings={strings} />
+      <GameFocusOverlay strings={strings} />
     </div>
   );
 }

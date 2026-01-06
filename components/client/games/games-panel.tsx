@@ -1,51 +1,76 @@
 'use client';
 
-// Client games panel with selection state.
+// Client games panel with carousel selection state.
 import { useMemo, useState } from 'react';
-import { Gamepad2, Sparkles } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { Play, Trophy } from 'lucide-react';
+import useSWR from 'swr';
 
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { PortalStrings } from '@/lib/i18n';
 import { games } from '@/lib/games';
 import { cn } from '@/lib/utils';
-import OrbChase from '@/components/client/games/orb-chase';
+import { jsonFetcher } from '@/lib/fetcher';
 
 type GamesPanelProps = {
   strings: PortalStrings;
   variant?: 'preview' | 'full';
 };
 
+type GameStats = {
+  gameId: string;
+  totalPlays: number;
+  topScores: Array<{ userLogin: string; score: number }>;
+};
+
+type GameStatsResponse = {
+  stats: Record<string, GameStats>;
+};
+
 /**
- * Renders a two-pane games panel showing details for the active game and a selectable collection.
- *
- * @param strings - Localized UI text used throughout the panel.
- * @param variant - Layout variant; `'preview'` renders a more compact view, `'full'` renders an expanded layout. Defaults to `'preview'`.
- * @returns The React element containing the active game detail pane (title, status, description, tags, and play area or placeholder) and the horizontally scrollable game collection.
+ * Renders a games lounge with a hero panel and a hoverable carousel.
  */
 export default function GamesPanel({
   strings,
   variant = 'preview',
 }: Readonly<GamesPanelProps>) {
   const [activeId, setActiveId] = useState(games[0]?.id ?? '');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const activeGame = useMemo(
     () => games.find((game) => game.id === activeId) ?? games[0],
     [activeId]
   );
 
-  const isPreview = variant === 'preview';
+  const { data } = useSWR<GameStatsResponse>('/api/games/stats', jsonFetcher, {
+    refreshInterval: 20000,
+  });
+
+  const stats = activeGame?.id ? data?.stats?.[activeGame.id] : undefined;
+  const topScore = stats?.topScores?.[0];
   const isPlayable = activeGame?.status === 'live';
-  const coverStyle = activeGame?.cover
-    ? { backgroundImage: activeGame.cover }
+  const coverStyle = activeGame?.coverImage
+    ? { backgroundImage: activeGame.coverImage }
     : undefined;
 
+  const openFocus = (gameId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('game', gameId);
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname);
+  };
+
+  const handlePlay = (gameId: string) => {
+    openFocus(gameId);
+  };
+
   return (
-    <div
-      className={cn(
-        'mt-5 grid gap-4',
-        isPreview ? 'lg:grid-cols-[1.5fr_1fr]' : 'lg:grid-cols-[1.7fr_1fr]'
-      )}
-    >
-      <div className="portal-surface relative overflow-hidden rounded-(--radius) p-5">
+    <div className="mt-5 flex flex-col gap-5">
+      <div className="portal-surface relative overflow-hidden rounded-(--radius) p-6">
         {coverStyle && (
           <div
             className="absolute inset-0 opacity-60"
@@ -53,13 +78,14 @@ export default function GamesPanel({
             aria-hidden="true"
           />
         )}
-        <div className="relative">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/60 to-background/90" />
+        <div className="relative z-10 flex flex-col gap-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
                 {strings.games.nowPlaying}
               </p>
-              <h3 className="mt-1 text-lg font-semibold">
+              <h3 className="mt-1 text-xl font-semibold">
                 {activeGame?.title}
               </h3>
             </div>
@@ -67,10 +93,10 @@ export default function GamesPanel({
               {isPlayable ? strings.games.liveLabel : strings.games.comingSoon}
             </Badge>
           </div>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {activeGame?.description}
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             {activeGame?.tags?.map((tag) => (
               <span
                 key={tag}
@@ -80,12 +106,25 @@ export default function GamesPanel({
               </span>
             ))}
           </div>
-          <div className="mt-4">
-            {isPlayable && activeGame?.runtime === 'inline' ? (
-              <OrbChase strings={strings} compact={isPreview} />
-            ) : (
-              <div className="rounded-2xl border border-border/60 bg-background/70 p-4 text-sm text-muted-foreground">
-                {strings.games.comingSoon}
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              size="sm"
+              disabled={!isPlayable}
+              onClick={() => activeGame && handlePlay(activeGame.id)}
+              className="shadow-[0_12px_30px_var(--portal-glow)]"
+            >
+              <Play className="h-4 w-4" />
+              {strings.games.play}
+            </Button>
+            <div className="text-xs text-muted-foreground">
+              {strings.games.playsLabel}: {stats?.totalPlays ?? 0}
+            </div>
+            {topScore && (
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Trophy className="h-3.5 w-3.5" />
+                <span className="truncate">
+                  {strings.games.topScoreLabel}: {topScore.score} · {topScore.userLogin}
+                </span>
               </div>
             )}
           </div>
@@ -93,49 +132,76 @@ export default function GamesPanel({
       </div>
 
       <div className="portal-surface rounded-(--radius) p-5">
-        <div className="flex items-center gap-2 text-sm font-semibold">
-          <Gamepad2 className="h-4 w-4" />
-          {strings.games.collectionTitle}
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h4 className="text-sm font-semibold">
+              {strings.games.collectionTitle}
+            </h4>
+            <p className="text-xs text-muted-foreground">
+              {strings.games.collectionDesc}
+            </p>
+          </div>
+          {variant === 'preview' && (
+            <span className="text-xs text-muted-foreground">
+              {strings.games.cta}
+            </span>
+          )}
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">
-          {strings.games.collectionDesc}
-        </p>
-        <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+
+        <div className="mt-4 flex gap-4 overflow-x-auto pb-4">
           {games.map((game) => {
             const selected = game.id === activeGame?.id;
+            const playable = game.status === 'live';
+            const cardCover = game.coverImage
+              ? { backgroundImage: game.coverImage }
+              : undefined;
+
             return (
-              <button
+              <motion.button
                 key={game.id}
                 type="button"
                 onClick={() => setActiveId(game.id)}
+                whileHover={{ scale: 1.04 }}
+                transition={{ duration: 0.2 }}
                 className={cn(
-                  'min-w-45 rounded-2xl border p-3 text-left transition',
+                  'group relative min-w-52 overflow-hidden rounded-3xl border p-4 text-left transition',
                   selected
                     ? 'border-primary/60 bg-primary/5 text-foreground'
-                    : 'border-border/60 bg-muted/40 text-muted-foreground hover:text-foreground'
+                    : 'border-border/60 bg-muted/40 text-muted-foreground'
                 )}
               >
                 <div
-                  className="h-20 w-full rounded-2xl border border-border/40"
-                  style={{ backgroundImage: game.cover }}
+                  className="absolute inset-0 opacity-60"
+                  style={cardCover}
+                  aria-hidden="true"
                 />
-                <div className="mt-3">
-                  <p className="text-sm font-semibold text-foreground">
+                <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/40 to-background/90" />
+                <div className="relative z-10 flex h-44 flex-col justify-end gap-2">
+                  <div className="text-sm font-semibold text-foreground">
                     {game.title}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {game.status === 'live'
-                      ? strings.games.play
-                      : strings.games.comingSoon}
-                  </p>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {playable ? strings.games.play : strings.games.comingSoon}
+                  </div>
                 </div>
-              </button>
+                {playable && (
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+                    <Button
+                      size="sm"
+                                           onClick={(event) => {
+                        event.stopPropagation();
+                        handlePlay(game.id);
+                      }}
+                      className="shadow-[0_12px_30px_var(--portal-glow)]"
+                    >
+                      <Play className="h-4 w-4" />
+                      {strings.games.play}
+                    </Button>
+                  </div>
+                )}
+              </motion.button>
             );
           })}
-        </div>
-        <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-          <Sparkles className="h-3.5 w-3.5" />
-          <span>{strings.games.cta}</span>
         </div>
       </div>
     </div>

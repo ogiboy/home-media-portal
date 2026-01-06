@@ -117,6 +117,8 @@ export type PortalStrings = {
     timeLeft: string;
     orbChaseTitle: string;
     orbChaseHint: string;
+    playsLabel: string;
+    topScoreLabel: string;
   };
   system: {
     title: string;
@@ -368,6 +370,8 @@ const dictionaries: Record<Locale, PortalStrings> = {
       timeLeft: "Sure",
       orbChaseTitle: "Orb Avcisi",
       orbChaseHint: "Parlayan orbu tikla ve sure bitmeden puan topla.",
+      playsLabel: "Oynanma",
+      topScoreLabel: "En yuksek skor",
     },
     system: {
       title: "Sistem durumu",
