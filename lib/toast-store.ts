@@ -40,6 +40,8 @@ const createId = () => {
   return `${Date.now()}-${globalThis.performance?.now() ?? 0}`;
 };
 
+const serverSnapshot: Toast[] = [];
+
 // Subscribe to toast updates for the viewport.
 export const toastStore = {
   subscribe: (listener: (toasts: Toast[]) => void) => {
@@ -49,7 +51,7 @@ export const toastStore = {
     };
   },
   getSnapshot: () => toasts,
-  getServerSnapshot: () => [],
+  getServerSnapshot: () => serverSnapshot,
 };
 
 // Remove a toast by ID.
