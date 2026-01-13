@@ -1,73 +1,79 @@
 // Mobile bottom navigation for quick section jumps.
-import { Gamepad2, Gauge, LayoutGrid, MessageSquare } from 'lucide-react';
+import { Gamepad2, LayoutGrid, Search, Settings, Sparkles, Film } from 'lucide-react';
 
 import type { PortalStrings } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 
 type PortalNavLinks = {
   dashboard: string;
+  search: string;
+  library: string;
   games: string;
-  system: string;
-  board: string;
+  shortcuts: string;
+  settings: string;
 };
+
+type PortalNavKey = keyof PortalNavLinks;
 
 type PortalMobileNavProps = Readonly<{
   strings: PortalStrings;
   links?: PortalNavLinks;
-  active?: 'dashboard' | 'games';
+  active?: PortalNavKey;
 }>;
 
 const defaultLinks: PortalNavLinks = {
-  dashboard: '#services',
+  dashboard: '/#search',
+  search: '/search',
+  library: '/library',
   games: '/games',
-  system: '#system',
-  board: '#board',
+  shortcuts: '/shortcuts',
+  settings: '/settings',
 };
 
 /**
- * Render a bottom-fixed mobile navigation bar with links for dashboard, games, system, and board.
- *
- * The component uses `strings.accessibility.mobileNav` for the `aria-label` and sets `aria-current="page"`
- * on the dashboard or games item when `active` matches that section.
- *
- * @param strings - Localized strings used for link labels and the navigation accessibility label
- * @param links - Optional URLs for each navigation item; defaults to `defaultLinks`
- * @param active - Optional active section selector; when `'dashboard'` or `'games'` it marks that item as current
- * @returns A React element containing the mobile navigation bar
+ * Render a bottom-fixed mobile navigation bar.
  */
 export default function PortalMobileNav({
   strings,
   links = defaultLinks,
   active = 'dashboard',
 }: PortalMobileNavProps) {
+  const items: Array<{
+    id: PortalNavKey;
+    href: string;
+    icon: typeof LayoutGrid;
+    label: string;
+  }> = [
+    { id: 'dashboard', href: links.dashboard, icon: LayoutGrid, label: strings.nav.dashboard },
+    { id: 'search', href: links.search, icon: Search, label: strings.nav.search },
+    { id: 'library', href: links.library, icon: Film, label: strings.nav.library },
+    { id: 'games', href: links.games, icon: Gamepad2, label: strings.nav.games },
+    { id: 'shortcuts', href: links.shortcuts, icon: Sparkles, label: strings.nav.shortcuts },
+    { id: 'settings', href: links.settings, icon: Settings, label: strings.nav.settings },
+  ];
+
   return (
     <nav
       className="portal-surface portal-mobile-nav fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-2 rounded-full px-4 py-3 md:hidden"
       aria-label={strings.accessibility.mobileNav}
     >
-      <a
-        href={links.dashboard}
-        aria-current={active === 'dashboard' ? 'page' : undefined}
-        className="flex items-center gap-2 text-xs font-semibold"
-      >
-        <LayoutGrid className="h-4 w-4" />
-        {strings.nav.dashboard}
-      </a>
-      <a
-        href={links.games}
-        aria-current={active === 'games' ? 'page' : undefined}
-        className="flex items-center gap-2 text-xs font-semibold"
-      >
-        <Gamepad2 className="h-4 w-4" />
-        {strings.nav.games}
-      </a>
-      <a href={links.system} className="flex items-center gap-2 text-xs font-semibold">
-        <Gauge className="h-4 w-4" />
-        {strings.nav.system}
-      </a>
-      <a href={links.board} className="flex items-center gap-2 text-xs font-semibold">
-        <MessageSquare className="h-4 w-4" />
-        {strings.nav.board}
-      </a>
+      {items.map((item) => {
+        const Icon = item.icon;
+        return (
+          <a
+            key={item.id}
+            href={item.href}
+            aria-current={active === item.id ? 'page' : undefined}
+            className={cn(
+              'flex items-center gap-2 text-xs font-semibold text-muted-foreground transition-colors',
+              active === item.id && 'text-foreground'
+            )}
+          >
+            <Icon className="h-4 w-4" />
+            {item.label}
+          </a>
+        );
+      })}
     </nav>
   );
 }

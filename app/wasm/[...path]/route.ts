@@ -25,9 +25,10 @@ const resolvePath = (parts: string[]) => {
 
 export const GET = async (
   _request: Request,
-  { params }: { params: { path?: string[] } }
+  { params }: { params: Promise<{ path?: string[] }> }
 ) => {
-  const parts = params.path ?? ['index.html'];
+  const { path: routePath } = await params;
+  const parts = routePath ?? ['index.html'];
   const target = resolvePath(parts);
   if (!target) {
     return NextResponse.json({ error: 'not_found' }, { status: 404 });

@@ -75,7 +75,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   body {
@@ -102,7 +102,7 @@
     linear-gradient(to right, rgba(15, 23, 42, 0.08) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(15, 23, 42, 0.08) 1px, transparent 1px);
   background-size: 120px 120px;
-  transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.04), 0);
+  transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.06), 0);
   will-change: transform;
 }
 
@@ -115,10 +115,11 @@
 
 .portal-orb {
   position: absolute;
+  pointer-events: none;
   border-radius: 9999px;
   filter: blur(80px);
   opacity: 0.55;
-  transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.08), 0);
+  transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.12), 0);
   will-change: transform;
   animation: portal-float 18s ease-in-out infinite;
 }
@@ -234,6 +235,29 @@
   opacity: 1;
 }
 
+.portal-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.portal-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+  animation: portal-shimmer 1.6s ease-in-out infinite;
+}
+
+[data-theme="dark"] .portal-skeleton {
+  background: rgba(30, 41, 59, 0.55);
+}
+
+[data-theme="dark"] .portal-skeleton::after {
+  background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.35), transparent);
+}
+
 [data-theme="dark"] .portal-card {
   background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(17, 24, 39, 0.7));
   border-color: rgba(148, 163, 184, 0.18);
@@ -326,6 +350,15 @@ html[data-focus="true"] .portal-mobile-nav {
   display: none;
 }
 
+@keyframes portal-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
 @keyframes portal-rise {
   0% {
     opacity: 0;
@@ -339,13 +372,13 @@ html[data-focus="true"] .portal-mobile-nav {
 
 @keyframes portal-float {
   0% {
-    transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.08), 0);
+    transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.12), 0);
   }
   50% {
     transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.08 - 12px), 0);
   }
   100% {
-    transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.08), 0);
+    transform: translate3d(0, calc(var(--portal-scroll-y, 0px) * 0.12), 0);
   }
 }
 

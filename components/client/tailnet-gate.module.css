@@ -20,6 +20,16 @@
   width: min(48rem, calc(100% - 2rem));
 }
 
+
+.miniPanel {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  transform: translateX(-50%);
+  z-index: 65;
+  width: min(32rem, calc(100% - 2rem));
+}
+
 .panel {
   width: 100%;
   padding: 2.25rem;

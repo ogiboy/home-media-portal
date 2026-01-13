@@ -5,6 +5,7 @@ import { useEffect, useMemo, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowUpRight, Loader2 } from 'lucide-react';
 
+import OrbChase from '@/components/client/games/orb-chase';
 import BrandMark from '@/components/brand-mark';
 import { Button } from '@/components/ui/button';
 import type { PortalStrings } from '@/lib/i18n';
@@ -16,6 +17,7 @@ type TailnetGateProps = Readonly<{
   status: 'connecting' | 'online' | 'offline';
   isPublic: boolean;
   allowInteraction?: boolean;
+  showMiniGame?: boolean;
   strings: PortalStrings;
   onEnter: () => void;
 }>;
@@ -48,6 +50,7 @@ export default function TailnetGate({
   status,
   isPublic,
   allowInteraction = false,
+  showMiniGame = false,
   strings,
   onEnter,
 }: TailnetGateProps) {
@@ -78,7 +81,7 @@ export default function TailnetGate({
   );
 
   useEffect(() => {
-    if (!visible) {
+    if (!visible || !blocking) {
       return undefined;
     }
     const original = document.body.style.overflow;
@@ -86,7 +89,7 @@ export default function TailnetGate({
     return () => {
       document.body.style.overflow = original;
     };
-  }, [visible]);
+  }, [visible, blocking]);
 
   if (!visible || !hydrated) {
     return null;
@@ -107,6 +110,21 @@ export default function TailnetGate({
           !blocking && styles.overlayPassive
         )}
       />
+      {showMiniGame && (
+        <div className={cn('portal-gate', styles.miniPanel)}>
+          <div className="portal-surface rounded-(--radius) p-4">
+            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+              {strings.games.title}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {strings.games.description}
+            </p>
+            <div className="mt-3">
+              <OrbChase strings={strings} compact trackEvents={false} />
+            </div>
+          </div>
+        </div>
+      )}
       <div className={cn('portal-gate', styles.panelWrap)}>
         <dialog
           open

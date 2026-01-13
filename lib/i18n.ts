@@ -23,9 +23,14 @@ type ServiceDescriptions = Record<ServiceId, string>;
 export type PortalStrings = {
   nav: {
     dashboard: string;
+    search: string;
+    library: string;
     games: string;
+    shortcuts: string;
+    services: string;
     system: string;
     board: string;
+    settings: string;
   };
   header: {
     kicker: string;
@@ -102,6 +107,26 @@ export type PortalStrings = {
     errorMissingConfig: string;
     errorUnknown: string;
   };
+  search: {
+    title: string;
+    description: string;
+    placeholder: string;
+    cta: string;
+    resultsTitle: string;
+    resultsHint: string;
+    idle: string;
+    empty: string;
+    badgeDownloaded: string;
+    badgeNew: string;
+    kindMovie: string;
+    kindSeries: string;
+    playCta: string;
+    addCta: string;
+  };
+  library: {
+    title: string;
+    description: string;
+  };
   games: {
     title: string;
     description: string;
@@ -133,6 +158,11 @@ export type PortalStrings = {
     temperature: string;
     quickTitle: string;
     quickDesc: string;
+  };
+  settings: {
+    title: string;
+    description: string;
+    comingSoon: string;
   };
   board: {
     title: string;
@@ -247,6 +277,10 @@ export type PortalStrings = {
     na: string;
     tailnetOnly: string;
   };
+  footer: {
+    onlineNow: string;
+    peakOnline: string;
+  };
   errors: {
     title: string;
     description: string;
@@ -269,9 +303,14 @@ const dictionaries: Record<Locale, PortalStrings> = {
   tr: {
     nav: {
       dashboard: "Gosterge",
+      search: "Arama",
+      library: "Kutuphane",
       games: "Oyunlar",
+      shortcuts: "Kisayollar",
+      services: "Servisler",
       system: "Sistem",
       board: "Pano",
+      settings: "Ayarlar",
     },
     header: {
       kicker: "Ev Medya Portali",
@@ -355,6 +394,26 @@ const dictionaries: Record<Locale, PortalStrings> = {
       errorMissingConfig: "Profil veya klasor ayarlanmamis.",
       errorUnknown: "Arama basarisiz oldu.",
     },
+    search: {
+      title: "Global Arama",
+      description: "Yeni medya ve kutuphane arasinda ara.",
+      placeholder: "Film, dizi veya kutuphane ara...",
+      cta: "Ara",
+      resultsTitle: "Sonuclar",
+      resultsHint: "Kaynak · Durum",
+      idle: "Arama yapmak icin yazmaya basla.",
+      empty: "Sonuc bulunamadi.",
+      badgeDownloaded: "Indirildi",
+      badgeNew: "Yeni",
+      kindMovie: "Film",
+      kindSeries: "Dizi",
+      playCta: "Oynat",
+      addCta: "Ekle",
+    },
+    library: {
+      title: "Kutuphane",
+      description: "Indirilen icerikleri satirlar halinde gor.",
+    },
     games: {
       title: "Oyun Kosesi",
       description: "Beklerken kisa bir oyun oyna.",
@@ -386,6 +445,11 @@ const dictionaries: Record<Locale, PortalStrings> = {
       temperature: "Sicaklik",
       quickTitle: "Hizli durum",
       quickDesc: "Servis saglik ozeti.",
+    },
+    settings: {
+      title: "Ayarlar",
+      description: "Portal tercihlerini yonet.",
+      comingSoon: "Yakinda",
     },
     board: {
       title: "Aile mesaj panosu",
@@ -500,6 +564,10 @@ const dictionaries: Record<Locale, PortalStrings> = {
       na: "yok",
       tailnetOnly: "Sadece tailnet",
     },
+    footer: {
+      onlineNow: "Simdi online",
+      peakOnline: "En yuksek online",
+    },
     errors: {
       title: "Bir hata olustu",
       description: "Portal beklenmeyen bir hatayla karsilasti. Tekrar deneyin ya da sayfayi yenileyin.",
@@ -528,9 +596,14 @@ const dictionaries: Record<Locale, PortalStrings> = {
   en: {
     nav: {
       dashboard: "Dashboard",
+      search: "Search",
+      library: "Library",
       games: "Games",
+      shortcuts: "Shortcuts",
+      services: "Services",
       system: "System",
       board: "Board",
+      settings: "Settings",
     },
     header: {
       kicker: "Home Media Portal",
@@ -548,6 +621,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       primaryNav: "Primary navigation",
       mobileNav: "Mobile navigation",
       dialogClose: "Close dialog",
+      backToTop: "Back to top",
     },
     badges: {
       homePortal: "Home Portal",
@@ -613,6 +687,26 @@ const dictionaries: Record<Locale, PortalStrings> = {
       errorMissingConfig: "Missing profile or folder config.",
       errorUnknown: "Search failed.",
     },
+    search: {
+      title: "Global Search",
+      description: "Search across new requests and your library.",
+      placeholder: "Search movies, series, or your library...",
+      cta: "Search",
+      resultsTitle: "Results",
+      resultsHint: "Source · Status",
+      idle: "Start typing to search the library.",
+      empty: "No results found.",
+      badgeDownloaded: "Downloaded",
+      badgeNew: "New",
+      kindMovie: "Movie",
+      kindSeries: "Series",
+      playCta: "Play",
+      addCta: "Add",
+    },
+    library: {
+      title: "Library",
+      description: "Browse downloaded content in rows.",
+    },
     games: {
       title: "Games Lounge",
       description: "Play a quick game while you wait.",
@@ -628,6 +722,8 @@ const dictionaries: Record<Locale, PortalStrings> = {
       timeLeft: "Time left",
       orbChaseTitle: "Orb Chase",
       orbChaseHint: "Tap the glowing orb and score before the timer ends.",
+      playsLabel: "Plays",
+      topScoreLabel: "Top score",
     },
     system: {
       title: "System status",
@@ -642,6 +738,11 @@ const dictionaries: Record<Locale, PortalStrings> = {
       temperature: "Temperature",
       quickTitle: "Quick status",
       quickDesc: "Service health snapshot.",
+    },
+    settings: {
+      title: "Settings",
+      description: "Manage portal preferences.",
+      comingSoon: "Coming soon",
     },
     board: {
       title: "Family message board",
@@ -756,6 +857,10 @@ const dictionaries: Record<Locale, PortalStrings> = {
       na: "n/a",
       tailnetOnly: "Tailnet only",
     },
+    footer: {
+      onlineNow: "Online now",
+      peakOnline: "Peak online",
+    },
     errors: {
       title: "Something went wrong",
       description: "The portal hit an unexpected error. Try again or refresh the page.",
@@ -784,9 +889,14 @@ const dictionaries: Record<Locale, PortalStrings> = {
   it: {
     nav: {
       dashboard: "Dashboard",
+      search: "Ricerca",
+      library: "Libreria",
       games: "Giochi",
+      shortcuts: "Scorciatoie",
+      services: "Servizi",
       system: "Sistema",
       board: "Bacheca",
+      settings: "Impostazioni",
     },
     header: {
       kicker: "Home Media Portal",
@@ -804,6 +914,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       primaryNav: "Navigazione principale",
       mobileNav: "Navigazione mobile",
       dialogClose: "Chiudi finestra",
+      backToTop: "Torna su",
     },
     badges: {
       homePortal: "Portale Casa",
@@ -869,6 +980,25 @@ const dictionaries: Record<Locale, PortalStrings> = {
       errorMissingConfig: "Profilo o cartella mancanti.",
       errorUnknown: "Ricerca non riuscita.",
     },
+    search: {
+      title: "Ricerca globale",
+      description: "Cerca tra nuove richieste e libreria.",
+      placeholder: "Cerca film, serie o libreria...",
+      cta: "Cerca",
+      resultsTitle: "Risultati",
+      resultsHint: "Fonte · Stato",
+      empty: "Nessun risultato.",
+      badgeDownloaded: "Scaricato",
+      badgeNew: "Nuovo",
+      kindMovie: "Film",
+      kindSeries: "Serie",
+      playCta: "Riproduci",
+      addCta: "Aggiungi",
+    },
+    library: {
+      title: "Libreria",
+      description: "Sfoglia i contenuti scaricati per righe.",
+    },
     games: {
       title: "Angolo Giochi",
       description: "Gioca mentre aspetti.",
@@ -884,6 +1014,8 @@ const dictionaries: Record<Locale, PortalStrings> = {
       timeLeft: "Tempo",
       orbChaseTitle: "Caccia all'Orb",
       orbChaseHint: "Tocca l'orb brillante prima che scada il tempo.",
+      playsLabel: "Partite",
+      topScoreLabel: "Punteggio massimo",
     },
     system: {
       title: "Stato sistema",
@@ -898,6 +1030,11 @@ const dictionaries: Record<Locale, PortalStrings> = {
       temperature: "Temperatura",
       quickTitle: "Stato rapido",
       quickDesc: "Snapshot salute servizi.",
+    },
+    settings: {
+      title: "Impostazioni",
+      description: "Gestisci le preferenze del portale.",
+      comingSoon: "In arrivo",
     },
     board: {
       title: "Bacheca di famiglia",
@@ -1011,6 +1148,10 @@ const dictionaries: Record<Locale, PortalStrings> = {
       updated: "Aggiornato",
       na: "n/d",
       tailnetOnly: "Solo tailnet",
+    },
+    footer: {
+      onlineNow: "Online ora",
+      peakOnline: "Picco online",
     },
     errors: {
       title: "Si e verificato un errore",

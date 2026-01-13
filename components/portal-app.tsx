@@ -5,21 +5,33 @@ import FocusOverlay from '@/components/client/focus-overlay';
 import GameFocusOverlay from '@/components/client/game-focus-overlay';
 import ToastViewport from '@/components/client/toast-viewport';
 import ScrollParallax from '@/components/client/scroll-parallax';
-import ScrollRestoration from '@/components/client/scroll-restoration';
 import ToTopButton from '@/components/client/to-top-button';
 import PortalSidebar from '@/components/portal/portal-sidebar';
 import PortalHeader from '@/components/portal/portal-header';
-import ShortcutsSection from '@/components/portal/shortcuts-section';
+import PortalFooter from '@/components/portal/portal-footer';
+import DashboardSections from '@/components/portal/dashboard-sections';
 import GamesSection from '@/components/portal/games-section';
+import LibrarySection from '@/components/portal/library-section';
+import SearchSection from '@/components/portal/search-section';
 import ServicesSection from '@/components/portal/services-section';
+import SettingsSection from '@/components/portal/settings-section';
+import ShortcutsSection from '@/components/portal/shortcuts-section';
 import SystemSection from '@/components/portal/system-section';
-import BoardSection from '@/components/portal/board-section';
 import PortalMobileNav from '@/components/portal/portal-mobile-nav';
 import { getTranslations } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { isHomeDeployment } from '@/lib/env';
 
-type PortalView = 'dashboard' | 'games';
+type PortalView =
+  | 'dashboard'
+  | 'games'
+  | 'search'
+  | 'library'
+  | 'shortcuts'
+  | 'services'
+  | 'system'
+  | 'board'
+  | 'settings';
 
 type PortalAppProps = {
   view?: PortalView;
@@ -27,15 +39,6 @@ type PortalAppProps = {
 
 /**
  * Render the server-side portal shell composed of sidebar, header, and view-specific sections.
- *
- * Calculates locale and translation strings from cookies and request headers, then composes
- * the complete portal layout including navigation, sidebar, header, main sections, mobile nav,
- * toast viewport, and focus overlay.
- *
- * @param view - Which top-level view to render: `'dashboard'` renders the multi-section home
- *   layout (default), `'games'` renders the games-focused layout.
- * @returns The JSX element for the fully composed portal layout configured for the selected view
- *   with server-resolved locale and strings.
  */
 export default async function PortalApp({
   view = 'dashboard',
@@ -48,38 +51,66 @@ export default async function PortalApp({
   const isHome = isHomeDeployment();
   const isPublic = !isHome;
   const isGamesView = view === 'games';
+  const isDashboardView = view === 'dashboard';
   const lockPortal = isPublic && !isGamesView;
 
   const navLinks = {
-    dashboard: isGamesView ? '/#services' : '#services',
-    games: isGamesView ? '#games' : '/games',
-    system: isGamesView ? '/#system' : '#system',
-    board: isGamesView ? '/#board' : '#board',
+    dashboard: isDashboardView ? '#search' : '/',
+    search: isDashboardView ? '#search' : '/search',
+    library: isDashboardView ? '#library' : '/library',
+    games: isDashboardView ? '#games' : '/games',
+    shortcuts: isDashboardView ? '#shortcuts' : '/shortcuts',
+    services: isDashboardView ? '#services' : '/services',
+    system: isDashboardView ? '#system' : '/#system',
+    board: isDashboardView ? '#board' : '/#board',
+    settings: '/settings',
   };
+
+  const activeNav = isDashboardView ? 'dashboard' : view;
+  const mobileActive =
+    activeNav === 'services' || activeNav === 'system' || activeNav === 'board'
+      ? 'dashboard'
+      : activeNav;
+  const viewTitleMap = {
+    dashboard: strings.header.title,
+    games: strings.games.title,
+    search: strings.search.title,
+    library: strings.library.title,
+    shortcuts: strings.shortcuts.title,
+    services: strings.services.title,
+    system: strings.services.title,
+    board: strings.services.title,
+    settings: strings.settings.title,
+  } as const;
+
+  const viewSubtitleMap = {
+    dashboard: strings.header.subtitle,
+    games: strings.games.description,
+    search: strings.search.description,
+    library: strings.library.description,
+    shortcuts: strings.shortcuts.description,
+    services: strings.services.description,
+    system: strings.services.description,
+    board: strings.services.description,
+    settings: strings.settings.description,
+  } as const;
 
   return (
     <div className="portal-shell relative min-h-screen overflow-x-hidden">
       <ScrollParallax />
-      <ScrollRestoration />
       <div className="pointer-events-none absolute inset-0 portal-grid opacity-40" />
       <div className="portal-orb portal-orb--a" />
       <div className="portal-orb portal-orb--b" />
       <div className="portal-orb portal-orb--c" />
 
-      <div className="relative mx-auto grid min-h-screen w-full max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[300px_1fr]">
+      <div className="relative mx-auto grid w-full max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[280px_1fr]">
         <div className="order-2 flex flex-col gap-6 lg:order-1">
           <PortalSidebar
             strings={strings}
             isHome={isHome}
             links={navLinks}
-            active={isGamesView ? 'games' : 'dashboard'}
+            active={activeNav}
             delay={40}
-          />
-          <BoardSection
-            strings={strings}
-            isHome={isHome}
-            variant="compact"
-            delay={120}
           />
         </div>
 
@@ -89,41 +120,60 @@ export default async function PortalApp({
             isHome={isHome}
             isPublic={isPublic}
             locale={locale}
-            title={isGamesView ? strings.games.title : strings.header.title}
-            subtitle={
-              isGamesView ? strings.games.description : strings.header.subtitle
-            }
+            title={viewTitleMap[view]}
+            subtitle={viewSubtitleMap[view]}
             allowGateInteraction={isGamesView}
             delay={80}
           />
 
-          {isGamesView ? (
+          {view === 'games' && (
             <GamesSection strings={strings} variant="full" delay={140} />
-          ) : (
+          )}
+          {view === 'search' && <SearchSection strings={strings} delay={140} />}
+          {view === 'library' && (
+            <LibrarySection strings={strings} delay={140} />
+          )}
+          {view === 'shortcuts' && (
+            <ShortcutsSection strings={strings} delay={140} />
+          )}
+          {view === 'services' && (
+            <ServicesSection
+              strings={strings}
+              isHome={isHome}
+              isPublic={isPublic}
+              delay={140}
+            />
+          )}
+          {view === 'settings' && (
+            <SettingsSection strings={strings} delay={140} />
+          )}
+          {view === 'dashboard' && (
             <div
               className={cn(
                 'flex flex-col gap-10',
                 lockPortal && 'pointer-events-none opacity-60'
               )}
             >
-              <ShortcutsSection strings={strings} delay={140} />
-              <GamesSection strings={strings} variant="preview" delay={200} />
-              <ServicesSection
+              <DashboardSections
                 strings={strings}
                 isHome={isHome}
                 isPublic={isPublic}
-                delay={240}
               />
-              <SystemSection strings={strings} isHome={isHome} delay={320} />
             </div>
+          )}
+
+          {view === 'services' && (
+            <SystemSection strings={strings} isHome={isHome} delay={200} />
           )}
         </main>
       </div>
 
+      <PortalFooter strings={strings} isHome={isHome} />
+
       <PortalMobileNav
         strings={strings}
         links={navLinks}
-        active={isGamesView ? 'games' : 'dashboard'}
+        active={mobileActive}
       />
       <ToTopButton label={strings.accessibility.backToTop} />
       <ToastViewport strings={strings} />

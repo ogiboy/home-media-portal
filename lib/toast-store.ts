@@ -40,7 +40,7 @@ const createId = () => {
   return `${Date.now()}-${globalThis.performance?.now() ?? 0}`;
 };
 
-const serverSnapshot: Toast[] = [];
+const serverSnapshot: ReadonlyArray<Toast> = Object.freeze([]);
 
 // Subscribe to toast updates for the viewport.
 export const toastStore = {

@@ -1,41 +1,57 @@
 // Sidebar shell for the portal layout.
-import { Gamepad2, Gauge, LayoutGrid, MessageSquare, Server } from 'lucide-react';
+import {
+  Gamepad2,
+  Gauge,
+  LayoutGrid,
+  MessageSquare,
+  Search,
+  Server,
+  Settings,
+  Sparkles,
+  Film,
+} from 'lucide-react';
 
 import BrandMark from '@/components/brand-mark';
 import type { PortalStrings } from '@/lib/i18n';
 import { withDelay } from '@/components/portal/portal-motion';
+import { cn } from '@/lib/utils';
 
 type PortalNavLinks = {
   dashboard: string;
+  search: string;
+  library: string;
   games: string;
+  shortcuts: string;
+  services: string;
   system: string;
   board: string;
+  settings: string;
 };
+
+type PortalNavKey = keyof PortalNavLinks;
 
 type PortalSidebarProps = Readonly<{
   strings: PortalStrings;
   isHome: boolean;
   delay?: number;
   links?: PortalNavLinks;
-  active?: 'dashboard' | 'games';
+  active?: PortalNavKey;
 }>;
 
 const defaultLinks: PortalNavLinks = {
-  dashboard: '#services',
+  dashboard: '/#search',
+  search: '/search',
+  library: '/library',
   games: '/games',
-  system: '#system',
-  board: '#board',
+  shortcuts: '/shortcuts',
+  services: '/services',
+  system: '/#system',
+  board: '/#board',
+  settings: '/settings',
 };
 
 /**
  * Render the desktop portal sidebar with brand, primary navigation, and status badge.
- *
- * @param strings - Localization strings used for the header, navigation labels, accessibility attributes, badges, and tailnet notes.
- * @param isHome - Whether the current portal is the user's home portal; toggles badge and tailnet note content.
- * @param delay - Optional entrance animation delay in milliseconds.
- * @param links - Optional navigation targets for `dashboard`, `games`, `system`, and `board`; defaults to `defaultLinks`.
- * @param active - Which navigation item is currently active; when `'dashboard'` or `'games'` sets `aria-current="page"` on that link.
- * @returns The sidebar JSX element containing brand, navigation, and footer status badge.
  */
 export default function PortalSidebar({
   strings,
@@ -44,6 +60,23 @@ export default function PortalSidebar({
   links = defaultLinks,
   active = 'dashboard',
 }: PortalSidebarProps) {
+  const navItems: Array<{
+    id: PortalNavKey;
+    href: string;
+    icon: typeof LayoutGrid;
+    label: string;
+  }> = [
+    { id: 'dashboard', href: links.dashboard, icon: LayoutGrid, label: strings.nav.dashboard },
+    { id: 'search', href: links.search, icon: Search, label: strings.nav.search },
+    { id: 'library', href: links.library, icon: Film, label: strings.nav.library },
+    { id: 'games', href: links.games, icon: Gamepad2, label: strings.nav.games },
+    { id: 'shortcuts', href: links.shortcuts, icon: Sparkles, label: strings.nav.shortcuts },
+    { id: 'services', href: links.services, icon: Server, label: strings.nav.services },
+    { id: 'system', href: links.system, icon: Gauge, label: strings.nav.system },
+    { id: 'board', href: links.board, icon: MessageSquare, label: strings.nav.board },
+    { id: 'settings', href: links.settings, icon: Settings, label: strings.nav.settings },
+  ];
+
   return (
     <aside
       className="portal-surface portal-sidebar portal-entrance hidden shrink-0 flex-col gap-6 rounded-(--radius) p-5 md:flex"
@@ -68,44 +101,24 @@ export default function PortalSidebar({
         aria-label={strings.accessibility.primaryNav}
       >
         <ul className="flex flex-1 flex-col gap-3">
-          <li>
-            <a
-              href={links.dashboard}
-              aria-current={active === 'dashboard' ? 'page' : undefined}
-              className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <LayoutGrid className="h-5 w-5" />
-              <span className="portal-label">{strings.nav.dashboard}</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href={links.games}
-              aria-current={active === 'games' ? 'page' : undefined}
-              className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <Gamepad2 className="h-5 w-5" />
-              <span className="portal-label">{strings.nav.games}</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href={links.system}
-              className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <Gauge className="h-5 w-5" />
-              <span className="portal-label">{strings.nav.system}</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href={links.board}
-              className="portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <MessageSquare className="h-5 w-5" />
-              <span className="portal-label">{strings.nav.board}</span>
-            </a>
-          </li>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <li key={item.id}>
+                <a
+                  href={item.href}
+                  aria-current={active === item.id ? 'page' : undefined}
+                  className={cn(
+                    'portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground',
+                    active === item.id && 'bg-muted text-foreground'
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="portal-label">{item.label}</span>
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 

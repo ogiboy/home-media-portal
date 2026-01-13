@@ -55,19 +55,19 @@ export default function PortalHeader({
           <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
             {strings.header.kicker}
           </p>
-          <h1 className="mt-2 min-h-12 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="mt-2 h-12 overflow-hidden text-3xl font-semibold tracking-tight sm:h-14 sm:text-4xl">
             <span className="bg-linear-to-r from-primary to-accent bg-clip-text text-transparent">
               {headerTitle}
             </span>
           </h1>
-          <p className="mt-2 min-h-10 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-2 h-10 max-w-2xl overflow-hidden text-sm leading-relaxed text-muted-foreground">
             {headerSubtitle}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 lg:justify-end">
           <Badge
             variant={isHome ? 'accent' : 'outline'}
-            className="portal-chip px-3 py-1 text-xs"
+            className="portal-chip min-w-28 justify-center px-3 py-1 text-xs"
           >
             {isHome ? strings.badges.homePortal : strings.badges.publicPreview}
           </Badge>

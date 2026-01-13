@@ -1,7 +1,7 @@
 'use client';
 
 // Framer Motion powered scroll listener for parallax effects.
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMotionValueEvent, useScroll } from 'framer-motion';
 
 /**
@@ -9,14 +9,31 @@ import { useMotionValueEvent, useScroll } from 'framer-motion';
  */
 export default function ScrollParallax() {
   const { scrollY } = useScroll();
+  const frameRef = useRef<number | null>(null);
+  const applyValue = (value: number) => {
+    const next = `${value}px`;
+    document.documentElement.style.setProperty('--portal-scroll-y', next);
+    document.body?.style.setProperty('--portal-scroll-y', next);
+  };
 
   useMotionValueEvent(scrollY, 'change', (value) => {
-    document.documentElement.style.setProperty('--portal-scroll-y', `${value}px`);
+    if (frameRef.current !== null) {
+      cancelAnimationFrame(frameRef.current);
+    }
+    frameRef.current = requestAnimationFrame(() => {
+      applyValue(value);
+    });
   });
 
   useEffect(() => {
     const initial = scrollY.get();
-    document.documentElement.style.setProperty('--portal-scroll-y', `${initial}px`);
+    applyValue(initial);
+    return () => {
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+    };
   }, [scrollY]);
 
   return null;

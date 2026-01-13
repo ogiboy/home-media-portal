@@ -1,10 +1,9 @@
 // Shortcuts panel for quick actions and searches.
-import { Button } from '@/components/ui/button';
-import { Radar, Sparkles, Zap } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 import type { PortalStrings } from '@/lib/i18n';
 import { withDelay } from '@/components/portal/portal-motion';
-import ShortcutsSearchPanel from '@/components/client/shortcuts-search-panel';
+import ShortcutStrip from '@/components/portal/shortcut-strip';
 
 type ShortcutsSectionProps = {
   strings: PortalStrings;
@@ -12,11 +11,11 @@ type ShortcutsSectionProps = {
 };
 
 /**
- * Render the Shortcuts section of the portal with a search panel and a secondary actions panel.
+ * Render the Shortcuts section with the quick-action strip and status note.
  *
  * @param strings - Localized texts for titles, descriptions, and action labels
  * @param delay - Optional entrance animation delay applied to the section's style
- * @returns A section element containing the shortcuts search panel and a panel of (currently disabled) shortcut action buttons
+ * @returns A section element containing the shortcuts strip and a supporting info panel
  */
 export default function ShortcutsSection({
   strings,
@@ -40,30 +39,16 @@ export default function ShortcutsSection({
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_1fr]">
-        <ShortcutsSearchPanel strings={strings} />
+      <div className="mt-4 space-y-4">
+        <ShortcutStrip strings={strings} />
         <div className="portal-surface rounded-(--radius) p-5">
           <div className="flex items-center gap-2 text-sm font-semibold">
             <Sparkles className="h-4 w-4" />
-            {strings.shortcuts.actionsTitle}
+            {strings.shortcuts.title}
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            {strings.shortcuts.actionsDesc}
+            {strings.shortcuts.description}
           </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" disabled>
-              <Radar className="h-4 w-4" />
-              {strings.shortcuts.actionSync}
-            </Button>
-            <Button size="sm" variant="outline" disabled>
-              <Zap className="h-4 w-4" />
-              {strings.shortcuts.actionRescan}
-            </Button>
-            <Button size="sm" variant="outline" disabled>
-              <Zap className="h-4 w-4" />
-              {strings.shortcuts.actionTest}
-            </Button>
-          </div>
           <p className="mt-3 text-xs text-muted-foreground">
             {strings.shortcuts.comingSoon}
           </p>

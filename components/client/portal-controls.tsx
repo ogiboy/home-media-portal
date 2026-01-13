@@ -206,6 +206,7 @@ export default function PortalControls({
         status={status}
         isPublic={isPublic}
         allowInteraction={Boolean(allowGateInteraction)}
+        showMiniGame={isPublic && status !== "online" && !allowGateInteraction}
         strings={strings}
         onEnter={enterHome}
       />

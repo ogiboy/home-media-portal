@@ -29,6 +29,7 @@ type OrbChaseProps = {
   strings: PortalStrings;
   compact?: boolean;
   gameId?: string;
+  trackEvents?: boolean;
 };
 
 /**
@@ -42,6 +43,7 @@ export default function OrbChase({
   strings,
   compact = false,
   gameId = 'orb-chase',
+  trackEvents = true,
 }: Readonly<OrbChaseProps>) {
   const [status, setStatus] = useState<'idle' | 'running' | 'ended'>('idle');
   const [isPending, startTransition] = useTransition();
@@ -53,6 +55,9 @@ export default function OrbChase({
   useEffect(() => {
     if (status === 'ended' && !hasReportedScore.current) {
       hasReportedScore.current = true;
+      if (!trackEvents) {
+        return;
+      }
       startTransition(() => {
         recordGameScore(gameId, score);
       });
@@ -61,7 +66,7 @@ export default function OrbChase({
     if (status === 'running') {
       hasReportedScore.current = false;
     }
-  }, [gameId, score, startTransition, status]);
+  }, [gameId, score, startTransition, status, trackEvents]);
 
   useEffect(() => {
     if (status !== 'running') {
@@ -86,9 +91,11 @@ export default function OrbChase({
     setTimeLeft(GAME_DURATION);
     setTarget(randomPosition());
     setStatus('running');
-    startTransition(() => {
-      recordGamePlay(gameId);
-    });
+    if (trackEvents) {
+      startTransition(() => {
+        recordGamePlay(gameId);
+      });
+    }
   };
 
   const handleHit = () => {
