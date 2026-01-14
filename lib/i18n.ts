@@ -126,6 +126,7 @@ export type PortalStrings = {
   library: {
     title: string;
     description: string;
+    loading: string;
   };
   games: {
     title: string;
@@ -413,6 +414,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
     library: {
       title: "Kutuphane",
       description: "Indirilen icerikleri satirlar halinde gor.",
+      loading: "Kutuphane baglantisi hazirlaniyor...",
     },
     games: {
       title: "Oyun Kosesi",

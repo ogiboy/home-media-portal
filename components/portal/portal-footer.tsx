@@ -12,8 +12,15 @@ export type PortalFooterProps = Readonly<{
  */
 export default function PortalFooter({ strings, isHome }: PortalFooterProps) {
   return (
-    <footer className="relative mx-auto w-full max-w-6xl px-4 pb-10 lg:pl-[280px]">
-      <PresenceFooter strings={strings} isHome={isHome} />
+    <footer className="relative w-full pb-24 md:pb-12 lg:pb-10">
+      <div className="mx-auto w-full max-w-7xl px-4">
+        <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
+          <div className="hidden lg:block" aria-hidden="true" />
+          <div>
+            <PresenceFooter strings={strings} isHome={isHome} />
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }

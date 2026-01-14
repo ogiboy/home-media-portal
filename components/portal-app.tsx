@@ -98,12 +98,18 @@ export default async function PortalApp({
   return (
     <div className="portal-shell relative min-h-screen overflow-x-hidden">
       <ScrollParallax />
+
+      <div className="portal-backdrop" aria-hidden="true">
+        <div className="portal-backdrop-layer portal-backdrop-stars" />
+        <div className="portal-backdrop-layer portal-backdrop-aurora" />
+        <div className="portal-backdrop-layer portal-backdrop-glow" />
+      </div>
       <div className="pointer-events-none absolute inset-0 portal-grid opacity-40" />
       <div className="portal-orb portal-orb--a" />
       <div className="portal-orb portal-orb--b" />
       <div className="portal-orb portal-orb--c" />
 
-      <div className="relative mx-auto grid w-full max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[280px_1fr]">
+      <div className="portal-content mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[220px_1fr]">
         <div className="order-2 flex flex-col gap-6 lg:order-1">
           <PortalSidebar
             strings={strings}

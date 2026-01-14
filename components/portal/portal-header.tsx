@@ -47,7 +47,7 @@ export default function PortalHeader({
 
   return (
     <header
-      className="portal-hero portal-surface portal-entrance flex min-h-41 flex-col gap-4 rounded-(--radius) p-6"
+      className="portal-hero portal-surface portal-entrance flex min-h-44 flex-col gap-5 rounded-(--radius) p-7"
       style={withDelay(delay)}
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">

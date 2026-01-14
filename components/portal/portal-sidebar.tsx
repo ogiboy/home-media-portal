@@ -79,11 +79,11 @@ export default function PortalSidebar({
 
   return (
     <aside
-      className="portal-surface portal-sidebar portal-entrance hidden shrink-0 flex-col gap-6 rounded-(--radius) p-5 md:flex"
+      className="portal-surface portal-sidebar portal-entrance hidden shrink-0 flex-col gap-4 rounded-(--radius) p-4 md:flex"
       style={withDelay(delay)}
     >
-      <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[0_0_24px_var(--portal-glow)]">
+      <div className="flex items-center gap-2">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_24px_var(--portal-glow)]">
           <BrandMark className="h-6 w-6 text-primary-foreground" />
         </div>
         <div className="portal-label">
@@ -97,10 +97,10 @@ export default function PortalSidebar({
       </div>
 
       <nav
-        className="flex flex-1 flex-col gap-3"
+        className="flex flex-1 flex-col gap-2"
         aria-label={strings.accessibility.primaryNav}
       >
-        <ul className="flex flex-1 flex-col gap-3">
+        <ul className="flex flex-1 flex-col gap-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -109,7 +109,7 @@ export default function PortalSidebar({
                   href={item.href}
                   aria-current={active === item.id ? 'page' : undefined}
                   className={cn(
-                    'portal-nav-item flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground',
+                    'portal-nav-item flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground',
                     active === item.id && 'bg-muted text-foreground'
                   )}
                 >
@@ -122,7 +122,7 @@ export default function PortalSidebar({
         </ul>
       </nav>
 
-      <div className="mt-auto rounded-2xl border border-border/60 bg-muted/60 p-3 text-xs text-muted-foreground">
+      <div className="mt-auto rounded-xl border border-border/60 bg-muted/60 p-3 text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
           <Server className="h-4 w-4" />
           <span>

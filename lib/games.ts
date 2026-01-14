@@ -29,10 +29,10 @@ export const games: GameDefinition[] = [
     id: 'retro-dock',
     title: 'Retro Dock',
     description: 'Boot into the retro dock. WASM powered runtime.',
-    coverImage: "url('/wasm/github_logo.png')",
+    coverImage: "url('/wasm/retro-dock/github_logo.png')",
     runtime: 'wasm',
     status: 'live',
-    launchUrl: '/wasm/index.html',
+    launchUrl: '/wasm/retro-dock/index.html',
     tags: ['retro', 'wasm'],
   },
   {

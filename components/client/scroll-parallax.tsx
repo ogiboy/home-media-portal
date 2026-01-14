@@ -10,7 +10,13 @@ import { useMotionValueEvent, useScroll } from 'framer-motion';
 export default function ScrollParallax() {
   const { scrollY } = useScroll();
   const frameRef = useRef<number | null>(null);
+  const lastValueRef = useRef<number | null>(null);
   const applyValue = (value: number) => {
+    const last = lastValueRef.current;
+    if (last !== null && Math.abs(value - last) < 1) {
+      return;
+    }
+    lastValueRef.current = value;
     const next = `${value}px`;
     document.documentElement.style.setProperty('--portal-scroll-y', next);
     document.body?.style.setProperty('--portal-scroll-y', next);

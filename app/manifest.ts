@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Single-universe dashboard for home media services.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#0a0f1a',
-    theme_color: '#2f6df6',
+    background_color: '#fff2eb',
+    theme_color: '#ffb4a2',
     icons: [
       {
         src: '/android-chrome-512x512.png',
