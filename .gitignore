@@ -46,3 +46,4 @@ board.db-shm
 board.db-wal
 
 sonar-issues.json
+security_best_practices_report.md
