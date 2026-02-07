@@ -38,35 +38,35 @@ export default function ServicesSection({
       className="portal-entrance scroll-mt-32"
       style={withDelay(delay)}
     >
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 id="services-title" className="text-xl font-semibold">
-            {strings.services.title}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {strings.services.description}
-          </p>
+      <div className="portal-surface rounded-(--radius) p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 id="services-title" className="text-xl font-semibold">
+              {strings.services.title}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {strings.services.description}
+            </p>
+          </div>
+          <div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
+            <MonitorPlay className="h-4 w-4" />
+            <span>{strings.services.focusHint}</span>
+          </div>
         </div>
-        <div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
-          <MonitorPlay className="h-4 w-4" />
-          <span>{strings.services.focusHint}</span>
-        </div>
-      </div>
 
-      <ul
-        className="mt-6 grid auto-rows-fr items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3"
-      >
-        {services.map((service, index) => (
-          <ServiceCard
-            key={service.id}
-            service={service}
-            strings={strings}
-            isHome={isHome}
-            isPublic={isPublic}
-            delay={CARD_BASE_DELAY + index * CARD_STAGGER}
-          />
-        ))}
-      </ul>
+        <ul className="mt-6 grid auto-rows-fr items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          {services.map((service, index) => (
+            <ServiceCard
+              key={service.id}
+              service={service}
+              strings={strings}
+              isHome={isHome}
+              isPublic={isPublic}
+              delay={CARD_BASE_DELAY + index * CARD_STAGGER}
+            />
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }

@@ -35,6 +35,7 @@ let config: Config = {
 };
 let intervalId: ReturnType<typeof globalThis.setInterval> | null = null;
 let inFlight = false;
+let devOverride = false;
 
 // Notify all subscribers about the latest state.
 const notify = () => {
@@ -86,8 +87,38 @@ const updateConfig = (next: Config) => {
   }
 };
 
+// Dev-only override check for local testing.
+const checkDevOverride = async () => {
+  if (process.env.NODE_ENV !== "development") {
+    return false;
+  }
+
+  const token = process.env.NEXT_PUBLIC_TAILGATE_DEV_TOKEN;
+  const url = token
+    ? `/api/tailgate/override?token=${encodeURIComponent(token)}`
+    : "/api/tailgate/override";
+
+  try {
+    const response = await fetch(url, { cache: "no-store" });
+    if (response.ok) {
+      devOverride = true;
+      setState({ status: "online", lastChecked: Date.now() });
+      stopPolling();
+      return true;
+    }
+  } catch {
+    // Ignore override failures and continue with normal probing.
+  }
+
+  return false;
+};
+
 // Perform a single reachability probe.
 const probe = () => {
+  if (devOverride) {
+    setState({ status: "online", lastChecked: Date.now() });
+    return;
+  }
   if (inFlight) {
     return;
   }
@@ -155,11 +186,22 @@ export function useTailnetStatus(homeUrl: string, options: Options = {}) {
       setSnapshot(next);
     };
 
+    let active = true;
+
     listeners.add(listener);
-    updateConfig(stableConfig);
-    startPolling();
+
+    checkDevOverride().then((overridden) => {
+      if (!active) {
+        return;
+      }
+      if (!overridden) {
+        updateConfig(stableConfig);
+        startPolling();
+      }
+    });
 
     return () => {
+      active = false;
       listeners.delete(listener);
       stopPolling();
     };

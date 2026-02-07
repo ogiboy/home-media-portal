@@ -39,7 +39,12 @@ export default function BoardSection({
       )}
       style={withDelay(delay)}
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div
+        className={cn(
+          'flex flex-wrap items-center justify-between gap-3',
+          isCompact && 'mb-4'
+        )}
+      >
         <div>
           <h2
             id="board-title"
@@ -47,7 +52,12 @@ export default function BoardSection({
           >
             {strings.board.title}
           </h2>
-          <p className={cn('text-sm text-muted-foreground', isCompact && 'text-xs')}>
+          <p
+            className={cn(
+              'text-sm text-muted-foreground',
+              isCompact && 'text-xs'
+            )}
+          >
             {strings.board.description}
           </p>
         </div>

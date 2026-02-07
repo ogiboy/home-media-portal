@@ -28,30 +28,32 @@ export default function ShortcutsSection({
       className="portal-entrance scroll-mt-32"
       style={withDelay(delay)}
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 id="shortcuts-title" className="text-xl font-semibold">
-            {strings.shortcuts.title}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {strings.shortcuts.description}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-4 space-y-4">
-        <ShortcutStrip strings={strings} />
-        <div className="portal-surface rounded-(--radius) p-5">
-          <div className="flex items-center gap-2 text-sm font-semibold">
-            <Sparkles className="h-4 w-4" />
-            {strings.shortcuts.title}
+      <div className="portal-surface rounded-(--radius) p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 id="shortcuts-title" className="text-xl font-semibold">
+              {strings.shortcuts.title}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {strings.shortcuts.description}
+            </p>
           </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {strings.shortcuts.description}
-          </p>
-          <p className="mt-3 text-xs text-muted-foreground">
-            {strings.shortcuts.comingSoon}
-          </p>
+        </div>
+
+        <div className="mt-5 space-y-4">
+          <ShortcutStrip strings={strings} />
+          <div className="rounded-(--radius) border border-border/50 bg-muted/40 p-4">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Sparkles className="h-4 w-4" />
+              {strings.shortcuts.title}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {strings.shortcuts.description}
+            </p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              {strings.shortcuts.comingSoon}
+            </p>
+          </div>
         </div>
       </div>
     </section>

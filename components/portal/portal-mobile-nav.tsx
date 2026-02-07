@@ -1,5 +1,12 @@
 // Mobile bottom navigation for quick section jumps.
-import { Gamepad2, LayoutGrid, Search, Settings, Sparkles, Film } from 'lucide-react';
+import {
+  Gamepad2,
+  LayoutGrid,
+  Search,
+  Settings,
+  Sparkles,
+  Film,
+} from 'lucide-react';
 
 import type { PortalStrings } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
@@ -44,17 +51,47 @@ export default function PortalMobileNav({
     icon: typeof LayoutGrid;
     label: string;
   }> = [
-    { id: 'dashboard', href: links.dashboard, icon: LayoutGrid, label: strings.nav.dashboard },
-    { id: 'search', href: links.search, icon: Search, label: strings.nav.search },
-    { id: 'library', href: links.library, icon: Film, label: strings.nav.library },
-    { id: 'games', href: links.games, icon: Gamepad2, label: strings.nav.games },
-    { id: 'shortcuts', href: links.shortcuts, icon: Sparkles, label: strings.nav.shortcuts },
-    { id: 'settings', href: links.settings, icon: Settings, label: strings.nav.settings },
+    {
+      id: 'dashboard',
+      href: links.dashboard,
+      icon: LayoutGrid,
+      label: strings.nav.dashboard,
+    },
+    {
+      id: 'search',
+      href: links.search,
+      icon: Search,
+      label: strings.nav.search,
+    },
+    {
+      id: 'library',
+      href: links.library,
+      icon: Film,
+      label: strings.nav.library,
+    },
+    {
+      id: 'games',
+      href: links.games,
+      icon: Gamepad2,
+      label: strings.nav.games,
+    },
+    {
+      id: 'shortcuts',
+      href: links.shortcuts,
+      icon: Sparkles,
+      label: strings.nav.shortcuts,
+    },
+    {
+      id: 'settings',
+      href: links.settings,
+      icon: Settings,
+      label: strings.nav.settings,
+    },
   ];
 
   return (
     <nav
-      className="portal-surface portal-mobile-nav fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-2 rounded-full px-4 py-3 md:hidden"
+      className="portal-surface portal-mobile-nav fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-2 rounded-full px-4 py-3 backdrop-blur-md md:hidden"
       aria-label={strings.accessibility.mobileNav}
     >
       {items.map((item) => {

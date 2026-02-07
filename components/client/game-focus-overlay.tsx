@@ -8,7 +8,7 @@ import { ArrowUpRight, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { PortalStrings } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
-import { getGameById } from '@/lib/games';
+import { getGameById, getGameLaunchUrl } from '@/lib/games';
 import OrbChase from '@/components/client/games/orb-chase';
 import { recordGamePlay } from '@/app/actions/game-actions';
 import styles from './game-focus-overlay.module.css';
@@ -41,6 +41,11 @@ export default function GameFocusOverlay({ strings }: GameFocusOverlayProps) {
     const activeId = searchParams.get('game');
     return getGameById(activeId);
   }, [searchParams]);
+
+  const launchUrl = useMemo(
+    () => (game ? getGameLaunchUrl(game) : undefined),
+    [game]
+  );
 
   const isActive = Boolean(game);
   const close = useCallback(() => {
@@ -111,12 +116,12 @@ export default function GameFocusOverlay({ strings }: GameFocusOverlayProps) {
               <h3 className="text-lg font-semibold">{game.title}</h3>
             </div>
             <div className="flex items-center gap-2">
-              {game.launchUrl && (
+              {launchUrl && (
                 <Button
                   size="sm"
                   variant="secondary"
                   onClick={() =>
-                    globalThis.open(game.launchUrl, '_blank', 'noopener,noreferrer')
+                    globalThis.open(launchUrl, '_blank', 'noopener,noreferrer')
                   }
                 >
                   {strings.focus.openInTab}
@@ -147,7 +152,7 @@ export default function GameFocusOverlay({ strings }: GameFocusOverlayProps) {
                 )}
                 <iframe
                   title={game.title}
-                  src={game.launchUrl}
+                  src={launchUrl}
                   className="h-full w-full"
                 />
               </div>

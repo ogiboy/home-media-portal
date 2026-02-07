@@ -7,6 +7,7 @@ import LanguageSwitch from '@/components/client/language-switch';
 import { Badge } from '@/components/ui/badge';
 import type { Locale, PortalStrings } from '@/lib/i18n';
 import { withDelay } from '@/components/portal/portal-motion';
+import { cn } from '@/lib/utils';
 
 type PortalHeaderProps = Readonly<{
   strings: PortalStrings;
@@ -47,48 +48,68 @@ export default function PortalHeader({
 
   return (
     <header
-      className="portal-hero portal-surface portal-entrance flex min-h-44 flex-col gap-5 rounded-(--radius) p-7"
+      className="portal-hero portal-surface portal-entrance relative flex min-h-52 flex-col gap-6 rounded-(--radius) p-7 lg:p-8"
       style={withDelay(delay)}
     >
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-        <div className="min-w-0 max-w-2xl">
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/60 via-transparent to-white/20 opacity-70" />
+      <div className="relative flex flex-col gap-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge
+              variant={isHome ? 'secondary' : 'outline'}
+              className="portal-chip px-3 py-1 text-xs"
+            >
+              {isHome
+                ? strings.badges.homePortal
+                : strings.badges.publicPreview}
+            </Badge>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span
+                className={cn(
+                  'h-2 w-2 rounded-full',
+                  isHome ? 'bg-emerald-400/80' : 'bg-amber-400/80'
+                )}
+                aria-hidden="true"
+              />
+              <span className="uppercase tracking-[0.2em]">
+                {isHome ? strings.header.liveNote : strings.header.previewNote}
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <PortalControls
+              strings={strings}
+              isPublic={isPublic}
+              allowGateInteraction={allowGateInteraction}
+            />
+            <ThemeToggle label={strings.accessibility.themeToggle} />
+            <LanguageSwitch
+              locale={locale}
+              label={strings.accessibility.languageToggle}
+            />
+          </div>
+        </div>
+
+        <div className="max-w-3xl">
           <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
             {strings.header.kicker}
           </p>
-          <h1 className="mt-2 h-12 overflow-hidden text-3xl font-semibold tracking-tight sm:h-14 sm:text-4xl">
+          <h1 className="mt-2 line-clamp-2 text-3xl font-semibold tracking-tight sm:text-4xl">
             <span className="bg-linear-to-r from-primary to-accent bg-clip-text text-transparent">
               {headerTitle}
             </span>
           </h1>
-          <p className="mt-2 h-10 max-w-2xl overflow-hidden text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
             {headerSubtitle}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3 lg:justify-end">
-          <Badge
-            variant={isHome ? 'accent' : 'outline'}
-            className="portal-chip min-w-28 justify-center px-3 py-1 text-xs"
-          >
-            {isHome ? strings.badges.homePortal : strings.badges.publicPreview}
-          </Badge>
-          <PortalControls
-            strings={strings}
-            isPublic={isPublic}
-            allowGateInteraction={allowGateInteraction}
-          />
-          <ThemeToggle label={strings.accessibility.themeToggle} />
-          <LanguageSwitch
-            locale={locale}
-            label={strings.accessibility.languageToggle}
-          />
-        </div>
-      </div>
 
-      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-        <MonitorPlay className="h-4 w-4" />
-        <span>
-          {isHome ? strings.header.liveNote : strings.header.previewNote}
-        </span>
+        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+          <MonitorPlay className="h-4 w-4" />
+          <span>
+            {isHome ? strings.header.liveNote : strings.header.previewNote}
+          </span>
+        </div>
       </div>
     </header>
   );

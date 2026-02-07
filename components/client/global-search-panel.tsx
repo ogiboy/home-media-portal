@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useDeferredValue, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowRight, Play, Plus, Search } from 'lucide-react';
 
@@ -27,43 +27,16 @@ type GlobalSearchPanelProps = Readonly<{
 /**
  * Render a global search panel that unifies library and discovery results.
  */
-export default function GlobalSearchPanel({
-  strings,
-}: GlobalSearchPanelProps) {
+export default function GlobalSearchPanel({ strings }: GlobalSearchPanelProps) {
   const [query, setQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const loadingTimer = useRef<number | null>(null);
+  const deferredQuery = useDeferredValue(query);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const hasQuery = query.trim().length > 0;
+  const isLoading = hasQuery && deferredQuery.trim() !== query.trim();
   const results: SearchResult[] = [];
-
-  useEffect(() => {
-    if (loadingTimer.current) {
-      globalThis.clearTimeout(loadingTimer.current);
-      loadingTimer.current = null;
-    }
-
-    if (!hasQuery) {
-      setIsLoading(false);
-      return;
-    }
-
-    setIsLoading(true);
-    loadingTimer.current = globalThis.setTimeout(() => {
-      setIsLoading(false);
-      loadingTimer.current = null;
-    }, 700);
-
-    return () => {
-      if (loadingTimer.current) {
-        globalThis.clearTimeout(loadingTimer.current);
-        loadingTimer.current = null;
-      }
-    };
-  }, [hasQuery, query]);
 
   const openJellyfin = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -75,7 +48,7 @@ export default function GlobalSearchPanel({
   const skeletonRows = Array.from({ length: 4 });
 
   return (
-    <div className="portal-surface rounded-(--radius) p-6">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -92,7 +65,7 @@ export default function GlobalSearchPanel({
         </Button>
       </div>
 
-      <div className="mt-5 space-y-3">
+      <div className="space-y-3">
         <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-muted-foreground">
           <span>{strings.search.resultsTitle}</span>
           <span>{strings.search.resultsHint}</span>
@@ -170,7 +143,11 @@ export default function GlobalSearchPanel({
                 </div>
                 <div className="flex items-center gap-2">
                   {result.status === 'downloaded' ? (
-                    <Button size="sm" variant="secondary" onClick={openJellyfin}>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={openJellyfin}
+                    >
                       <Play className="h-4 w-4" />
                       {strings.search.playCta}
                     </Button>

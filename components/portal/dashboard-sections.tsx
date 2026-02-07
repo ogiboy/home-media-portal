@@ -23,14 +23,33 @@ export default function DashboardSections({
   isPublic,
 }: DashboardSectionsProps) {
   return (
-    <div className="flex flex-col gap-10">
-      <SearchSection strings={strings} delay={80} />
-      <LibrarySection strings={strings} delay={140} />
-      <GamesSection strings={strings} variant="preview" delay={200} />
-      <ShortcutsSection strings={strings} delay={260} />
-      <ServicesSection strings={strings} isHome={isHome} isPublic={isPublic} delay={320} />
-      <SystemSection strings={strings} isHome={isHome} delay={380} />
-      <BoardSection strings={strings} isHome={isHome} delay={440} />
+    <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="min-w-0 flex flex-col gap-10">
+        <SearchSection strings={strings} delay={80} />
+        <LibrarySection strings={strings} delay={140} />
+        <GamesSection strings={strings} variant="preview" delay={200} />
+        <ShortcutsSection strings={strings} delay={260} />
+        <ServicesSection
+          strings={strings}
+          isHome={isHome}
+          isPublic={isPublic}
+          delay={320}
+        />
+      </div>
+      <aside className="min-w-0 flex flex-col gap-6">
+        <SystemSection
+          strings={strings}
+          isHome={isHome}
+          delay={380}
+          variant="compact"
+        />
+        <BoardSection
+          strings={strings}
+          isHome={isHome}
+          delay={440}
+          variant="compact"
+        />
+      </aside>
     </div>
   );
 }

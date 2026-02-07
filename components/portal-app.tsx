@@ -78,8 +78,8 @@ export default async function PortalApp({
     library: strings.library.title,
     shortcuts: strings.shortcuts.title,
     services: strings.services.title,
-    system: strings.services.title,
-    board: strings.services.title,
+    system: strings.system.title,
+    board: strings.board.title,
     settings: strings.settings.title,
   } as const;
 
@@ -90,8 +90,8 @@ export default async function PortalApp({
     library: strings.library.description,
     shortcuts: strings.shortcuts.description,
     services: strings.services.description,
-    system: strings.services.description,
-    board: strings.services.description,
+    system: strings.system.description,
+    board: strings.board.description,
     settings: strings.settings.description,
   } as const;
 
@@ -104,13 +104,45 @@ export default async function PortalApp({
         <div className="portal-backdrop-layer portal-backdrop-aurora" />
         <div className="portal-backdrop-layer portal-backdrop-glow" />
       </div>
-      <div className="pointer-events-none absolute inset-0 portal-grid opacity-40" />
+      <div className="portal-cosmic" aria-hidden="true">
+        <span
+          className="portal-cosmic-item portal-cosmic-item--slow"
+          style={{ top: '14%', left: '12%' }}
+        >
+          ✦
+        </span>
+        <span
+          className="portal-cosmic-item"
+          style={{ top: '28%', right: '16%' }}
+        >
+          ✶
+        </span>
+        <span
+          className="portal-cosmic-item portal-cosmic-item--fast"
+          style={{ top: '62%', left: '8%' }}
+        >
+          ✷
+        </span>
+        <span
+          className="portal-cosmic-item"
+          style={{ top: '72%', right: '18%' }}
+        >
+          ✹
+        </span>
+        <span
+          className="portal-cosmic-item portal-cosmic-item--slow"
+          style={{ top: '82%', left: '45%' }}
+        >
+          ✺
+        </span>
+      </div>
+      <div className="pointer-events-none absolute inset-0 portal-grid opacity-50" />
       <div className="portal-orb portal-orb--a" />
       <div className="portal-orb portal-orb--b" />
       <div className="portal-orb portal-orb--c" />
 
-      <div className="portal-content mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[220px_1fr]">
-        <div className="order-2 flex flex-col gap-6 lg:order-1">
+      <div className="portal-content portal-frame grid w-full gap-10 py-10 lg:grid-cols-[200px_1fr]">
+        <div className="order-2 flex flex-col gap-6 lg:order-1 lg:sticky lg:top-8 lg:self-start">
           <PortalSidebar
             strings={strings}
             isHome={isHome}

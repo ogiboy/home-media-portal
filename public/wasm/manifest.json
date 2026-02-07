@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "defaultGame": "doom-shareware",
+  "games": [
+    {
+      "id": "doom-shareware",
+      "title": "DOOM (Shareware)",
+      "engine": "dosbox-x",
+      "files": [
+        "roms/SETUP.EXE",
+        "roms/DWANGO.EXE",
+        "roms/DWANGO.STR",
+        "roms/DMFAQ66C.TXT",
+        "roms/DMFAQ66B.TXT",
+        "roms/DMFAQ66A.TXT",
+        "roms/SERSETUP.EXE",
+        "roms/MODEM.CFG",
+        "roms/DMFAQ66D.TXT",
+        "roms/MODEM.NUM",
+        "roms/DWANGO.DOC",
+        "roms/HELPME.TXT",
+        "roms/README.TXT",
+        "roms/DM.DOC",
+        "roms/DOOM.EXE",
+        "roms/ORDER.FRM",
+        "roms/DM.EXE",
+        "roms/IPXSETUP.EXE",
+        "roms/DEFAULT.CFG",
+        "roms/MODEM.STR",
+        "roms/DOOM1.WAD",
+        "roms/DOOMS_19.DAT"
+      ],
+      "startupScript": "cd uploaded;doom.exe",
+      "cpu": "auto",
+      "ram": 64,
+      "harddrive": "hd_520"
+    }
+  ]
+}

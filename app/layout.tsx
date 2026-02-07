@@ -20,6 +20,7 @@ const themeScript = `(() => {
     const prefersLight = hasMatchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
     const theme = stored || (prefersDark ? 'dark' : prefersLight ? 'light' : 'dark');
     document.documentElement.dataset.theme = theme;
+    document.cookie = 'portal_theme=' + theme + '; path=/; max-age=31536000';
   } catch {}
 })();`;
 
@@ -45,9 +46,11 @@ export default async function RootLayout({
     cookieStore.get("portal_locale")?.value,
     acceptLanguage
   );
+  const themeCookie = cookieStore.get("portal_theme")?.value;
+  const initialTheme = themeCookie === "light" ? "light" : "dark";
 
   return (
-    <html lang={locale} data-theme="dark" suppressHydrationWarning>
+    <html lang={locale} data-theme={initialTheme} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

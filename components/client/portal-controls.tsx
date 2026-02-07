@@ -179,7 +179,6 @@ export default function PortalControls({
       <CommandDialog
         open={open}
         onOpenChange={setOpen}
-        closeLabel={strings.accessibility.dialogClose}
       >
         <CommandInput placeholder={strings.command.placeholder} />
         <CommandList>

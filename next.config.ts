@@ -8,11 +8,18 @@ const devOrigins = process.env.NEXT_PUBLIC_DEV_ORIGINS?.split(',')
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Next 16 may infer the wrong workspace root when multiple lockfiles exist on disk.
+  turbopack: {
+    root: __dirname,
+  },
   allowedDevOrigins: devOrigins ?? [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     '192.168.1.*.*',
   ],
+  experimental: {
+    authInterrupts: true,
+  },
 };
 
 export default nextConfig;

@@ -42,5 +42,7 @@ next-env.d.ts
 # local data
 /data
 *.db
+board.db-shm
+board.db-wal
 
 sonar-issues.json

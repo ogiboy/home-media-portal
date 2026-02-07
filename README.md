@@ -90,7 +90,6 @@ These keys are required for service actions and the Radarr/Sonarr shortcuts:
 
 All keys stay in `.env.local` and never ship to the client.
 
-
 ### Local development
 
 1. Create `.env.local` (see above)
@@ -238,7 +237,6 @@ Bu anahtarlar servis aksiyonlari ve Radarr/Sonarr kisa yollar icin gereklidir:
   Dokuman: https://jellyfin.org/docs/general/administration/api/
 
 Anahtarlar yalnizca `.env.local` icinde tutulur ve client tarafa gonderilmez.
-
 
 ### Lokal gelistirme
 

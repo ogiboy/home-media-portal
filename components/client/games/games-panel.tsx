@@ -80,7 +80,7 @@ export default function GamesPanel({
   };
 
   return (
-    <div className="mt-5 flex flex-col gap-5">
+    <div className="mt-6 grid gap-6 lg:grid-cols-[1.05fr_1fr]">
       <div className="portal-surface group relative overflow-hidden rounded-(--radius) p-6">
         {coverStyle && (
           <div
@@ -89,26 +89,14 @@ export default function GamesPanel({
             aria-hidden="true"
           />
         )}
-        <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/60 to-background/90" />
-        {isPlayable && (
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
-            <Button
-              size="sm"
-              onClick={() => activeGame && handlePlay(activeGame.id)}
-              className="shadow-[0_12px_30px_var(--portal-glow)]"
-            >
-              <Play className="h-4 w-4" />
-              {strings.games.play}
-            </Button>
-          </div>
-        )}
-        <div className="relative z-10 flex flex-col gap-4">
+        <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/50 to-background/95" />
+        <div className="relative z-10 flex h-full flex-col gap-4">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">
                 {strings.games.nowPlaying}
               </p>
-              <h3 className="mt-1 text-xl font-semibold">
+              <h3 className="mt-1 text-2xl font-semibold">
                 {activeGame?.title}
               </h3>
             </div>
@@ -116,9 +104,11 @@ export default function GamesPanel({
               {isPlayable ? strings.games.liveLabel : strings.games.comingSoon}
             </Badge>
           </div>
+
           <p className="text-sm text-muted-foreground">
             {activeGame?.description}
           </p>
+
           <div className="flex flex-wrap gap-2">
             {activeGame?.tags?.map((tag) => (
               <span
@@ -129,7 +119,8 @@ export default function GamesPanel({
               </span>
             ))}
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+
+          <div className="mt-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
             <div>
               {strings.games.playsLabel}: {stats?.totalPlays ?? 0}
             </div>
@@ -137,11 +128,25 @@ export default function GamesPanel({
               <div className="flex items-center gap-2">
                 <Trophy className="h-3.5 w-3.5" />
                 <span className="truncate">
-                  {strings.games.topScoreLabel}: {topScore.score} · {topScore.userLogin}
+                  {strings.games.topScoreLabel}: {topScore.score} ·{' '}
+                  {topScore.userLogin}
                 </span>
               </div>
             )}
           </div>
+
+          {isPlayable && (
+            <div className="pt-2">
+              <Button
+                size="sm"
+                onClick={() => activeGame && handlePlay(activeGame.id)}
+                className="shadow-[0_16px_40px_var(--portal-glow-strong)]"
+              >
+                <Play className="h-4 w-4" />
+                {strings.games.play}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -162,7 +167,7 @@ export default function GamesPanel({
           )}
         </div>
 
-        <div className="mt-4 flex gap-4 overflow-x-auto pb-4">
+        <div className="mt-4 flex gap-4 overflow-x-auto pb-4 pr-2">
           {games.map((game) => {
             const selected = game.id === activeGame?.id;
             const playable = game.status === 'live';
@@ -175,16 +180,17 @@ export default function GamesPanel({
                 key={game.id}
                 onClick={() => setActiveId(game.id)}
                 onKeyDown={(event) => handleCardKeyDown(event, game.id)}
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.06 }}
                 transition={{ duration: 0.2 }}
                 role="button"
                 tabIndex={0}
+                aria-label={game.title}
                 aria-pressed={selected}
                 className={cn(
-                  'group relative min-w-52 overflow-hidden rounded-3xl border p-4 text-left transition',
+                  'group relative min-w-56 overflow-hidden rounded-3xl border p-4 text-left transition shadow-[0_12px_30px_rgba(15,23,42,0.12)]',
                   selected
-                    ? 'border-primary/60 bg-primary/5 text-foreground'
-                    : 'border-border/60 bg-muted/40 text-muted-foreground'
+                    ? 'border-primary/60 bg-primary/10 text-foreground shadow-[0_18px_40px_rgba(15,23,42,0.18)]'
+                    : 'border-border/40 bg-muted/30 text-muted-foreground'
                 )}
               >
                 <div
@@ -192,7 +198,7 @@ export default function GamesPanel({
                   style={cardCover}
                   aria-hidden="true"
                 />
-                <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/40 to-background/90" />
+                <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/40 to-background/95" />
                 <div className="relative z-10 flex h-44 flex-col justify-end gap-2">
                   <div className="text-sm font-semibold text-foreground">
                     {game.title}
@@ -202,14 +208,14 @@ export default function GamesPanel({
                   </div>
                 </div>
                 {playable && (
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-hover:scale-105">
                     <Button
                       size="sm"
                       onClick={(event) => {
                         event.stopPropagation();
                         handlePlay(game.id);
                       }}
-                      className="shadow-[0_12px_30px_var(--portal-glow)]"
+                      className="shadow-[0_16px_40px_var(--portal-glow-strong)]"
                     >
                       <Play className="h-4 w-4" />
                       {strings.games.play}

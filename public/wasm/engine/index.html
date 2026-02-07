@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Retro Engine</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rivets/0.9.6/rivets.bundled.min.js"></script>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        background: #05070c;
+        color: #e2e8f0;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        overflow: hidden;
+      }
+
+      #maindiv {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      #canvasDiv {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #canvas {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        image-rendering: pixelated;
+      }
+
+      #topPanel {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: radial-gradient(
+            circle at top,
+            rgba(56, 189, 248, 0.2),
+            transparent 60%
+          ),
+          linear-gradient(180deg, rgba(5, 7, 12, 0.92), rgba(5, 7, 12, 0.88));
+        text-align: center;
+        padding: 24px;
+        z-index: 2;
+        transition: opacity 0.3s ease;
+      }
+
+      #topPanel.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #progressOuter {
+        width: min(420px, 70vw);
+        height: 8px;
+        background: rgba(148, 163, 184, 0.2);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      #myProgress {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #60a5fa, #38bdf8);
+        font-size: 10px;
+        line-height: 8px;
+        color: #0f172a;
+        text-align: right;
+        padding-right: 6px;
+        box-sizing: border-box;
+      }
+
+      #menuDiv,
+      #importModal,
+      #loginModal,
+      #settingsModal,
+      #mobileDiv,
+      #mobileButtons,
+      #divInstructions,
+      #githubDiv,
+      #errorOuter,
+      #dropArea,
+      #romselect,
+      #mobileCanvas {
+        display: none;
+      }
+
+      input[type='file'] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="maindiv">
+      <div id="topPanel">
+        <div style="font-weight: 600; font-size: 18px">Preparing game engine…</div>
+        <div style="font-size: 13px; opacity: 0.75">
+          Loading ROM assets and booting DOS environment.
+        </div>
+        <div id="progressOuter">
+          <div id="myProgress">0%</div>
+        </div>
+      </div>
+
+      <div id="errorOuter"></div>
+      <div id="divInstructions"></div>
+      <div id="githubDiv"></div>
+
+      <div id="canvasDiv">
+        <canvas id="canvas" width="640" height="400"></canvas>
+      </div>
+
+      <div id="menuDiv"></div>
+      <div id="dropArea"></div>
+      <div id="mobileCanvas"></div>
+
+      <select id="romselect"></select>
+      <div id="importModal"></div>
+      <div id="loginModal"></div>
+      <div id="settingsModal"></div>
+      <div id="mobileDiv"></div>
+      <div id="mobileButtons"></div>
+
+      <input id="file-upload" type="file" multiple />
+      <input id="file-import" type="file" multiple />
+    </div>
+
+    <script src="romlist.js"></script>
+    <script src="settings.js"></script>
+  </body>
+</html>

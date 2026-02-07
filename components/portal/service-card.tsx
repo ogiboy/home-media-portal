@@ -44,12 +44,12 @@ export default function ServiceCard({
 }: ServiceCardProps) {
   return (
     <li className="portal-entrance h-full" style={withDelay(delay)}>
-      <article className="portal-card group flex h-full flex-col rounded-(--radius)">
+      <article className="portal-card group flex h-full flex-col rounded-(--radius) p-1">
         <div
           className="absolute right-0 top-0 h-24 w-24 -translate-y-8 translate-x-8 rounded-full opacity-35"
           style={{ background: service.accent }}
         />
-        <CardHeader className="gap-4">
+        <CardHeader className="gap-4 rounded-[calc(var(--radius)-8px)] bg-white/70 p-5 dark:bg-slate-900/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div
@@ -75,7 +75,7 @@ export default function ServiceCard({
             />
           </div>
         </CardHeader>
-        <CardContent className="flex-1 space-y-4">
+        <CardContent className="flex-1 space-y-4 px-5 pb-5">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>{strings.services.latency}</span>
             <ServiceLatency
@@ -85,9 +85,13 @@ export default function ServiceCard({
             />
           </div>
           <Separator />
-          <ServiceActions service={service} isPublic={isPublic} strings={strings} />
+          <ServiceActions
+            service={service}
+            isPublic={isPublic}
+            strings={strings}
+          />
         </CardContent>
-        <CardFooter className="mt-auto text-xs text-muted-foreground">
+        <CardFooter className="mt-auto px-5 pb-5 text-xs text-muted-foreground">
           {service.openMode === 'overlay'
             ? strings.services.overlayHint
             : strings.services.newTabHint}

@@ -20,15 +20,22 @@ const getCurrentTheme = (): Theme => {
   return current === "dark" ? "dark" : "light";
 };
 
+const setThemeCookie = (theme: Theme) => {
+  const maxAgeSeconds = 60 * 60 * 24 * 365;
+  document.cookie = `portal_theme=${theme}; path=/; max-age=${maxAgeSeconds}`;
+};
+
 // Theme toggle button that updates the document dataset.
 export default function ThemeToggle({ label }: ThemeToggleProps) {
   const toggleTheme = useCallback(() => {
     if (typeof document === "undefined") {
       return;
     }
+
     const next: Theme = getCurrentTheme() === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     localStorage.setItem("portal-theme", next);
+    setThemeCookie(next);
   }, []);
 
   return (

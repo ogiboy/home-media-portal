@@ -35,26 +35,28 @@ export default function GamesSection({
       className="portal-entrance scroll-mt-32"
       style={withDelay(delay)}
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 id="games-title" className="text-xl font-semibold">
-            {strings.games.title}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {strings.games.description}
-          </p>
+      <div className="portal-surface rounded-(--radius) p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 id="games-title" className="text-xl font-semibold">
+              {strings.games.title}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {strings.games.description}
+            </p>
+          </div>
+          {isPreview ? (
+            <Button asChild size="sm" variant="outline">
+              <Link href="/games">{strings.games.cta}</Link>
+            </Button>
+          ) : (
+            <Badge variant="outline" className="portal-chip px-3 py-1 text-xs">
+              {strings.games.nowPlaying}
+            </Badge>
+          )}
         </div>
-        {isPreview ? (
-          <Button asChild size="sm" variant="outline">
-            <Link href="/games">{strings.games.cta}</Link>
-          </Button>
-        ) : (
-          <Badge variant="outline" className="portal-chip px-3 py-1 text-xs">
-            {strings.games.nowPlaying}
-          </Badge>
-        )}
+        <GamesPanel strings={strings} variant={variant} />
       </div>
-      <GamesPanel strings={strings} variant={variant} />
     </section>
   );
 }
