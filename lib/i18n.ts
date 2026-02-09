@@ -604,9 +604,9 @@ const dictionaries: Record<Locale, PortalStrings> = {
       dayShort: 'gun',
     },
     forbidden: {
-      title: '',
-      description: '',
-      action: '',
+      title: 'Erisim engellendi',
+      description: 'Bu sayfaya erisim yok.',
+      action: 'Ana sayfaya don',
     },
   },
   en: {
@@ -906,9 +906,9 @@ const dictionaries: Record<Locale, PortalStrings> = {
       dayShort: 'd',
     },
     forbidden: {
-      title: '',
-      description: '',
-      action: '',
+      title: 'Access denied',
+      description: 'You do not have access to this page.',
+      action: 'Back to home',
     },
   },
   it: {
@@ -1209,9 +1209,9 @@ const dictionaries: Record<Locale, PortalStrings> = {
       dayShort: 'g',
     },
     forbidden: {
-      title: '',
-      description: '',
-      action: '',
+      title: 'Accesso negato',
+      description: 'Non hai accesso a questa pagina.',
+      action: 'Torna alla home',
     },
   },
 };

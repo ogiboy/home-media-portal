@@ -1,7 +1,6 @@
 // Sidebar shell for the portal layout.
 import {
   Gamepad2,
-  Gauge,
   LayoutGrid,
   MessageSquare,
   Search,
@@ -23,7 +22,6 @@ type PortalNavLinks = {
   games: string;
   shortcuts: string;
   services: string;
-  system: string;
   board: string;
   settings: string;
 };
@@ -45,7 +43,6 @@ const defaultLinks: PortalNavLinks = {
   games: '/games',
   shortcuts: '/shortcuts',
   services: '/services',
-  system: '/#system',
   board: '/#board',
   settings: '/settings',
 };
@@ -101,12 +98,6 @@ export default function PortalSidebar({
       href: links.services,
       icon: Server,
       label: strings.nav.services,
-    },
-    {
-      id: 'system',
-      href: links.system,
-      icon: Gauge,
-      label: strings.nav.system,
     },
     {
       id: 'board',

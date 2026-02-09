@@ -51,7 +51,7 @@ export default function PortalHeader({
       className="portal-hero portal-surface portal-entrance relative flex min-h-52 flex-col gap-6 rounded-(--radius) p-7 lg:p-8"
       style={withDelay(delay)}
     >
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/60 via-transparent to-white/20 opacity-70" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/25 via-transparent to-white/55 opacity-70 bg-position-[80%_20%] bg-size-[160%_160%]" />
       <div className="relative flex flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
@@ -67,7 +67,7 @@ export default function PortalHeader({
               <span
                 className={cn(
                   'h-2 w-2 rounded-full',
-                  isHome ? 'bg-emerald-400/80' : 'bg-amber-400/80'
+                  isHome ? 'bg-emerald-400/80' : 'bg-amber-400/80',
                 )}
                 aria-hidden="true"
               />

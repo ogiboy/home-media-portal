@@ -5,7 +5,6 @@ import LibrarySection from '@/components/portal/library-section';
 import GamesSection from '@/components/portal/games-section';
 import ShortcutsSection from '@/components/portal/shortcuts-section';
 import ServicesSection from '@/components/portal/services-section';
-import SystemSection from '@/components/portal/system-section';
 import BoardSection from '@/components/portal/board-section';
 
 export type DashboardSectionsProps = Readonly<{
@@ -15,7 +14,7 @@ export type DashboardSectionsProps = Readonly<{
 }>;
 
 /**
- * Render the ordered dashboard sections: search, library, games, shortcuts, services, system, board.
+ * Render the ordered dashboard sections: search, library, games, shortcuts, services, board.
  */
 export default function DashboardSections({
   strings,
@@ -37,16 +36,10 @@ export default function DashboardSections({
         />
       </div>
       <aside className="min-w-0 flex flex-col gap-6">
-        <SystemSection
-          strings={strings}
-          isHome={isHome}
-          delay={380}
-          variant="compact"
-        />
         <BoardSection
           strings={strings}
           isHome={isHome}
-          delay={440}
+          delay={380}
           variant="compact"
         />
       </aside>

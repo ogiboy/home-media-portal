@@ -55,7 +55,7 @@ export default function GamesPanel({
   const topScore = stats?.topScores?.[0];
   const isPlayable = activeGame?.status === 'live';
   const coverStyle = activeGame?.coverImage
-    ? { backgroundImage: activeGame.coverImage }
+    ? { backgroundImage: `url(${activeGame.coverImage})` }
     : undefined;
 
   const openFocus = (gameId: string) => {
@@ -172,7 +172,7 @@ export default function GamesPanel({
             const selected = game.id === activeGame?.id;
             const playable = game.status === 'live';
             const cardCover = game.coverImage
-              ? { backgroundImage: game.coverImage }
+              ? { backgroundImage: `url(${game.coverImage})` }
               : undefined;
 
             return (

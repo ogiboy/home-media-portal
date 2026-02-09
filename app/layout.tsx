@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
-import { cookies, headers } from "next/headers";
-import { Roboto } from "next/font/google";
+import type { Metadata } from 'next';
+import { cookies, headers } from 'next/headers';
+import { Roboto } from 'next/font/google';
 
-import { resolveLocale } from "@/lib/i18n";
-import "./globals.css";
+import { resolveLocale } from '@/lib/i18n';
+import './globals.css';
 
 const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-roboto",
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700'],
+  variable: '--font-roboto',
 });
 
 // Pre-hydration theme init to avoid flashing the wrong theme.
@@ -26,10 +26,10 @@ const themeScript = `(() => {
 
 // Global metadata and favicon configuration.
 export const metadata: Metadata = {
-  title: "Home Media Portal",
-  description: "A unified, in-universe dashboard for your home media services.",
+  title: 'Home Media Portal',
+  description: 'A unified, in-universe dashboard for your home media services.',
   icons: {
-    icon: "/icon.svg",
+    icon: '/icon.svg',
   },
 };
 
@@ -41,13 +41,13 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const headerList = await headers();
-  const acceptLanguage = headerList.get("accept-language") ?? undefined;
+  const acceptLanguage = headerList.get('accept-language') ?? undefined;
   const locale = resolveLocale(
-    cookieStore.get("portal_locale")?.value,
-    acceptLanguage
+    cookieStore.get('portal_locale')?.value,
+    acceptLanguage,
   );
-  const themeCookie = cookieStore.get("portal_theme")?.value;
-  const initialTheme = themeCookie === "light" ? "light" : "dark";
+  const themeCookie = cookieStore.get('portal_theme')?.value;
+  const initialTheme = themeCookie === 'light' ? 'light' : 'dark';
 
   return (
     <html lang={locale} data-theme={initialTheme} suppressHydrationWarning>
@@ -55,7 +55,7 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
-        className={`${roboto.variable} bg-background font-sans text-foreground antialiased`}
+        className={`${roboto.variable} bg-background font-sans text-foreground antialiased select-none`}
       >
         {children}
       </body>

@@ -3,11 +3,13 @@ import Link from 'next/link';
 
 import type { PortalStrings } from '@/lib/i18n';
 import { withDelay } from '@/components/portal/portal-motion';
+import SystemSection from '@/components/portal/system-section';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 export type SettingsSectionProps = Readonly<{
   strings: PortalStrings;
+  isHome: boolean;
   delay?: number;
 }>;
 
@@ -16,6 +18,7 @@ export type SettingsSectionProps = Readonly<{
  */
 export default function SettingsSection({
   strings,
+  isHome,
   delay = 0,
 }: SettingsSectionProps) {
   return (
@@ -90,6 +93,10 @@ export default function SettingsSection({
         <div className="mt-6 rounded-(--radius) border border-dashed border-border/70 bg-background/40 px-4 py-3 text-xs text-muted-foreground">
           {strings.settings.comingSoon}
         </div>
+      </div>
+
+      <div className="mt-8">
+        <SystemSection strings={strings} isHome={isHome} delay={delay + 80} />
       </div>
     </section>
   );
