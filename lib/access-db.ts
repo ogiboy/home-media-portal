@@ -195,3 +195,12 @@ export const hasPermission = (login: string, permission: PermissionName) => {
   const perms = getPermissionsForRole(role);
   return perms.includes('admin:all') || perms.includes(permission);
 };
+
+// Get user by tailnet_id
+export const getUserByTailnetId = (tailnetId: string): { id: number; login: string; display_name: string | null } | null => {
+  const database = getDb();
+  const row = database
+    .prepare('SELECT id, login, display_name FROM users WHERE tailnet_id = @tailnetId')
+    .get({ tailnetId }) as { id: number; login: string; display_name: string | null } | undefined;
+  return row ?? null;
+};

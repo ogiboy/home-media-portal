@@ -2,6 +2,7 @@
 import {
   Gamepad2,
   LayoutGrid,
+  MessageCircle,
   Search,
   Settings,
   Sparkles,
@@ -17,6 +18,10 @@ type PortalNavLinks = {
   library: string;
   games: string;
   shortcuts: string;
+  services: string;
+  system: string;
+  board: string;
+  chat: string;
   settings: string;
 };
 
@@ -34,6 +39,10 @@ const defaultLinks: PortalNavLinks = {
   library: '/library',
   games: '/games',
   shortcuts: '/shortcuts',
+  services: '/services',
+  system: '/system',
+  board: '/#board',
+  chat: '/chat',
   settings: '/settings',
 };
 
@@ -80,6 +89,12 @@ export default function PortalMobileNav({
       href: links.shortcuts,
       icon: Sparkles,
       label: strings.nav.shortcuts,
+    },
+    {
+      id: 'chat',
+      href: links.chat,
+      icon: MessageCircle,
+      label: strings.nav.chat,
     },
     {
       id: 'settings',

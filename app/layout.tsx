@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { cookies, headers } from 'next/headers';
 import { Roboto } from 'next/font/google';
 
+import { ReduxProvider } from '@/components/providers/redux-provider';
 import { resolveLocale } from '@/lib/i18n';
 import './globals.css';
 
@@ -57,7 +58,7 @@ export default async function RootLayout({
       <body
         className={`${roboto.variable} bg-background font-sans text-foreground antialiased select-none`}
       >
-        {children}
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );

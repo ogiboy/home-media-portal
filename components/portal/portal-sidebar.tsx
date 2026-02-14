@@ -3,6 +3,7 @@ import {
   Gamepad2,
   LayoutGrid,
   MessageSquare,
+  MessageCircle,
   Search,
   Server,
   Settings,
@@ -22,7 +23,9 @@ type PortalNavLinks = {
   games: string;
   shortcuts: string;
   services: string;
+  system: string;
   board: string;
+  chat: string;
   settings: string;
 };
 
@@ -43,7 +46,9 @@ const defaultLinks: PortalNavLinks = {
   games: '/games',
   shortcuts: '/shortcuts',
   services: '/services',
+  system: '/system',
   board: '/#board',
+  chat: '/chat',
   settings: '/settings',
 };
 
@@ -104,6 +109,12 @@ export default function PortalSidebar({
       href: links.board,
       icon: MessageSquare,
       label: strings.nav.board,
+    },
+    {
+      id: 'chat',
+      href: links.chat,
+      icon: MessageCircle,
+      label: strings.nav.chat,
     },
     {
       id: 'settings',

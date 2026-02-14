@@ -1,44 +1,57 @@
-// Server-rendered portal shell that keeps client widgets at the leaf nodes.
+// Server-rendered portal shell - refactored for lower complexity.
 import { cookies, headers } from 'next/headers';
 
 import FocusOverlay from '@/components/client/focus-overlay';
 import GameFocusOverlay from '@/components/client/game-focus-overlay';
 import ToastViewport from '@/components/client/toast-viewport';
-import ParallaxLayers from '@/components/client/parallax-layers';
+import ParallaxBackground from '@/components/client/parallax-background';
 import SidebarFloat from '@/components/client/sidebar-float';
 import ToTopButton from '@/components/client/to-top-button';
+import { ChatFloatButton, ChatPopup } from '@/components/client/chatbot';
 import PortalSidebar from '@/components/portal/portal-sidebar';
 import PortalHeader from '@/components/portal/portal-header';
 import PortalFooter from '@/components/portal/portal-footer';
-import DashboardSections from '@/components/portal/dashboard-sections';
-import GamesSection from '@/components/portal/games-section';
-import LibrarySection from '@/components/portal/library-section';
-import SearchSection from '@/components/portal/search-section';
-import ServicesSection from '@/components/portal/services-section';
-import SettingsSection from '@/components/portal/settings-section';
-import ShortcutsSection from '@/components/portal/shortcuts-section';
+import ViewRenderer from '@/components/portal/view-renderer';
 import PortalMobileNav from '@/components/portal/portal-mobile-nav';
 import { getTranslations } from '@/lib/i18n';
-import { cn } from '@/lib/utils';
 import { isHomeDeployment } from '@/lib/env';
-
-type PortalView =
-  | 'dashboard'
-  | 'games'
-  | 'search'
-  | 'library'
-  | 'shortcuts'
-  | 'services'
-  | 'board'
-  | 'settings';
+import { createNavLinks, getActiveNav, getMobileActive } from '@/lib/nav-links';
+import type { PortalView } from '@/lib/store/slices/portalSlice';
 
 type PortalAppProps = {
   view?: PortalView;
 };
 
-/**
- * Render the server-side portal shell composed of sidebar, header, and view-specific sections.
- */
+const getViewTitle = (strings: ReturnType<typeof getTranslations>['strings'], view: PortalView) => {
+  const titles: Record<PortalView, string> = {
+    dashboard: strings.header.title,
+    games: strings.games.title,
+    search: strings.search.title,
+    library: strings.library.title,
+    shortcuts: strings.shortcuts.title,
+    services: strings.services.title,
+    board: strings.board.title,
+    chat: strings.chat.title,
+    settings: strings.settings.title,
+  };
+  return titles[view];
+};
+
+const getViewSubtitle = (strings: ReturnType<typeof getTranslations>['strings'], view: PortalView) => {
+  const subtitles: Record<PortalView, string> = {
+    dashboard: strings.header.subtitle,
+    games: strings.games.description,
+    search: strings.search.description,
+    library: strings.library.description,
+    shortcuts: strings.shortcuts.description,
+    services: strings.services.description,
+    board: strings.board.description,
+    chat: strings.chat.description,
+    settings: strings.settings.description,
+  };
+  return subtitles[view];
+};
+
 export default async function PortalApp({
   view = 'dashboard',
 }: Readonly<PortalAppProps>) {
@@ -47,53 +60,22 @@ export default async function PortalApp({
   const localeCookie = cookieStore.get('portal_locale')?.value;
   const acceptLanguage = headerList.get('accept-language') ?? undefined;
   const { locale, strings } = getTranslations(localeCookie, acceptLanguage);
+  
   const isHome = isHomeDeployment();
   const isPublic = !isHome;
   const isGamesView = view === 'games';
   const isDashboardView = view === 'dashboard';
   const lockPortal = isPublic && !isGamesView;
 
-  const navLinks = {
-    dashboard: isDashboardView ? '#search' : '/',
-    search: isDashboardView ? '#search' : '/search',
-    library: isDashboardView ? '#library' : '/library',
-    games: '/games',
-    shortcuts: isDashboardView ? '#shortcuts' : '/shortcuts',
-    services: isDashboardView ? '#services' : '/services',
-    board: isDashboardView ? '#board' : '/#board',
-    settings: '/settings',
-  };
-
-  const activeNav = isDashboardView ? 'dashboard' : view;
-  const mobileActive =
-    activeNav === 'services' || activeNav === 'board' ? 'dashboard' : activeNav;
-  const viewTitleMap = {
-    dashboard: strings.header.title,
-    games: strings.games.title,
-    search: strings.search.title,
-    library: strings.library.title,
-    shortcuts: strings.shortcuts.title,
-    services: strings.services.title,
-    board: strings.board.title,
-    settings: strings.settings.title,
-  } as const;
-
-  const viewSubtitleMap = {
-    dashboard: strings.header.subtitle,
-    games: strings.games.description,
-    search: strings.search.description,
-    library: strings.library.description,
-    shortcuts: strings.shortcuts.description,
-    services: strings.services.description,
-    board: strings.board.description,
-    settings: strings.settings.description,
-  } as const;
+  const navLinks = createNavLinks(isDashboardView);
+  const activeNav = getActiveNav(view, isDashboardView);
+  const mobileActive = getMobileActive(activeNav);
 
   return (
     <div className="portal-shell relative min-h-dvh overflow-x-hidden">
-      <ParallaxLayers />
+      <ParallaxBackground />
 
-      <div className="portal-content portal-frame grid w-full gap-10 py-10 lg:grid-cols-[minmax(72px,200px)_1fr]">
+      <div className="portal-content portal-frame relative z-10 grid w-full gap-10 py-10 lg:grid-cols-[minmax(72px,200px)_1fr]">
         <SidebarFloat className="order-2 flex flex-col gap-6 lg:order-1 lg:sticky lg:top-8 lg:self-start">
           <PortalSidebar
             strings={strings}
@@ -110,48 +92,19 @@ export default async function PortalApp({
             isHome={isHome}
             isPublic={isPublic}
             locale={locale}
-            title={viewTitleMap[view]}
-            subtitle={viewSubtitleMap[view]}
+            title={getViewTitle(strings, view)}
+            subtitle={getViewSubtitle(strings, view)}
             allowGateInteraction={isGamesView}
             delay={80}
           />
 
-          <div className={cn(view !== 'games' && 'hidden')}>
-            <GamesSection strings={strings} variant="full" delay={140} />
-          </div>
-          <div className={cn(view !== 'search' && 'hidden')}>
-            <SearchSection strings={strings} delay={140} />
-          </div>
-          <div className={cn(view !== 'library' && 'hidden')}>
-            <LibrarySection strings={strings} delay={140} />
-          </div>
-          <div className={cn(view !== 'shortcuts' && 'hidden')}>
-            <ShortcutsSection strings={strings} delay={140} />
-          </div>
-          <div className={cn(view !== 'services' && 'hidden')}>
-            <ServicesSection
-              strings={strings}
-              isHome={isHome}
-              isPublic={isPublic}
-              delay={140}
-            />
-          </div>
-          <div className={cn(view !== 'settings' && 'hidden')}>
-            <SettingsSection strings={strings} isHome={isHome} delay={140} />
-          </div>
-          <div
-            className={cn(
-              'flex flex-col gap-10',
-              lockPortal && 'pointer-events-none opacity-60',
-              view !== 'dashboard' && 'hidden',
-            )}
-          >
-            <DashboardSections
-              strings={strings}
-              isHome={isHome}
-              isPublic={isPublic}
-            />
-          </div>
+          <ViewRenderer
+            view={view}
+            strings={strings}
+            isHome={isHome}
+            isPublic={isPublic}
+            lockPortal={lockPortal}
+          />
         </main>
       </div>
 
@@ -164,6 +117,8 @@ export default async function PortalApp({
       />
       <ToTopButton label={strings.accessibility.backToTop} />
       <ToastViewport strings={strings} />
+      <ChatFloatButton strings={strings} />
+      <ChatPopup strings={strings} />
       <FocusOverlay isHome={isHome} strings={strings} />
       <GameFocusOverlay strings={strings} />
     </div>

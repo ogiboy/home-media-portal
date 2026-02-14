@@ -31,6 +31,7 @@ export type PortalStrings = {
     system: string;
     board: string;
     settings: string;
+    chat: string;
   };
   header: {
     kicker: string;
@@ -41,6 +42,36 @@ export type PortalStrings = {
     liveNote: string;
     previewNote: string;
     asideNote: string;
+    devMode: string;
+  };
+  chat: {
+    title: string;
+    description: string;
+    welcome: string;
+    placeholder: string;
+    send: string;
+    thinking: string;
+    suggestions: {
+      serverStatus: string;
+      downloads: string;
+      newMovies: string;
+      weather: string;
+      searchMedia: string;
+      quickActions: string;
+    };
+    actions: {
+      restart: string;
+      shutdown: string;
+      checkServices: string;
+      viewDownloads: string;
+      searchMovie: string;
+      addMovie: string;
+    };
+    errors: {
+      generic: string;
+      offline: string;
+      apiError: string;
+    };
   };
   accessibility: {
     themeToggle: string;
@@ -61,6 +92,7 @@ export type PortalStrings = {
     retry: string;
     connectedNote: string;
     lockedNote: string;
+    devMode: string;
   };
   services: {
     title: string;
@@ -317,6 +349,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       system: 'Sistem',
       board: 'Pano',
       settings: 'Ayarlar',
+      chat: 'Sohbet',
     },
     header: {
       kicker: 'Ev Medya Portali',
@@ -511,6 +544,36 @@ const dictionaries: Record<Locale, PortalStrings> = {
       empty: 'Eslesme yok.',
       groupServices: 'Servisler',
     },
+    chat: {
+      title: 'Ev Asistani',
+      description: 'Sorularini sor, sistemi kontrol et.',
+      welcome:
+        'Merhaba! Ben ev asistanınım. Sunucu durumu sorgulayabilir, film arayabilir, hava durumunu öğrenebilir veya servisleri yönetebilirim. Nasıl yardımcı olabilirim?',
+      placeholder: 'Mesaj yaz...',
+      send: 'Gonder',
+      thinking: 'Dusunuyorum...',
+      suggestions: {
+        serverStatus: 'Sunucu durumu',
+        downloads: 'Indirmeler',
+        newMovies: 'Yeni filmler',
+        weather: 'Hava durumu',
+        searchMedia: 'Medya ara',
+        quickActions: 'Hizli aksiyonlar',
+      },
+      actions: {
+        restart: 'Yeniden baslat',
+        shutdown: 'Kapat',
+        checkServices: 'Servisleri kontrol et',
+        viewDownloads: 'Indirmeleri goster',
+        searchMovie: 'Film ara',
+        addMovie: 'Film ekle',
+      },
+      errors: {
+        generic: 'Bir hata olustu. Tekrar dene.',
+        offline: 'Sunucuya baglanilamadi.',
+        apiError: 'API hatasi. Servisleri kontrol et.',
+      },
+    },
     toasts: {
       dismiss: 'Kapat',
       tailnetOnline: {
@@ -622,6 +685,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       system: 'System',
       board: 'Board',
       settings: 'Settings',
+      chat: 'Chat',
     },
     header: {
       kicker: 'Home Media Portal',
@@ -631,6 +695,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       searchHint: 'Cmd+K',
       liveNote: 'Live services run inside the portal.',
       previewNote: 'Preview mode: services are locked.',
+      devMode: 'Developer mode',
       asideNote: 'Single universe',
     },
     accessibility: {
@@ -815,6 +880,36 @@ const dictionaries: Record<Locale, PortalStrings> = {
       empty: 'No matches found.',
       groupServices: 'Services',
     },
+    chat: {
+      title: 'Home Assistant',
+      description: 'Ask questions, control your system.',
+      welcome:
+        "Hello! I'm your home assistant. I can check server status, search for movies, get weather info, or manage services. How can I help you?",
+      placeholder: 'Type a message...',
+      send: 'Send',
+      thinking: 'Thinking...',
+      suggestions: {
+        serverStatus: 'Server status',
+        downloads: 'Downloads',
+        newMovies: 'New movies',
+        weather: 'Weather',
+        searchMedia: 'Search media',
+        quickActions: 'Quick actions',
+      },
+      actions: {
+        restart: 'Restart',
+        shutdown: 'Shutdown',
+        checkServices: 'Check services',
+        viewDownloads: 'View downloads',
+        searchMovie: 'Search movie',
+        addMovie: 'Add movie',
+      },
+      errors: {
+        generic: 'An error occurred. Please try again.',
+        offline: 'Could not connect to server.',
+        apiError: 'API error. Check services.',
+      },
+    },
     toasts: {
       dismiss: 'Dismiss',
       tailnetOnline: {
@@ -925,6 +1020,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       system: 'Sistema',
       board: 'Bacheca',
       settings: 'Impostazioni',
+      chat: 'Chat',
     },
     header: {
       kicker: 'Home Media Portal',
@@ -953,6 +1049,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       reachable: 'Tailnet raggiungibile',
       offline: 'Tailnet offline',
       connecting: 'Connessione',
+      devMode: 'Modalita sviluppatore',
       retry: 'Riprova',
       connectedNote: 'Connesso alla tua tailnet.',
       lockedNote: 'Shell bloccata. Serve accesso tailnet.',
@@ -1105,7 +1202,6 @@ const dictionaries: Record<Locale, PortalStrings> = {
       connected: 'Tailnet connessa',
       waiting: 'In attesa della tailnet',
       connecting: 'Connessione alla tailnet',
-      devMode: 'Modalita sviluppatore',
       publicDescription:
         'Attiva Tailscale e connettiti alla tailnet per sbloccare il portale di casa.',
       homeDescription:
@@ -1118,6 +1214,36 @@ const dictionaries: Record<Locale, PortalStrings> = {
       placeholder: 'Cerca servizi...',
       empty: 'Nessun risultato.',
       groupServices: 'Servizi',
+    },
+    chat: {
+      title: 'Assistente Casa',
+      description: 'Fai domande, controlla il sistema.',
+      welcome:
+        'Ciao! Sono il tuo assistente di casa. Posso controllare lo stato del server, cercare film, informazioni sul meteo o gestire i servizi. Come posso aiutarti?',
+      placeholder: 'Scrivi un messaggio...',
+      send: 'Invia',
+      thinking: 'Sto pensando...',
+      suggestions: {
+        serverStatus: 'Stato server',
+        downloads: 'Download',
+        newMovies: 'Nuovi film',
+        weather: 'Meteo',
+        searchMedia: 'Cerca media',
+        quickActions: 'Azioni rapide',
+      },
+      actions: {
+        restart: 'Riavvia',
+        shutdown: 'Spegni',
+        checkServices: 'Controlla servizi',
+        viewDownloads: 'Vedi download',
+        searchMovie: 'Cerca film',
+        addMovie: 'Aggiungi film',
+      },
+      errors: {
+        generic: 'Si e verificato un errore. Riprova.',
+        offline: 'Impossibile connettersi al server.',
+        apiError: 'Errore API. Controlla i servizi.',
+      },
     },
     toasts: {
       dismiss: 'Chiudi',
