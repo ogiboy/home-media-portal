@@ -57,6 +57,7 @@ export default function PortalControls({
   const { status, retry } = useTailnetStatus(HOME_URL);
   const [open, setOpen] = useState(false);
   const lastStatus = useRef<typeof status | null>(null);
+  const isDev = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
     if (lastStatus.current === status) {
@@ -96,7 +97,10 @@ export default function PortalControls({
     offline: strings.tailnet.offline,
     connecting: strings.tailnet.connecting,
   };
-  const statusLabel = statusLabels[status];
+  const statusLabel = isDev
+    ? `${strings.tailnet.devMode} · ${statusLabels[status]}`
+    : statusLabels[status];
+  const statusDot = isDev ? 'bg-amber-400' : statusTone[status];
 
   const setActiveApp = useCallback(
     (id?: string) => {
@@ -144,7 +148,7 @@ export default function PortalControls({
     <>
       <div className="flex flex-wrap items-center gap-2">
         <div className="portal-chip flex min-w-40 items-center justify-between gap-2 px-3 py-1 text-xs text-muted-foreground">
-          <span className={cn('h-2 w-2 rounded-full', statusTone[status])} />
+          <span className={cn('h-2 w-2 rounded-full', statusDot)} />
           <span className="whitespace-nowrap">{statusLabel}</span>
         </div>
         <Button
@@ -176,10 +180,7 @@ export default function PortalControls({
         )}
       </div>
 
-      <CommandDialog
-        open={open}
-        onOpenChange={setOpen}
-      >
+      <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder={strings.command.placeholder} />
         <CommandList>
           <CommandEmpty>{strings.command.empty}</CommandEmpty>
@@ -205,7 +206,7 @@ export default function PortalControls({
         status={status}
         isPublic={isPublic}
         allowInteraction={Boolean(allowGateInteraction)}
-        showMiniGame={isPublic && status !== "online" && !allowGateInteraction}
+        showMiniGame={isPublic && status !== 'online' && !allowGateInteraction}
         strings={strings}
         onEnter={enterHome}
       />

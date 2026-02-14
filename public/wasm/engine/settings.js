@@ -64,7 +64,10 @@
     app.Run();
 
     if (game.startupScript) {
-      app.configuration.startupScript = game.startupScript;
+      const normalized = game.startupScript.replace(/;/g, '\n').trim();
+      app.configuration.startupScript = normalized.endsWith('\n')
+        ? normalized
+        : `${normalized}\n`;
     }
     if (game.cpu) {
       app.rivetsData.cpu = game.cpu;

@@ -326,6 +326,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       searchHint: 'Cmd+K',
       liveNote: 'Canli servisler portal icinde calisir.',
       previewNote: 'Onizleme modu: servisler kilitli.',
+      devMode: 'Gelistirici modu',
       asideNote: 'Tek evren',
     },
     accessibility: {
@@ -344,6 +345,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       reachable: 'Tailnet erisilebilir',
       offline: 'Tailnet cevrimdisi',
       connecting: 'Baglaniyor',
+      devMode: 'Gelistirici modu',
       retry: 'Yeniden dene',
       connectedNote: 'Tailnet yiginina baglisin.',
       lockedNote: 'Kilitli kabuk. Tailnet baglantisi gerekiyor.',
@@ -647,6 +649,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       reachable: 'Tailnet reachable',
       offline: 'Tailnet offline',
       connecting: 'Connecting',
+      devMode: 'Developer mode',
       retry: 'Retry',
       connectedNote: 'Connected to your tailnet stack.',
       lockedNote: 'Locked shell. Tailnet access required.',
@@ -931,6 +934,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       searchHint: 'Cmd+K',
       liveNote: 'I servizi live girano dentro il portale.',
       previewNote: 'Modalita anteprima: servizi bloccati.',
+      devMode: 'Modalita sviluppatore',
       asideNote: 'Universo unico',
     },
     accessibility: {
@@ -1101,6 +1105,7 @@ const dictionaries: Record<Locale, PortalStrings> = {
       connected: 'Tailnet connessa',
       waiting: 'In attesa della tailnet',
       connecting: 'Connessione alla tailnet',
+      devMode: 'Modalita sviluppatore',
       publicDescription:
         'Attiva Tailscale e connettiti alla tailnet per sbloccare il portale di casa.',
       homeDescription:

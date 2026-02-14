@@ -30,7 +30,7 @@
         "roms/doom/DOOM1.WAD",
         "roms/doom/DOOMS_19.DAT"
       ],
-      "startupScript": "cd uploaded;doom.exe",
+      "startupScript": "e:\ncd uploaded\ndoom.exe\n",
       "cpu": "auto",
       "ram": 64,
       "harddrive": "hd_520"

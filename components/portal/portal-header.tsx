@@ -45,13 +45,24 @@ export default function PortalHeader({
 }: PortalHeaderProps) {
   const headerTitle = title ?? strings.header.title;
   const headerSubtitle = subtitle ?? strings.header.subtitle;
+  const isDev = process.env.NODE_ENV === 'development';
+  const statusNote = isDev
+    ? `${strings.header.devMode} · ${isHome ? strings.header.liveNote : strings.header.previewNote}`
+    : isHome
+      ? strings.header.liveNote
+      : strings.header.previewNote;
+  const statusDot = isDev
+    ? 'bg-amber-400/80'
+    : isHome
+      ? 'bg-emerald-400/80'
+      : 'bg-amber-400/80';
 
   return (
     <header
       className="portal-hero portal-surface portal-entrance relative flex min-h-52 flex-col gap-6 rounded-(--radius) p-7 lg:p-8"
       style={withDelay(delay)}
     >
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/25 via-transparent to-white/55 opacity-70 bg-position-[80%_20%] bg-size-[160%_160%]" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-white/55 opacity-60 bg-position-[75%_35%] bg-size-[170%_170%]" />
       <div className="relative flex flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
@@ -65,14 +76,11 @@ export default function PortalHeader({
             </Badge>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span
-                className={cn(
-                  'h-2 w-2 rounded-full',
-                  isHome ? 'bg-emerald-400/80' : 'bg-amber-400/80',
-                )}
+                className={cn('h-2 w-2 rounded-full', statusDot)}
                 aria-hidden="true"
               />
               <span className="uppercase tracking-[0.2em]">
-                {isHome ? strings.header.liveNote : strings.header.previewNote}
+                {statusNote}
               </span>
             </div>
           </div>
@@ -91,24 +99,20 @@ export default function PortalHeader({
         </div>
 
         <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
+          <p className="portal-kicker">
             {strings.header.kicker}
           </p>
-          <h1 className="mt-2 line-clamp-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            <span className="bg-linear-to-r from-primary to-accent bg-clip-text text-transparent">
-              {headerTitle}
-            </span>
+          <h1 className="portal-title">
+            {headerTitle}
           </h1>
-          <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
+          <p className="portal-subtitle">
             {headerSubtitle}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           <MonitorPlay className="h-4 w-4" />
-          <span>
-            {isHome ? strings.header.liveNote : strings.header.previewNote}
-          </span>
+          <span>{statusNote}</span>
         </div>
       </div>
     </header>

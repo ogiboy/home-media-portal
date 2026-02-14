@@ -5,6 +5,7 @@ import FocusOverlay from '@/components/client/focus-overlay';
 import GameFocusOverlay from '@/components/client/game-focus-overlay';
 import ToastViewport from '@/components/client/toast-viewport';
 import ParallaxLayers from '@/components/client/parallax-layers';
+import SidebarFloat from '@/components/client/sidebar-float';
 import ToTopButton from '@/components/client/to-top-button';
 import PortalSidebar from '@/components/portal/portal-sidebar';
 import PortalHeader from '@/components/portal/portal-header';
@@ -92,8 +93,8 @@ export default async function PortalApp({
     <div className="portal-shell relative min-h-dvh overflow-x-hidden">
       <ParallaxLayers />
 
-      <div className="portal-content portal-frame grid w-full gap-10 py-10 lg:grid-cols-[200px_1fr]">
-        <div className="order-2 flex flex-col gap-6 lg:order-1 lg:sticky lg:top-8 lg:self-start">
+      <div className="portal-content portal-frame grid w-full gap-10 py-10 lg:grid-cols-[minmax(72px,200px)_1fr]">
+        <SidebarFloat className="order-2 flex flex-col gap-6 lg:order-1 lg:sticky lg:top-8 lg:self-start">
           <PortalSidebar
             strings={strings}
             isHome={isHome}
@@ -101,7 +102,7 @@ export default async function PortalApp({
             active={activeNav}
             delay={40}
           />
-        </div>
+        </SidebarFloat>
 
         <main className="order-1 relative flex flex-col gap-6 lg:order-2">
           <PortalHeader

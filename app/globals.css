@@ -130,6 +130,9 @@
     @apply bg-background text-foreground;
     overflow-x: hidden;
     overflow-y: auto;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   html::-webkit-scrollbar {
@@ -237,17 +240,17 @@
 .portal-backdrop-stars {
   background-image: radial-gradient(
       circle at 20% 20%,
-      rgba(255, 255, 255, 0.45),
+      rgba(255, 255, 255, 0.65),
       transparent 40%
     ),
     radial-gradient(
       circle at 80% 10%,
-      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0.5),
       transparent 45%
     ),
     radial-gradient(
       circle at 10% 80%,
-      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0.55),
       transparent 40%
     );
   opacity: 1;
@@ -282,13 +285,13 @@
 [data-theme='dark'] .portal-backdrop-stars {
   background-image: radial-gradient(
       circle at 20% 20%,
-      rgba(161, 227, 249, 0.45),
+      rgba(161, 227, 249, 0.6),
       transparent 40%
     ),
-    radial-gradient(circle at 80% 10%, rgba(87, 143, 202, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(87, 143, 202, 0.5), transparent 45%),
     radial-gradient(
       circle at 10% 80%,
-      rgba(209, 248, 239, 0.35),
+      rgba(209, 248, 239, 0.55),
       transparent 40%
     );
 }
@@ -464,6 +467,33 @@
   z-index: 1;
 }
 
+.portal-kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+}
+
+.portal-title {
+  margin-top: 0.4rem;
+  font-size: clamp(1.9rem, 2.8vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  text-shadow: 0 12px 30px rgba(121, 76, 61, 0.18);
+}
+
+.portal-subtitle {
+  margin-top: 0.8rem;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+}
+
+[data-theme='dark'] .portal-title {
+  text-shadow: 0 18px 40px rgba(3, 7, 14, 0.7);
+}
+
 .portal-card {
   position: relative;
   overflow: hidden;
@@ -567,12 +597,36 @@
 
 .portal-sidebar {
   width: 100%;
+  max-width: 4.75rem;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.8), rgba(255, 242, 235, 0.55));
+  border: 1px solid rgba(255, 214, 186, 0.55);
+  box-shadow: 0 18px 50px rgba(121, 76, 61, 0.16);
+  backdrop-filter: blur(16px) saturate(1.05);
+  transition: max-width 240ms ease, box-shadow 240ms ease, background 240ms ease;
+}
+
+.portal-sidebar:hover {
   max-width: 12.5rem;
-  transition: max-width 200ms ease;
+  box-shadow: 0 24px 70px rgba(121, 76, 61, 0.22);
+}
+
+[data-theme='dark'] .portal-sidebar {
+  background: linear-gradient(140deg, rgba(16, 31, 56, 0.9), rgba(8, 16, 30, 0.75));
+  border-color: rgba(87, 143, 202, 0.35);
+  box-shadow: 0 22px 70px rgba(4, 8, 16, 0.7);
 }
 
 .portal-sidebar .portal-label {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-6px);
   transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.portal-sidebar:hover .portal-label {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
 html[data-focus='true'],
